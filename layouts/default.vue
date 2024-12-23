@@ -1,19 +1,20 @@
 <template>
   
-  <div class="flex h-screen overflow-hidden bg-gray-100">
+    <div class="relative h-full md:flex min-h-svh w-full bg-gray-100">
 
-      <AppSidebar />
+            <AppSidebar />
 
-      <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            <main class="relative min-h-svh flex-1 p-5 md:pt-3 md:p-6 md:pb-10 pb-10">
+                
+                <AppHeader />
 
-        <main>
-          <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-            <slot />
-          </div>
-        </main>
+                <slot />
 
-      </div>
+                <AppFooter />
+                
+            </main>
 
-  </div>
+
+    </div>
 
 </template>

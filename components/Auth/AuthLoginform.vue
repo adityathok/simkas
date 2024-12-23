@@ -1,32 +1,5 @@
-<script setup lang="ts">
-  const { login } = useSanctumAuth()
-
-  const isLoading = ref(false)
-  const errors = ref(false)
-
-  const form = ref({
-      email: '',
-      password: '',
-      remember: '',
-  })
-
-  async function handleFormSubmit() {
-      isLoading.value = true; 
-      errors.value = false; 
-      try {
-          await login(form.value)
-      } catch (e) {
-          const error = useApiError(e);
-          errors.value = true; 
-          console.error('Request failed not because of a validation', error.code);
-      } finally {
-          isLoading.value = false; 
-          return navigateTo('/')
-      }
-  }
-</script>
-
 <template>
+    
     <form @submit.prevent="handleFormSubmit">
         <div class="mb-3">
             <label for="email">Email</label>
@@ -55,6 +28,34 @@
             <Message severity="warn">Email dan sandi salah, silahkan coba lagi..</Message>
         </div>
     </form>
+
 </template>
 
-<style scoped></style>
+<script setup>
+    const { login } = useSanctumAuth()
+
+    const isLoading = ref(false)
+    const errors = ref(false)
+
+    const form = ref({
+        email: '',
+        password: '',
+        remember: '',
+    })
+
+    async function handleFormSubmit() {
+        isLoading.value = true; 
+        errors.value = false; 
+        try {
+            await login(form.value)
+        } catch (e) {
+            const error = useSanctumError(e);
+            errors.value = true; 
+            console.error('Request failed not because of a validation', error.code);
+        } finally {
+            isLoading.value = false; 
+            return navigateTo('/')
+        }
+    }
+
+</script>

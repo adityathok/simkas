@@ -21,14 +21,17 @@ const MyPreset = definePreset(Aura, {
 });
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  ssr: false,
+  compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: [
-    '@nuxtjs/tailwindcss',
-    'nuxt-auth-sanctum',
-    '@nuxt/icon',
-    '@primevue/nuxt-module'
-  ],
+  css: ['~/assets/css/main.css'],  
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+  modules: ['@primevue/nuxt-module', 'nuxt-auth-sanctum', '@nuxt/icon', '@pinia/nuxt'], 
   sanctum: {
       baseUrl: process.env.BACKEND_URL,
       redirectIfAuthenticated: true,
