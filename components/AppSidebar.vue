@@ -155,6 +155,23 @@ const items = ref([
         ]
     },
     {
+        key: 'pegawais',
+        label: 'Pegawai',
+        icon: 'lucide:users',
+        items: [
+            {
+                key: 'pegawais_all',
+                label: 'Semua Pegawai',
+                href:'/pegawai',
+            },
+            {
+                key: '3_1',
+                label: 'Tambah User',
+                href:'/users/create',
+            }
+        ]
+    },
+    {
         key: 'users',
         label: 'Users',
         icon: 'lucide:square-user',
