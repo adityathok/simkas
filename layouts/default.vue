@@ -4,7 +4,7 @@
 
             <AppSidebar />
 
-            <main class="relative min-h-svh flex-1 p-5 md:pt-3 md:p-6 md:pb-10 pb-10">
+            <main class="relative min-h-svh flex-1 p-5 md:pt-3 md:p-6 md:pb-10 pb-10 md:max-w-[calc(100%-14rem)]">
                 
                 <AppHeader />
 

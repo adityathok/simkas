@@ -10,24 +10,38 @@
         </template>
     </PageHeader>
   
-    <div class="rounded-md border overflow-hidden">
+    <div class="rounded-md border overflow-hidden text-nowrap">
       <DataTable :value="data.data" stripedRows scrollable scrollHeight="calc(100dvh - 240px)" tableStyle="min-width: 50rem">
 
-        <Column field="nama" header="Nama" class="font-bold"></Column>
+        <Column field="nama" header="Nama">            
+            <template #body="slotProps">
+                <div class="font-bold truncate" style="width: 200px">
+                    {{ slotProps.data.nama }}
+                </div>
+            </template>
+        </Column>
         <Column field="nip" header="NIP"></Column>
-        <Column field="email" header="Email"></Column>
+        <Column field="email" header="Email">                       
+            <template #body="slotProps">
+                <div class="truncate" style="width: 200px">
+                    {{ slotProps.data.email }}
+                </div>
+            </template>
+        </Column>
         <Column field="jenis_kelamin" header="JK"></Column>
         <Column field="status" header="Status"></Column>
-        <Column field="tanggal_masuk" header="Tgl Masuk"></Column>
-        <Column field="tanggal_lahir" header="Tgl Lahir"></Column>
-        <Column :exportable="false" header="Aksi" class="flex justify-end">
-            <template #body="slotProps">
-                <Button outlined rounded class="mr-2 !px-3 !py-3" @click="editPegawai(slotProps.data)" >
-                    <Icon name="lucide:pencil" />
-                </Button>
-                <Button outlined rounded severity="danger" class="!px-3 !py-3" @click="editProduct(slotProps.data)" >
-                    <Icon name="lucide:trash" />
-                </Button>
+        <Column field="tanggal_masuk" header="Masuk" class="hidden 2xl:table-cell"></Column>
+        <Column field="tanggal_lahir" header="Lahir" class="hidden 2xl:table-cell"></Column>
+        <Column :exportable="false"  header="Aksi">
+            <template #body="slotProps">                
+                <div class="flex justify-end">
+                    <Button outlined rounded size="small" class="mr-2 !px-3 !py-0" @click="editPegawai(slotProps.data)" >
+                        <Icon size="small" name="lucide:pencil" />
+                    </Button>
+                    <Button outlined rounded severity="danger" class="!px-3 !py-3" >
+                        <Icon name="lucide:trash" />
+                    </Button>
+                </div>
             </template>
         </Column>
 
@@ -80,7 +94,7 @@
         navigateTo('/pegawai?page='+page.value)
   };
 
-const editPegawai = (datapegawai) => {
+const editPegawai = (datapegawai:any) => {
     idpegawai.value = datapegawai.id;
     pegawaiDialog.value = true;
 
