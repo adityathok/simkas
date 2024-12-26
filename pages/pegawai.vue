@@ -36,10 +36,10 @@
             <template #body="slotProps">                
                 <div class="flex justify-end">
                     <Button outlined rounded size="small" class="mr-2 !px-3 !py-0" @click="editPegawai(slotProps.data)" >
-                        <Icon size="small" name="lucide:pencil" />
+                        <Icon name="lucide:pencil" mode="svg"/>
                     </Button>
                     <Button outlined rounded severity="danger" class="!px-3 !py-3" >
-                        <Icon name="lucide:trash" />
+                        <Icon name="lucide:trash" mode="svg"/>
                     </Button>
                 </div>
             </template>
@@ -72,7 +72,12 @@
     </div>
 
     <Dialog v-model:visible="pegawaiDialog" :style="{ width: '800px' }" header="Profil Pegawai" :modal="true">
-        <PegawaiForm v-if='pegawaiDialog' :idpegawai="idpegawai" />
+        <template v-if='pegawaiDialog'>
+            <div class="mb-5">
+                <SelectButton v-model="selectTab" :options="optionsTab" />
+            </div>
+            <PegawaiForm v-if='selectTab == "Profil"' :idpegawai="idpegawai"/>
+        </template>
     </Dialog>
 
 </template>
@@ -82,6 +87,10 @@
   const idpegawai = ref({});
   const route = useRoute();
   const page = ref(route.query.page ? Number(route.query.page) : 1);
+
+  const selectTab = ref('Profil');
+  const optionsTab = ref(['Profil', 'Foto']);
+
   const client = useSanctumClient();
   const { data, status, error, refresh } = await useAsyncData(
       'pegawai',
