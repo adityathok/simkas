@@ -9,9 +9,11 @@
             Semua pegawai yang terdaftar
         </template>
     </PageHeader>
+
+    <Button @click="addPegawai" label="Tambah Pegawai" class="mb-3" />
   
     <div class="rounded-md border overflow-hidden text-nowrap">
-      <DataTable :value="data.data" stripedRows scrollable scrollHeight="calc(100dvh - 240px)" tableStyle="min-width: 50rem">
+      <DataTable :value="data.data" size="small" stripedRows scrollable tableStyle="min-width: 50rem">
 
         <Column field="nama" header="Nama">            
             <template #body="slotProps">
@@ -38,7 +40,7 @@
                     <Button outlined rounded size="small" class="mr-2 !px-3 !py-0" @click="editPegawai(slotProps.data)" >
                         <Icon name="lucide:pencil" mode="svg"/>
                     </Button>
-                    <Button outlined rounded severity="danger" class="!px-3 !py-3" >
+                    <Button outlined rounded severity="danger" class="!px-3 !py-3" @click="confirmDelete(slotProps.data.id)">
                         <Icon name="lucide:trash" mode="svg"/>
                     </Button>
                 </div>
@@ -79,11 +81,15 @@
             <PegawaiForm v-if='selectTab == "Profil"' :idpegawai="idpegawai"/>
         </template>
     </Dialog>
+    <Toast />
+    <ConfirmDialog></ConfirmDialog>
 
 </template>
 
 <script setup lang="ts">
   const pegawaiDialog = ref(false);
+  const confirm = useConfirm();
+  const toast = useToast();
   const idpegawai = ref({});
   const route = useRoute();
   const page = ref(route.query.page ? Number(route.query.page) : 1);
@@ -103,9 +109,42 @@
         navigateTo('/pegawai?page='+page.value)
   };
 
-const editPegawai = (datapegawai:any) => {
-    idpegawai.value = datapegawai.id;
-    pegawaiDialog.value = true;
+    const editPegawai = (datapegawai:any) => {
+        idpegawai.value = datapegawai.id;
+        pegawaiDialog.value = true;
 
-};
+    };
+
+    const addPegawai = () => {
+        pegawaiDialog.value = true;
+
+    };
+
+    /**
+     * Confirm delete a pegawai
+     * @param {string} id
+     */
+    const confirmDelete = (id: string) => {
+        confirm.require({
+            message: 'Yakin untuk menghapus pegawai ini ?',
+            header: 'Hapus User',
+            icon: 'pi pi-info-circle',
+            rejectLabel: 'Cancel',
+            rejectProps: {
+                label: 'Cancel',
+                severity: 'secondary',
+                outlined: true
+            },
+            acceptProps: {
+                label: 'Delete',
+                severity: 'danger'
+            },
+            accept: async () => {
+                await client('/api/pegawai/'+id, { method: 'DELETE' })   
+                refresh()
+                toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
+            },
+        });
+    };
+
 </script>

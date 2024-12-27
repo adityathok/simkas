@@ -113,12 +113,6 @@
         navigateTo(url)
     };
 
-    const toDelete = async (id: string) => {
-        await client('/api/users/'+id, { method: 'DELETE' })   
-        refresh()
-        toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
-    };
-
     const confirmDelete = (id: string) => {
         confirm.require({
             message: 'Yakin untuk menghapus user ini ?',

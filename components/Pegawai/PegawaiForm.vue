@@ -72,20 +72,22 @@
   }
     
   onMounted(async () => {
-    await client('/api/pegawai/'+idPegawai)
-      .then((res) => {
-          form.nip = res.nip
-          form.nama = res.nama
-          form.status = res.status
-          form.tempat_lahir = res.tempat_lahir
-          form.tanggal_lahir = res.tanggal_lahir
-          form.tanggal_masuk = res.tanggal_masuk
-          form.jenis_kelamin = res.jenis_kelamin
-          form.nik = res.nik
-          form.email = res.email
-          form.foto = res.foto
-          previewFoto.value = urlStorage+res.foto
+    if(idPegawai.value){
+      await client('/api/pegawai/'+idPegawai)
+        .then((res) => {
+            form.nip = res.nip
+            form.nama = res.nama
+            form.status = res.status
+            form.tempat_lahir = res.tempat_lahir
+            form.tanggal_lahir = res.tanggal_lahir
+            form.tanggal_masuk = res.tanggal_masuk
+            form.jenis_kelamin = res.jenis_kelamin
+            form.nik = res.nik
+            form.email = res.email
+            form.foto = res.foto
+            previewFoto.value = urlStorage+res.foto
       })
+    }
   });
 
   const handleFormSubmit = async () => {
