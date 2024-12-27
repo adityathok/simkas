@@ -2,6 +2,8 @@
   <form @submit.prevent="handleFormSubmit">
     <div class="flex flex-col gap-6">
 
+      {{ idPegawai.value }}
+
       <div v-for="field in formFields" class="py-1">
         <FloatLabel v-if="field.type !== 'file'" variant="on">
 
@@ -38,6 +40,7 @@
   const props = defineProps(['idpegawai']);
   const idPegawai = props.idpegawai;
   const previewFoto = ref('');
+  const emit = defineEmits(['update'])
 
   const form: Record<any, any> = reactive({
       nip: '',
@@ -72,7 +75,7 @@
   }
     
   onMounted(async () => {
-    if(idPegawai.value){
+    if(idPegawai){
       await client('/api/pegawai/'+idPegawai)
         .then((res) => {
             form.nip = res.nip
@@ -100,6 +103,7 @@
       body: formData
     })
     toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil diperbarui', life: 3000 });
+    emit('update')
   }  
 
 </script>

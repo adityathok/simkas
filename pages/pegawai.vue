@@ -15,9 +15,18 @@
     <div class="rounded-md border overflow-hidden text-nowrap">
       <DataTable :value="data.data" size="small" stripedRows scrollable tableStyle="min-width: 50rem">
 
+        <Column field="foto" header="">            
+            <template #body="slotProps">
+                
+                <!-- <Avatar v-if="slotProps.data.foto" :image="urlStorage+slotProps.data.foto" shape="circle" /> -->
+                <img v-if="slotProps.data.foto" :src="urlStorage+slotProps.data.foto" alt="" class="rounded-full aspect-square object-cover" width="32" height="32">
+                <Avatar v-else :label="firstName(slotProps.data.nama)" shape="circle" />
+
+            </template>
+        </Column>
         <Column field="nama" header="Nama">            
             <template #body="slotProps">
-                <div class="font-bold truncate" style="width: 200px">
+                <div class="font-bold truncate" style="width: 100%">
                     {{ slotProps.data.nama }}
                 </div>
             </template>
@@ -34,7 +43,7 @@
         <Column field="status" header="Status"></Column>
         <Column field="tanggal_masuk" header="Masuk" class="hidden 2xl:table-cell"></Column>
         <Column field="tanggal_lahir" header="Lahir" class="hidden 2xl:table-cell"></Column>
-        <Column :exportable="false"  header="Aksi">
+        <Column :exportable="false"  header="">
             <template #body="slotProps">                
                 <div class="flex justify-end">
                     <Button outlined rounded size="small" class="mr-2 !px-3 !py-0" @click="editPegawai(slotProps.data)" >
@@ -54,7 +63,7 @@
                     Loading....
                 </span>
                 <span v-else>
-                    Tampil {{ data.per_page*page }} dari {{ data.total }}
+                    Tampil {{ data.from }} sampai {{ data.to }} dari {{ data.total }}
                 </span>
             </div>
             <Paginator
@@ -78,7 +87,9 @@
             <div class="mb-5">
                 <SelectButton v-model="selectTab" :options="optionsTab" />
             </div>
-            <PegawaiForm v-if='selectTab == "Profil"' :idpegawai="idpegawai"/>
+
+            <PegawaiForm v-if='selectTab == "Profil"' :idpegawai="idpegawai" @update="pegawaiDialog = false; refresh()"/>
+
         </template>
     </Dialog>
     <Toast />
@@ -88,11 +99,16 @@
 
 <script setup lang="ts">
   const pegawaiDialog = ref(false);
+  const { urlStorage } = useGlobalStore()
   const confirm = useConfirm();
   const toast = useToast();
   const idpegawai = ref({});
   const route = useRoute();
   const page = ref(route.query.page ? Number(route.query.page) : 1);
+
+  const firstName = (name: string) => {
+        return Array.from(name)[0];
+    }
 
   const selectTab = ref('Profil');
   const optionsTab = ref(['Profil', 'Foto']);
@@ -112,12 +128,11 @@
     const editPegawai = (datapegawai:any) => {
         idpegawai.value = datapegawai.id;
         pegawaiDialog.value = true;
-
     };
 
     const addPegawai = () => {
         pegawaiDialog.value = true;
-
+        refresh
     };
 
     /**
@@ -148,3 +163,9 @@
     };
 
 </script>
+
+<style scoped>
+    .p-avatar img {
+        object-fit: cover;
+    }
+</style>
