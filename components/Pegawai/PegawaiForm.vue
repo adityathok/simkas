@@ -1,19 +1,21 @@
 <template>
   <form @submit.prevent="handleFormSubmit">
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
 
       {{ idPegawai.value }}
 
-      <div v-for="field in formFields" class="py-1">
-        <FloatLabel v-if="field.type !== 'file'" variant="on">
+      <div v-for="field in formFields" :key="field.key">
+      
+        <template v-if="field.type !== 'file'" >
+
+          <label :for="field.key" class="block mb-1">{{ field.label }}</label>
 
           <DatePicker v-if="field.type == 'date'" v-model="form[field.key]" fluid showIcon dateFormat="yy-mm-dd"/>
 
           <InputText v-else :id="field.key" class="w-full" v-model="form[field.key]" />
 
-          <label :for="field.key">{{ field.label }}</label>
-
-        </FloatLabel>
+        </template>
+        
 
         <template v-if="field.type == 'file'">
           <label for="foto">Foto</label>
