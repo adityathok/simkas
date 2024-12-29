@@ -158,7 +158,18 @@ const items = ref([
         key: 'pegawai',
         label: 'Pegawai',
         icon: 'lucide:circle-user',
-        href:'/pegawai',
+        items: [
+            {
+                key: 'pegawai_all',
+                label: 'Daftar pegawai',
+                href:'/pegawai',
+            },
+            {
+                key: 'pegawai_add',
+                label: 'Tambah pegawai',
+                href:'/pegawai/add',
+            },
+        ]
     },
     {
         key: 'users',

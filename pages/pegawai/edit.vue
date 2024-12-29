@@ -2,17 +2,18 @@
 
   <PageHeader>
       <template #title>          
-          <template v-if="idPegawai">Edit Pegawai</template>
-          <template v-else>Tambah Pegawai</template>
+          <template>Edit Pegawai</template>
       </template>
   </PageHeader>
 
+  <Card class="mb-5">
+    <template #content>
+      <SelectButton size="small" v-model="selectTab" :options="optionsTab" @change="tabclick"/></template>
+  </Card>
+
   <Card>
     <template #content>
-      <div class="mb-5">
-            <SelectButton v-model="selectTab" :options="optionsTab" />
-      </div>
-
+      
       <PegawaiAkun v-if="selectTab == 'Akun'" :idpegawai="idPegawai" />
       <PegawaiForm v-else :idpegawai="idPegawai" />
 
@@ -25,8 +26,13 @@
   const toast = useToast();
   const route = useRoute()
   const idPegawai = route.query.id || '';
+  const idTab = route.query.tab || 'Profil';
 
-  const selectTab = ref('Profil');
-  const optionsTab = ref(['Profil', 'Akun']);
+  const selectTab = ref(idTab);
+  const optionsTab = ref(['Profil', 'Akun']); 
 
+  const tabclick = (e:any) => {
+    navigateTo({ path: '/pegawai/edit', query: { id: idPegawai, tab: e.value } });
+  };
+ 
 </script>

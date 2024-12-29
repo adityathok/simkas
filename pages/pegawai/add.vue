@@ -1,5 +1,14 @@
 <template>
-  <form @submit.prevent="handleFormSubmit">
+    <PageHeader>
+        <template #title>          
+            Tambah Pegawai
+        </template>
+    </PageHeader>
+
+    <Card>
+      <template #content>
+        
+        <form @submit.prevent="handleFormSubmit">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
       <div v-for="field in formFields" :key="field.key">
@@ -16,12 +25,6 @@
 
         </template>
         
-        <template v-if="field.type == 'file'">
-          <label for="foto" class="block">Foto</label>          
-          <Image v-if="previewFoto" :src="previewFoto" alt="Image" width="150" preview />
-          <InputText type="file" @change="handleFileUpload" id="foto" class="w-full"/>
-        </template>
-
       </div>    
         
     </div>
@@ -31,15 +34,15 @@
         </Button>
     </div>
   </form>
+
+      </template>
+    </Card>
+
 </template>
 
 <script setup lang="ts">
   const toast = useToast();
-  const { urlStorage } = useGlobalStore()
   const client = useSanctumClient();
-  const props = defineProps(['idpegawai']);
-  const idPegawai = props.idpegawai;
-  const previewFoto = ref('');
   const form: Record<any, any> = reactive({
       nip: '',
       nama: '',
@@ -50,21 +53,7 @@
       jenis_kelamin: '',
       nik: '',
       email: '',
-      foto: '',
   })
-
-  if(idPegawai){
-    const { data, status, error, refresh } = await useAsyncData(
-        'pegawai'+idPegawai,
-        () => client('/api/pegawai/'+idPegawai)
-    )
-    if(error.value==null){
-      Object.assign(form, data.value);
-      previewFoto.value = urlStorage+data.value.foto
-    } else {
-      navigateTo({ path: '/pegawai'});
-    }
-  }
 
   const formFields = [
     { label: 'NIP', key: 'nip', type: 'text' },
@@ -76,26 +65,24 @@
     { label: 'Jenis Kelamin', key: 'jenis_kelamin', type: 'select', options: ['Laki-laki', 'Perempuan'] },
     { label: 'NIK', key: 'nik', type: 'text' },
     { label: 'Email', key: 'email', type: 'text' },
-    { label: 'Foto', key: 'foto', type: 'file' },
   ]
-  
-  // Method untuk meng-handle file upload
-  function handleFileUpload(event: any) {
-      form.foto = event.target.files[0];
-      previewFoto.value = URL.createObjectURL(event.target.files[0])
-  }
 
   const handleFormSubmit = async () => {
     const formData = new FormData();
     for (const key in form) {
       formData.append(key, form[key]);
     }
-    await client('/api/pegawai/'+idPegawai, {
-      method: 'PUT',
+    const response = await client('/api/pegawai', {
+      method: 'POST',
       body: formData
     })
-    toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil diperbarui', life: 3000 });
-  }  
+    const responseData = await response.json();
+    if (!response.ok) {
+      toast.add({ severity: 'error', summary: 'Gagal', detail: responseData.message, life: 3000 });
+    } else {
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil diperbarui', life: 3000 });
+      navigateTo('/pegawai/edit/'+responseData.id);
+    }
+  } 
 
 </script>
-
