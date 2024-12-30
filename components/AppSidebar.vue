@@ -166,7 +166,7 @@ const items = ref([
             },
             {
                 key: 'pegawai_add',
-                label: 'Tambah pegawai',
+                label: 'Tambah Pegawai',
                 href:'/pegawai/add',
             },
         ]

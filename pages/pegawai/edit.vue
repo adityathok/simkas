@@ -15,7 +15,10 @@
     <template #content>
       
       <PegawaiAkun v-if="selectTab == 'Akun'" :idpegawai="idPegawai" />
-      <PegawaiForm v-else :idpegawai="idPegawai" />
+
+      <UserFormAvatar v-else-if="selectTab == 'Foto'" :idpegawai="idPegawai" />
+
+      <PegawaiFormProfil v-else :idpegawai="idPegawai" :data="data" :action="'edit'" />
 
     </template>
   </Card>
@@ -25,17 +28,22 @@
 <script setup lang="ts">
   definePageMeta({
     title: 'Edit Pegawai',
-  })
-  const toast = useToast();
+  })  
+  const client = useSanctumClient();
   const route = useRoute()
   const idPegawai = route.query.id || '';
   const idTab = route.query.tab || 'Profil';
 
   const selectTab = ref(idTab);
-  const optionsTab = ref(['Profil', 'Akun']); 
+  const optionsTab = ref(['Profil', 'Akun', 'Foto']); 
 
   const tabclick = (e:any) => {
     navigateTo({ path: '/pegawai/edit', query: { id: idPegawai, tab: e.value } });
   };
+
+  const { data, status, error, refresh } = await useAsyncData(
+        'pegawai'+idPegawai,
+        () => client('/api/pegawai/'+idPegawai)
+  )
  
 </script>
