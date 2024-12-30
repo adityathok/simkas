@@ -23,6 +23,9 @@
 </template>
 
 <script setup lang="ts">
+  definePageMeta({
+    title: 'Edit Pegawai',
+  })
   const toast = useToast();
   const route = useRoute()
   const idPegawai = route.query.id || '';

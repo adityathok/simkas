@@ -1,15 +1,5 @@
 <template>
 
-  <PageHeader>
-      <template #title>
-          Pegawai
-      </template>
-
-      <template #subtitle>
-          Semua pegawai yang terdaftar
-      </template>
-  </PageHeader>
-
   <Button @click="addPegawai" label="Tambah Pegawai" class="mb-3" />
 
   <div class="rounded-md border overflow-hidden text-nowrap bg-white shadow-sm">
@@ -100,6 +90,9 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  title: 'Semua Pegawai',
+})
 const pegawaiDialog = ref(false);
 const { urlStorage } = useGlobalStore()
 const confirm = useConfirm();

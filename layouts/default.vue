@@ -8,6 +8,10 @@
                 
                 <AppHeader />
 
+                <h1 class="text-lg font-medium text-gray-900 mb-5">
+                    {{ $route.meta.title }}
+                </h1>
+
                 <slot />
 
                 <AppFooter />
@@ -18,3 +22,6 @@
     </div>
 
 </template>
+
+<script>
+</script>

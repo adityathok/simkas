@@ -161,7 +161,7 @@ const items = ref([
         items: [
             {
                 key: 'pegawai_all',
-                label: 'Daftar pegawai',
+                label: 'Semua Pegawai',
                 href:'/pegawai',
             },
             {
