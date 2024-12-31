@@ -35,13 +35,13 @@
       <Column :exportable="false"  header="">
           <template #body="slotProps">                
               <div class="flex justify-end">
-                  <Button severity="info" variant="text" size="small" class="!px-1">
+                  <Button severity="secondary" variant="text" size="small">
                       <Icon name="lucide:eye" mode="svg"/>
                   </Button>
-                  <NuxtLink :to="'/pegawai/edit?id='+slotProps.data.id" class="p-2 rounded">
-                    <Icon name="lucide:pencil" mode="svg" size="13px"/>
-                  </NuxtLink>
-                  <Button severity="danger" variant="text" size="small" class="!px-1" @click="confirmDelete(slotProps.data.id)">
+                  <Button as="router-link" severity="info" variant="text" size="small" :to="'/pegawai/edit?id='+slotProps.data.id">
+                    <Icon name="lucide:pencil" mode="svg"/>
+                  </Button>
+                  <Button v-if="useUser.currentUser.id!==slotProps.data.user_id" severity="danger" variant="text" size="small" @click="confirmDelete(slotProps.data.id)">
                       <Icon name="lucide:trash" mode="svg"/>
                   </Button>
               </div>
@@ -90,35 +90,36 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  title: 'Semua Pegawai',
-})
-const pegawaiDialog = ref(false);
-const { urlStorage } = useGlobalStore()
-const confirm = useConfirm();
-const toast = useToast();
-const idpegawai = ref({});
-const route = useRoute();
-const page = ref(route.query.page ? Number(route.query.page) : 1);
+    definePageMeta({
+    title: 'Semua Pegawai',
+    })
+    const useUser = useUserStore()
+    const pegawaiDialog = ref(false);
+    const { urlStorage } = useGlobalStore()
+    const confirm = useConfirm();
+    const toast = useToast();
+    const idpegawai = ref({});
+    const route = useRoute();
+    const page = ref(route.query.page ? Number(route.query.page) : 1);
 
-const firstName = (name: string) => {
-      return Array.from(name)[0];
-}
+    const firstName = (name: string) => {
+        return Array.from(name)[0];
+    }
 
-const selectTab = ref('Profil');
-const optionsTab = ref(['Profil', 'Foto']);
+    const selectTab = ref('Profil');
+    const optionsTab = ref(['Profil', 'Foto']);
 
-const client = useSanctumClient();
-const { data, status, error, refresh } = await useAsyncData(
-    'pegawai',
-    () => client('/api/pegawai/?page='+page.value)
-)
+    const client = useSanctumClient();
+    const { data, status, error, refresh } = await useAsyncData(
+        'pegawai',
+        () => client('/api/pegawai/?page='+page.value)
+    )
 
-const onPaginate = (event: { page: number }) => {
-      page.value = event.page + 1; 
-      refresh()
-      navigateTo('/pegawai?page='+page.value)
-};
+    const onPaginate = (event: { page: number }) => {
+        page.value = event.page + 1; 
+        refresh()
+        navigateTo('/pegawai?page='+page.value)
+    };
 
   const editPegawai = (datapegawai:any) => {
       idpegawai.value = datapegawai.id;
@@ -159,8 +160,3 @@ const onPaginate = (event: { page: number }) => {
 
 </script>
 
-<style scoped>
-  .p-avatar img {
-      object-fit: cover;
-  }
-</style>

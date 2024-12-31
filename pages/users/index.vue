@@ -1,15 +1,5 @@
 <template>
 
-    <PageHeader>
-        <template #title>
-            Semua Users
-        </template>
-
-        <template #subtitle>
-            Semua users yang terdaftar
-        </template>
-    </PageHeader>
-
     <div class="rounded-md border overflow-hidden">
                 
         <DataTable :value="data.data" stripedRows scrollable scrollHeight="calc(100dvh - 235px)" tableStyle="min-width: 50rem">
@@ -75,6 +65,9 @@
 </template>
 
 <script lang="ts" setup>
+    definePageMeta({
+    title: 'Semua Akun',
+    })
     const { urlStorage } = useGlobalStore()
     const useUser = useUserStore()
     const confirm = useConfirm();

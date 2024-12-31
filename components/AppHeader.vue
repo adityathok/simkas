@@ -4,9 +4,9 @@
 
                 <div class="flex items-center justify-start">
                     
-                    <Button @click="$router.back()" size="small" severity="secondary" variant="link">
-                        <Icon name="lucide:chevron-left" />
-                    </Button>
+                    <button type="button" @click="$router.back()" class="py-1 px-2">
+                        <Icon name="lucide:chevron-left" mode="svg" />
+                    </button>
                     <h1 class="text-lg font-medium text-gray-900">
                         {{ $route.meta.title }}
                     </h1>
