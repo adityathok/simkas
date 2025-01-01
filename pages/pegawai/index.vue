@@ -1,6 +1,11 @@
 <template>
 
-  <Button @click="addPegawai" label="Tambah Pegawai" class="mb-3" />
+    <div class="flex justify-end mb-5">
+        <Button as="router-link" to="/pegawai/add" size="small">
+            <Icon name="lucide:user-plus" mode="svg"/>
+            Tambah
+        </Button>
+    </div>
 
   <div class="rounded-md border overflow-hidden text-nowrap bg-white shadow-sm">
     <DataTable :value="data.data" size="small" stripedRows scrollable tableStyle="min-width: 50rem">
@@ -8,14 +13,16 @@
       <Column field="foto" header="">            
           <template #body="slotProps">
               
-              <img v-if="slotProps.data.foto" :src="urlStorage+slotProps.data.foto" alt="" class="rounded-full aspect-square object-cover" width="32" height="32">
+            <span class="cursor-pointer" @click="showPegawai(slotProps.data.id)">
+              <img v-if="slotProps.data.user.avatar" :src="urlStorage+slotProps.data.user.avatar" alt="" class="rounded-full aspect-square object-cover" width="32" height="32">
               <Avatar v-else :label="firstName(slotProps.data.nama)" shape="circle" />
+            </span>
 
           </template>
       </Column>
       <Column field="nama" header="Nama">            
           <template #body="slotProps">
-              <div class="truncate" style="max-width: 200px">
+              <div class="truncate cursor-pointer" style="max-width: 200px" @click="showPegawai(slotProps.data.id)">
                   {{ slotProps.data.nama }}
               </div>
           </template>
@@ -35,14 +42,8 @@
       <Column :exportable="false"  header="">
           <template #body="slotProps">                
               <div class="flex justify-end">
-                  <Button severity="secondary" variant="text" size="small">
-                      <Icon name="lucide:eye" mode="svg"/>
-                  </Button>
-                  <Button as="router-link" severity="info" variant="text" size="small" :to="'/pegawai/edit?id='+slotProps.data.id">
-                    <Icon name="lucide:pencil" mode="svg"/>
-                  </Button>
-                  <Button v-if="useUser.currentUser.id!==slotProps.data.user_id" severity="danger" variant="text" size="small" @click="confirmDelete(slotProps.data.id)">
-                      <Icon name="lucide:trash" mode="svg"/>
+                  <Button type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
+                    <Icon name="lucide:ellipsis-vertical" mode="svg"/>
                   </Button>
               </div>
           </template>
@@ -59,39 +60,53 @@
               </span>
           </div>
           <Paginator
-                      :rows="data.per_page"
-                      :totalRecords="data.total"
-                      @page="onPaginate"
-                      :pt="{
-                          root: (event) => {
-                              const itemForPage =  data.per_page;
-                              const currentPage =  page - 1;
-                              event.state.d_first = itemForPage * currentPage;
-                          },
-                      }"
-                  >
+            :rows="data.per_page"
+            :totalRecords="data.total"
+            @page="onPaginate"
+            :pt="{
+                root: (event) => {
+                    const itemForPage =  data.per_page;
+                    const currentPage =  page - 1;
+                    event.state.d_first = itemForPage * currentPage;
+                },
+            }"
+            >
           </Paginator>
       </div>
   </div>
 
-  <Dialog v-model:visible="pegawaiDialog" :style="{ width: '800px' }" header="Profil Pegawai" :modal="true">
+  <Dialog v-model:visible="pegawaiDialog" :style="{ width: '500px' }" header="Profil Pegawai" :modal="true">
       <template v-if='pegawaiDialog'>
-          <div class="mb-5">
-              <SelectButton v-model="selectTab" :options="optionsTab" />
-          </div>
-
-          <PegawaiForm v-if='selectTab == "Profil"' :idpegawai="idpegawai" @update="pegawaiDialog = false; refresh()"/>
+          
+        Profil
 
       </template>
   </Dialog>
-  <Toast />
-  <ConfirmDialog></ConfirmDialog>
+
+    <Popover ref="op" :dismissable="true">
+        <div v-if="selectedItem" class="rounded flex flex-col">            
+            
+            <div class="truncate border-b text-xs pb-2 opacity-50" style="max-width: 100px">
+                {{ selectedItem.nama }}  
+            </div>       
+            
+            <Button @click="showPegawai(selectedItem.id)" severity="secondary" variant="text" size="small" class="w-full !justify-start">
+                <Icon name="lucide:eye" mode="svg"/> Lihat
+            </Button>
+            <Button as="router-link" severity="info" variant="text" size="small" :to="'/pegawai/edit?id='+selectedItem.id" class="w-full !justify-start">
+                <Icon name="lucide:pencil" mode="svg"/> Edit
+            </Button>
+            <Button v-if="useUser.currentUser.id!==selectedItem.user_id" @click="confirmDelete(selectedItem.id)" severity="danger" variant="text" size="small" class="w-full !justify-start">
+                <Icon name="lucide:trash" mode="svg"/> Hapus
+            </Button>
+        </div>
+    </Popover>
 
 </template>
 
 <script setup lang="ts">
     definePageMeta({
-    title: 'Semua Pegawai',
+        title: 'Semua Pegawai',
     })
     const useUser = useUserStore()
     const pegawaiDialog = ref(false);
@@ -101,35 +116,41 @@
     const idpegawai = ref({});
     const route = useRoute();
     const page = ref(route.query.page ? Number(route.query.page) : 1);
+    const selectedItem = ref();
+    const op = ref();
 
     const firstName = (name: string) => {
         return Array.from(name)[0];
     }
 
-    const selectTab = ref('Profil');
-    const optionsTab = ref(['Profil', 'Foto']);
-
     const client = useSanctumClient();
     const { data, status, error, refresh } = await useAsyncData(
-        'pegawai',
+        'pegawai-page-'+page.value,
         () => client('/api/pegawai/?page='+page.value)
     )
 
     const onPaginate = (event: { page: number }) => {
         page.value = event.page + 1; 
         refresh()
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
         navigateTo('/pegawai?page='+page.value)
     };
 
-  const editPegawai = (datapegawai:any) => {
-      idpegawai.value = datapegawai.id;
-      pegawaiDialog.value = true;
-  };
+    const showPegawai = (datapegawai:any) => {
+        op.value.hide();
+        idpegawai.value = datapegawai.id;
+        pegawaiDialog.value = true;
+    };
 
-  const addPegawai = () => {
-      pegawaiDialog.value = true;
-      refresh
-  };
+  const displayPop = (event: Event, pegawai: any) => {
+    op.value.hide();
+    selectedItem.value = pegawai;
+    op.value.show(event);
+  }
 
   /**
    * Confirm delete a pegawai

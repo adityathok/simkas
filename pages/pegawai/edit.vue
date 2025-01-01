@@ -1,11 +1,26 @@
 <template>
-
-  <div class="bg-white rounded-md shadow-sm p-2 mb-3">
-    <SelectButton size="small" v-model="selectTab" :options="optionsTab" @change="tabclick"/>
+  
+  <div class="flex justify-end gap-2 mb-3">
+    <Button as="router-link" to="/pegawai" variant="outlined" size="small">
+        <Icon name="lucide:list" mode="svg"/>
+        Semua
+    </Button>
+    <Button as="router-link" to="/pegawai/add" size="small">
+        <Icon name="lucide:user-plus" mode="svg"/>
+        Tambah
+    </Button>
   </div>
 
   <Card>
     <template #content>
+
+      <h2 class="font-bold text-xl mb-5">
+        {{ data.nama }}
+      </h2>
+
+      <div class="mb-3">
+        <SelectButton v-model="selectTab" :options="optionsTab" @change="tabclick"/>
+      </div>
       
       <PegawaiAkun v-if="selectTab == 'Akun'" :idpegawai="idPegawai" />
 
@@ -41,8 +56,8 @@
   };
 
   const { data, status, error, refresh } = await useAsyncData(
-        'pegawai'+idPegawai,
-        () => client('/api/pegawai/'+idPegawai)
+    'pegawai'+idPegawai,
+    () => client('/api/pegawai/'+idPegawai)
   )
  
 </script>

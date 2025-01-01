@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white shadow-sm px-3 md:px-6 py-5 mb-3">
+    <div class="bg-white shadow-sm p-3 md:px-6 mb-3">
             <div class="flex items-center justify-between">
 
                 <div class="flex items-center justify-start">
@@ -17,7 +17,9 @@
                         <Icon name="bi:bell" />
                     </Button>
                     
-                    <Avatar :image="avatar" shape="circle" class="object-cover" @click="toggleAvatar" />
+                    <Avatar v-if="avatar" :image="avatar" shape="circle" class="object-cover" @click="toggleAvatar" />
+                    <Avatar v-else :label="firstName(user.name)" shape="circle" class="cursor-pointer" @click="toggleAvatar" />
+
                     <Menu ref="menu" id="avatar_menu" :model="menuAvatar" :popup="true" />
 
                     <div class="md:hidden ms-1">
@@ -36,13 +38,18 @@
 <script setup>
 const useGlobal = useGlobalStore()
 const useUser = useUserStore()
+const user = useSanctumUser();
 
 const { toLogout } = useAuth()
-const avatar = useUser.currentUser.avatar ? useGlobal.urlStorage+useUser.currentUser.avatar : '~/assets/img/ava-man.jpg';
+const avatar = user.value.avatar ? useGlobal.urlStorage+user.value.avatar : '';
 const menu = ref();
 const toggleAvatar = (event) => {
     menu.value.toggle(event);
 };
+
+const firstName = (name) => {
+    return Array.from(name)[0];
+}
 
  // Daftar Menu dengan label dinamis menggunakan user.name
  const menuAvatar = computed(() => {
