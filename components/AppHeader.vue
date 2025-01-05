@@ -17,7 +17,7 @@
                         <Icon name="bi:bell" />
                     </Button>
                     
-                    <Avatar v-if="avatar" :image="avatar" shape="circle" class="object-cover" @click="toggleAvatar" />
+                    <img v-if="avatar" :src="avatar" alt="" class="rounded-full aspect-square object-cover" width="32" height="32" @click="toggleAvatar">
                     <Avatar v-else :label="firstName(user.name)" shape="circle" class="cursor-pointer" @click="toggleAvatar" />
 
                     <Menu ref="menu" id="avatar_menu" :model="menuAvatar" :popup="true" />
@@ -41,7 +41,7 @@ const useUser = useUserStore()
 const user = useSanctumUser();
 
 const { toLogout } = useAuth()
-const avatar = user.value.avatar ? useGlobal.urlStorage+user.value.avatar : '';
+const avatar = user.value.avatar ? user.value.avatar : '';
 const menu = ref();
 const toggleAvatar = (event) => {
     menu.value.toggle(event);

@@ -59,7 +59,7 @@
 
   onMounted(() => {
     if(form.avatar){
-      previewFoto.value = urlStorage+form.avatar
+      previewFoto.value = data.value.avatar_url
     }
   })
 

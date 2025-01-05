@@ -14,7 +14,7 @@
           <template #body="slotProps">
               
             <span class="cursor-pointer" @click="showPegawai(slotProps.data.id)">
-              <img v-if="slotProps.data.user.avatar" :src="urlStorage+slotProps.data.user.avatar" alt="" class="rounded-full aspect-square object-cover" width="32" height="32">
+              <img v-if="slotProps.data.user.avatar" :src="slotProps.data.user.avatar_file.url" alt="" class="rounded-full aspect-square object-cover" width="32" height="32">
               <Avatar v-else :label="firstName(slotProps.data.nama)" shape="circle" />
             </span>
 
