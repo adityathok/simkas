@@ -26,11 +26,6 @@
                     <div class="mb-3">
                         <label for="email" class="block mb-1">Email</label>
                         <InputText type="text" id="email" class="w-full" v-model="form.email" />
-                    </div>    
-                    <div class="mb-3">
-                        <label for="avatar" class="block mb-1">Avatar</label>
-                        <img v-if="form.avatar" :src="form.avatar" alt="" class="rounded mb-2">
-                        <InputText @change="handleFileUpload" type="file" id="avatar" class="w-full"/>
                     </div>
 
                     <div v-if="eror">
@@ -48,20 +43,18 @@
 
     </Card>
 
-    <Toast />
 </template>
 
 <script lang="ts" setup>
-    const { currentUser,refreshUser } = useUserStore()
-    const { urlStorage } = useGlobalStore()
-    const route = useRoute()
+    const { isAuthenticated, user, refreshIdentity } = useSanctumAuth()
+    const route = useRoute();
     const toast = useToast();
     const idUser = route.query.id || '';
     const client = useSanctumClient();
     const eror = ref({})
 
-    if(!idUser){
-       await navigateTo('/users')
+    if(idUser==''){
+       await navigateTo('/')
     }
 
     const { data, status, error, refresh } = await useAsyncData(
@@ -72,41 +65,28 @@
     const form = ref({
         name: data.value.name,
         email: data.value.email,
-        avatar: urlStorage+data.value.avatar,
-        file: '',
     })
 
-    // Method untuk meng-handle file upload
-    function handleFileUpload(event: any) {
-        form.value.file = event.target.files[0];
-        form.value.avatar = URL.createObjectURL(event.target.files[0])
-    }
-
     const handleFormSubmit = async () => {
-        const formData = new FormData();
-        formData.append('name', form.value.name);
-        formData.append('email', form.value.email);
-        if(form.value.file){
-            formData.append('avatar', form.value.file);
-        }
 
         try {
             await client('/api/users/'+data.value.id, {
                 method: 'PUT',
-                body: formData
+                params: form.value
             })
             refresh()
             toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil diperbarui', life: 3000 });
             eror.value = ({});
             //jika id sama dengan id user yang sedang login
-            if(idUser == currentUser.id){
-                await refreshUser()
-            }
+            // if(idUser == user.id){
+            //     await refreshIdentity()
+            // }
         } catch (er) {
             const e = useSanctumError(er);
             eror.value = e.bag;
             console.log(er);
         }
+
     }
 
 </script>

@@ -103,7 +103,7 @@
       refresh()
       previewFoto.value = ''
       form.avatar = ''
-      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Gambar berhasil dihapus', life: 3000 });
     } catch (er) {    
       const e = useSanctumError(er);      
       console.log(e.bag);      
