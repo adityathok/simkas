@@ -1,19 +1,27 @@
 <template>
-  
+ 
   <form @submit.prevent="handleFormSubmit">
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
       <div v-for="field in formFields" :key="field.key">
 
-          <label :for="field.key" class="block mb-1">{{ field.label }}</label>
+          <template v-if="isLoad">
+            <Skeleton width="10rem" class="mb-2"></Skeleton>
+            <Skeleton height="2rem" class="mb-2"></Skeleton>
+          </template>
 
-          <InputText v-if="field.type == 'date'" type="date" v-model="form[field.key]" :id="field.key" class="w-full" />
+          <template v-else>
 
-          <Select v-else-if="field.type == 'select'" v-model="form[field.key]" :options="field.options" placeholder="Pilih" class="w-full" />
+            <label :for="field.key" class="block mb-1">{{ field.label }}</label>
 
-          <InputText v-else :id="field.key" class="w-full" v-model="form[field.key]" />
+            <InputText v-if="field.type == 'date'" type="date" v-model="form[field.key]" :id="field.key" class="w-full" />
 
+            <Select v-else-if="field.type == 'select'" v-model="form[field.key]" :options="field.options" placeholder="Pilih" class="w-full" />
+
+            <InputText v-else :id="field.key" class="w-full" v-model="form[field.key]" />
+
+          </template>
       </div>       
         
     </div> 
@@ -43,6 +51,7 @@
   const toast = useToast();
   const client = useSanctumClient();
 
+  const isLoad = ref(true)
   const isLoading = ref(false)
   const error = ref({})
 
@@ -66,6 +75,7 @@
       }
   }).then((res) => {
     Object.assign(form, res)
+    isLoad.value = false; 
   })
 
   const handleFormSubmit = async () => {
@@ -76,10 +86,9 @@
     for (const key in form) {
       formData.append(key, form[key]);
     }
-
     try {
-        await client('/api/pegawai/'+idUser, {
-          method: 'PUT',
+        await client('/api/usermeta/'+idUser, {
+          method: 'POST',
           body: formData
         })
         toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil diperbarui', life: 3000 });
