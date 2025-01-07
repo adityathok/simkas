@@ -13,7 +13,7 @@
       <Column field="foto" header="">            
           <template #body="slotProps">
               
-            <span class="cursor-pointer" @click="showPegawai(slotProps.data.id)">
+            <span class="cursor-pointer" @click="showPegawai(slotProps.data)">
               <img v-if="slotProps.data.user.avatar" :src="slotProps.data.user.avatar_file.url" alt="" class="rounded-full aspect-square object-cover" width="32" height="32">
               <Avatar v-else :label="firstName(slotProps.data.nama)" shape="circle" />
             </span>
@@ -22,7 +22,7 @@
       </Column>
       <Column field="nama" header="Nama">            
           <template #body="slotProps">
-              <div class="truncate cursor-pointer" style="max-width: 200px" @click="showPegawai(slotProps.data.id)">
+              <div class="truncate cursor-pointer" style="max-width: 200px" @click="showPegawai(slotProps.data)">
                   {{ slotProps.data.nama }}
               </div>
           </template>
@@ -78,7 +78,7 @@
   <Dialog v-model:visible="pegawaiDialog" :style="{ width: '500px' }" header="Profil Pegawai" :modal="true">
       <template v-if='pegawaiDialog'>
           
-        Profil
+        <PegawaiProfil :idpegawai="idpegawai" :data="itemPegawai" />
 
       </template>
   </Dialog>
@@ -90,7 +90,7 @@
                 {{ selectedItem.nama }}  
             </div>       
             
-            <Button @click="showPegawai(selectedItem.id)" severity="secondary" variant="text" size="small" class="w-full !justify-start">
+            <Button @click="showPegawai(selectedItem)" severity="secondary" variant="text" size="small" class="w-full !justify-start">
                 <Icon name="lucide:eye" mode="svg"/> Lihat
             </Button>
             <Button as="router-link" severity="info" variant="text" size="small" :to="'/pegawai/edit?id='+selectedItem.id" class="w-full !justify-start">
@@ -105,15 +105,17 @@
 </template>
 
 <script setup lang="ts">
+import PegawaiProfil from '~/components/Pegawai/PegawaiProfil.vue';
+
     definePageMeta({
         title: 'Semua Pegawai',
     })
     const useUser = useUserStore()
     const pegawaiDialog = ref(false);
-    const { urlStorage } = useGlobalStore()
     const confirm = useConfirm();
     const toast = useToast();
     const idpegawai = ref({});
+    const itemPegawai = ref();
     const route = useRoute();
     const page = ref(route.query.page ? Number(route.query.page) : 1);
     const selectedItem = ref();
@@ -144,6 +146,7 @@
         op.value.hide();
         idpegawai.value = datapegawai.id;
         pegawaiDialog.value = true;
+        itemPegawai.value = datapegawai;
     };
 
   const displayPop = (event: Event, pegawai: any) => {
