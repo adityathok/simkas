@@ -8,14 +8,13 @@
     </div>
 
   <div class="rounded-md border overflow-hidden text-nowrap bg-white shadow-sm">
-    <DataTable :value="data.data" size="small" stripedRows scrollable tableStyle="min-width: 50rem">
+    <DataTable :value="data.data" size="small" stripedRows scrollable>
 
       <Column field="foto" header="">            
           <template #body="slotProps">
               
             <span class="cursor-pointer" @click="showPegawai(slotProps.data)">
-              <img v-if="slotProps.data.user.avatar" :src="slotProps.data.user.avatar_file.url" alt="" class="rounded-full aspect-square object-cover" width="32" height="32">
-              <Avatar v-else :label="firstName(slotProps.data.nama)" shape="circle" />
+                <UserAvatar :url="slotProps.data.avatar_url" :name="slotProps.data.nama" :size="32" />
             </span>
 
           </template>
@@ -25,20 +24,29 @@
               <div class="truncate cursor-pointer" style="max-width: 200px" @click="showPegawai(slotProps.data)">
                   {{ slotProps.data.nama }}
               </div>
+              <div class="md:hidden text-xs opacity-50">
+                  {{ slotProps.data.nip }}
+              </div>
           </template>
       </Column>
-      <Column field="nip" header="NIP"></Column>
-      <Column field="email" header="Email">                       
+      <Column field="nip" header="NIP" class="hidden md:table-cell"></Column>
+      <Column field="email" header="Email" class="hidden md:table-cell">                       
           <template #body="slotProps">
-              <div class="truncate" style="max-width: 200px">
+              <div class="truncate">
                   {{ slotProps.data.email }}
               </div>
           </template>
       </Column>
-      <Column field="jenis_kelamin" header="JK"></Column>
-      <Column field="status" header="Status"></Column>
+      <Column field="jenis_kelamin" header="JK" class="hidden xl:table-cell"></Column>
+      <Column field="status" header="Status" class="hidden md:table-cell"></Column>
       <Column field="tanggal_masuk" header="Masuk" class="hidden 2xl:table-cell"></Column>
-      <Column field="tanggal_lahir" header="Lahir" class="hidden 2xl:table-cell"></Column>
+      <Column field="tanggal_lahir" header="TTL" class="hidden 2xl:table-cell">                               
+        <template #body="slotProps">
+            <div class="truncate">
+                {{ slotProps.data.tempat_lahir }}, {{ slotProps.data.tanggal_lahir }}
+            </div>
+        </template>
+      </Column>
       <Column :exportable="false"  header="">
           <template #body="slotProps">                
               <div class="flex justify-end">
@@ -75,10 +83,22 @@
       </div>
   </div>
 
-  <Dialog v-model:visible="pegawaiDialog" :style="{ width: '500px' }" header="Profil Pegawai" :modal="true">
+  <Dialog v-model:visible="pegawaiDialog" :style="{ width: '40rem' }" :breakpoints="{ '1000px': '40rem', '768px': '90vw' }" header="" :modal="true">
       <template v-if='pegawaiDialog'>
           
         <PegawaiProfil :idpegawai="idpegawai" :data="itemPegawai" />
+
+        <div class="flex justify-end gap-1 mt-4">
+            <Button severity="secondary" variant="outlined" @click="pegawaiDialog = false" >
+                <Icon name="lucide:x" mode="svg"/> Tutup
+            </Button>
+            <Button severity="info" variant="outlined" as="router-link" :to="'/pegawai/edit?id='+idpegawai" >
+                <Icon name="lucide:pencil" mode="svg"/> Edit
+            </Button>
+            <Button v-if="useUser.currentUser.id!==idpegawai" @click="confirmDelete(idpegawai)" severity="danger" variant="outlined">
+                <Icon name="lucide:trash" mode="svg"/> Hapus
+            </Button>
+        </div>
 
       </template>
   </Dialog>
@@ -105,7 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import PegawaiProfil from '~/components/Pegawai/PegawaiProfil.vue';
+import UserAvatar from '~/components/User/UserAvatar.vue';
 
     definePageMeta({
         title: 'Semua Pegawai',
@@ -159,7 +179,7 @@ import PegawaiProfil from '~/components/Pegawai/PegawaiProfil.vue';
    * Confirm delete a pegawai
    * @param {string} id
    */
-  const confirmDelete = (id: string) => {
+  const confirmDelete = (id : any) => {
       confirm.require({
           message: 'Yakin untuk menghapus pegawai ini ?',
           header: 'Hapus User',

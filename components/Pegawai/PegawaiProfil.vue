@@ -1,23 +1,51 @@
-
 <template>
 
-  <div class="flex justify-center items-center">
-    <UserAvatar :url="data.avatar_url" :name="data.nama" />
+  <div class="flex justify-start items-start">    
+    <UserAvatar :url="data.avatar_url" :name="data.nama" :size="100" />
   </div>
 
-  <div v-for="field in fields" :key="field.key" class="border-b p-2">
-    <div class="font-semibold mb-1">
-       {{ field.label }}
-    </div>
-    <div>
-      {{  data[field.key] }}
-    </div>
-  </div>
+  <Tabs value="0">
+      <TabList>
+          <Tab value="0">Profil</Tab>
+          <Tab value="1">Informasi</Tab>
+      </TabList>
+      <TabPanels>
+          <TabPanel value="0">                    
+            <div v-for="field in fields" :key="field.key" class="border-b py-2">
+              <div class="font-semibold mb-1">
+                {{ field.label }}
+              </div>
+              <div>
+                {{  data[field.key] }}
+              </div>
+            </div>
+          </TabPanel>
+          <TabPanel value="1">
+             <div class="border-b py-2">
+                <div class="font-semibold mb-1">Pendidikan Terakhir</div>
+                <div>
+                  {{  data.metas.pendidikan_terakhir||'-' }}
+                </div>
+             </div>
+             <div class="border-b py-2">
+                <div class="font-semibold mb-1">NIK</div>
+                <div>
+                  {{  data.metas.nik||'-' }}
+                </div>
+             </div>
+             <div class="border-b py-2">
+                <div class="font-semibold mb-1">Golongan</div>
+                <div>
+                  {{  data.metas.golongan||'-' }}
+                </div>
+             </div>
+          </TabPanel>
+      </TabPanels>
+  </Tabs>
+
 </template>
 
 <script setup lang="ts">
-import { Avatar } from 'primevue';
-
   const props = defineProps(['idpegawai','data'])
   const idpegawai = props.idpegawai || '';
   const data = props.data
