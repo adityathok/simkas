@@ -26,6 +26,8 @@
 
       <PegawaiFormInfo v-else-if="selectTab == 'Info'" :iduser="data.user_id" :data="data" />
 
+      <UserFormAlamat v-else-if="selectTab == 'Alamat'" :iduser="data.user_id" />
+
       <UserFormAvatar v-else-if="selectTab == 'Foto'" :iduser="data.user_id" />
 
       <PegawaiFormProfil v-else :idpegawai="idPegawai" :data="data" :action="'edit'" />
@@ -45,7 +47,7 @@
   const idTab = route.query.tab || 'Profil';
 
   const selectTab = ref(idTab);
-  const optionsTab = ref(['Profil','Info', 'Akun', 'Foto']); 
+  const optionsTab = ref(['Profil','Info','Alamat','Akun', 'Foto']); 
 
   onMounted(() => {
     if (idPegawai == '') {

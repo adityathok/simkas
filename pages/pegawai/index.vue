@@ -83,7 +83,7 @@
       </div>
   </div>
 
-  <Dialog v-model:visible="pegawaiDialog" :style="{ width: '40rem' }" :breakpoints="{ '1000px': '40rem', '768px': '90vw' }" header="" :modal="true">
+  <Dialog v-model:visible="pegawaiDialog" :style="{ width: '30rem', minHeight: '50vh' }" :breakpoints="{ '1000px': '40rem', '768px': '90vw' }" :modal="true">
       <template v-if='pegawaiDialog'>
           
         <PegawaiProfil :idpegawai="idpegawai" :data="itemPegawai" />
