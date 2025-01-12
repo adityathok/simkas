@@ -172,6 +172,12 @@ const items = ref([
         ]
     },
     {
+        key: 'pengaturan',
+        label: 'Pengaturan',
+        icon: 'lucide:settings',
+        href:'/pengaturan',
+    },
+    {
         key: 'users',
         label: 'Users',
         icon: 'lucide:square-user',
