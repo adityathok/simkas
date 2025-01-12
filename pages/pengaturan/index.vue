@@ -5,13 +5,13 @@
       
       <form @submit.prevent="handleFormSubmit">
         
-        <div v-for="field in fields" :key="field.key">
+        <div v-for="field in fields" :key="field.key" class="border-b border-gray-100 py-2">
 
           <div v-if="status == 'pending'">
             <Skeleton height="10rem"></Skeleton>
           </div>
 
-          <div v-else class="flex flex-col md:flex-row md:justify-between md:items-top border-b py-2">
+          <div v-else class="flex flex-col md:flex-row md:justify-between md:items-top gap-2">
 
             <div class="md:basis-1/3 lg:basis-1/4">
               <label :for="field.key" class="block mb-1">{{ field.label }}</label>
@@ -69,7 +69,7 @@
     { label: 'Pimpinan', key: 'pimpinan_lembaga', type: 'text' },
   ]
 
-  const { data, status, error, refresh } = await useAsyncData(
+  const { data, status } = await useAsyncData(
       'pengaturan-lembaga',
       () => client('/api/setting', {
          method: 'GET',

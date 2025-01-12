@@ -9,7 +9,7 @@
             <div class="overflow-x-auto">
               <div class="flex md:flex-col mb-3">
                 <div v-for="menu in menus" :key="menu.href" class="flex-1 md:basis-full">
-                  <NuxtLink :to="menu.href" class="block rounded mr-1 md:mb-1 py-2 px-4 text-slate-500 hover:text-slate-900 hover:bg-gray-100" :class="{ 'bg-gray-100 text-slate-900': isActive(menu.href) }">
+                  <NuxtLink :to="menu.href" class="block rounded mr-1 md:mb-1 py-2 px-4 text-slate-500 hover:text-slate-900 hover:bg-gray-100 border border-slate-50" :class="{ 'bg-gray-100 text-slate-900 border-slate-200': isActive(menu.href) }">
                     {{ menu.label }}
                   </NuxtLink>
                 </div>
