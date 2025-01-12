@@ -137,6 +137,10 @@
   }
   
   const handleFormSubmitLogo = async () => {
+    if(!fileLogo.value){
+      toast.add({ severity: 'error', summary: 'Gagal', detail: 'Logo belum dipilih', life: 3000 });
+      return
+    }
     const formData = new FormData();
     formData.append('logo', fileLogo.value);
     try {
