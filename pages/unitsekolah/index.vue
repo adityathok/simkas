@@ -1,9 +1,6 @@
 <template>
 
   <Card>
-      <template #title>
-          Unit Sekolah
-      </template>
     <template #content>
 
       <DataTable :value="data.data" stripedRows scrollable scrollHeight="100dvh" tableStyle="min-width: 50rem">
@@ -76,6 +73,9 @@
 </template>
 
 <script lang="ts" setup>
+  definePageMeta({
+      title: 'Unit Sekolah',
+  })
   const route = useRoute();
   const page = ref(route.query.page ? Number(route.query.page) : 1);
   const client = useSanctumClient();

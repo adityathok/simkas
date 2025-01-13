@@ -138,23 +138,6 @@ const items = ref([
         ]
     },
     {
-        key: 'settings',
-        label: 'Pengaturan',
-        icon: 'lucide:settings',
-        items: [
-            {
-                key: 'settings_0',
-                label: 'Umum',
-                href:'/settings/umum',
-            },
-            {
-                key: 'settings_1',
-                label: 'Jenjang',
-                href:'/settings/jenjang',
-            }
-        ]
-    },
-    {
         key: 'pegawai',
         label: 'Pegawai',
         icon: 'lucide:circle-user',
