@@ -2,7 +2,7 @@
 
     <div class="fixed md:sticky top-0 overflow-y-auto md:start-0 z-20 px-2 pb-3 h-svh w-[90%] md:w-[14rem] bg-gradient-to-bl from-slate-900 to-slate-700 shadow md:shadow-none transition ease-in-out duration-100" :class="{'start-[0%]': useGlobal.opensidebar, 'start-[-100%]': !useGlobal.opensidebar}">
 
-        <div class="flex items-center z-10 p-3 min-h-[5rem] mb-2 border-b border-zinc-500">
+        <div class="flex items-center z-10 p-3 min-h-[5rem] mb-2 text-white border-b border-zinc-500">
             <AppLogo />
         </div>
 
@@ -32,7 +32,7 @@
                     </span>
                     <Icon v-if="item.items" name="lucide:chevron-down" />
                 </button>
-                <NuxtLink v-else :to="item.href" :class="[classLink,{'bg-blue-600 text-white hover:text-slate-500 shadow' : isActive(item.href)}]">
+                <NuxtLink v-else :to="item.href" :class="[classLink,{'bg-blue-600 text-white hover:text-slate-500 shadow' : isActive(item.href)}]" @click="useGlobal.toggelsidebar">
                     <span class="flex justify-start items-center">
                         <Icon v-if="item.icon" :name="item.icon" :ssr="true" class="mr-2"/>
                         <span :class="{'ml-5':item.key.includes('_')}">{{ item.label }}</span>
