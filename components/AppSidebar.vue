@@ -27,14 +27,14 @@
             <template #item="{ item }">
                 <button v-if="item.items" v-ripple :class="[classLink,{'bg-blue-600 text-white hover:text-slate-500 shadow' : isActive(item.href)}]">
                     <span class="flex justify-start items-center">
-                        <Icon v-if="item.icon" :name="item.icon" :ssr="true" class="mr-2"/>
+                        <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="mr-2"/>
                         <span>{{ item.label }}</span>
                     </span>
                     <Icon v-if="item.items" name="lucide:chevron-down" />
                 </button>
                 <NuxtLink v-else :to="item.href" :class="[classLink,{'bg-blue-600 text-white hover:text-slate-500 shadow' : isActive(item.href)}]" @click="useGlobal.toggelsidebar">
                     <span class="flex justify-start items-center">
-                        <Icon v-if="item.icon" :name="item.icon" :ssr="true" class="mr-2"/>
+                        <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="mr-2"/>
                         <span :class="{'ml-5':item.key.includes('_')}">{{ item.label }}</span>
                     </span>
                 </NuxtLink>

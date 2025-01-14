@@ -1,25 +1,34 @@
 <template>
 
+  <div class="flex justify-end mb-5">
+      <Button as="router-link" to="/pegawai/add" size="small">
+          <Icon name="lucide:circle-plus" mode="svg"/>
+          Tambah
+      </Button>
+  </div>
+
   <Card>
     <template #content>
 
-      <DataTable :value="data.data" stripedRows scrollable scrollHeight="100dvh" tableStyle="min-width: 50rem">
+      <DataTable :value="data.data"  class="text-sm" stripedRows scrollable>
 
         <Column field="nama" header="Nama">
           <template #body="slotProps">
-            <span @click="dialogUnit(slotProps.data.id)" class="cursor-pointer">
+            <div @click="openDialog(slotProps.data,'view')" class="cursor-pointer">
               {{ slotProps.data.nama }}
-            </span>
+            </div>
           </template>
         </Column>
-        <Column field="jenjang" header="Jenjang" class="hidden md:table-cell"></Column>
-        <Column field="kepala_sekolah" header="Kepala Sekolah" class="hidden xl:table-cell"></Column>
-        <Column field="telepon" header="Telepon" class="hidden md:table-cell"></Column>
+        <Column field="jenjang" header="Jenjang" class="hidden lg:table-cell"></Column>
+        <Column field="telepon" header="Telepon" class="hidden lg:table-cell"></Column>
         <Column field="whatsapp" header="Whatsapp"  class="hidden sm:table-cell"></Column>
         <Column field="email" header="Email" class="hidden xl:table-cell"></Column>
         <Column field="option">
             <template #body="slotProps">
-                <div class="flex justify-end items-center">
+                <div class="flex justify-end items-center gap-1">
+                    <Button severity="info" variant="text" @click="openDialog(slotProps.data,'edit')">
+                      <Icon name="lucide:square-pen" mode="svg" />
+                    </Button>
                     <NuxtLink :to="'/unitsekolah/edit?id='+slotProps.data.id" class="!bg-transparent !border-none !text-slate-800" variant="text" size="small">
                       <Icon name="lucide:pencil" />
                     </NuxtLink>
@@ -35,7 +44,7 @@
                   Loading....
               </span>
               <span v-else>
-                  Tampil {{ data.per_page }} dari {{ data.total }}
+                Tampil {{ data.from }} sampai {{ data.to }} dari {{ data.total }}
               </span>
 
           </div>
@@ -57,18 +66,11 @@
     </template>
   </Card>
 
-  <div class="rounded-md border overflow-hidden">
 
-    
-
-
-    
-  </div>
-
-  <Dialog v-model:visible="visibleDialog" modal header="Header" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-        <p class="mb-8">
-        </p>
-    </Dialog>
+  <Dialog v-model:visible="visibleDialog" :modal="true" header="Unit Sekolah" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <UnitSekolahFormEdit v-if="actionDialog === 'edit'" :data="selectedItem" />
+    <UnitSekolahView v-else :data="selectedItem" />
+  </Dialog>
 
 </template>
 
@@ -80,26 +82,26 @@
   const page = ref(route.query.page ? Number(route.query.page) : 1);
   const client = useSanctumClient();
   const { data, status, error, refresh } = await useAsyncData(
-      'unitsekolah',
+      'unitsekolah-page-'+page.value,
       () => client('/api/unitsekolah/?page='+page.value)
   )
 
   const onPaginate = (event: { page: number }) => {
-        page.value = event.page + 1; 
-        refresh()
-        navigateTo('/unitsekolah?page='+page.value)
+      page.value = event.page + 1; 
+      refresh()
+      navigateTo('/unitsekolah?page='+page.value)
   };
 
   const Unit = ref({});
 
   const visibleDialog = ref(false);
-  const dialogUnit = (id : string) => {
-    visibleDialog.value = true;
-    client('/api/unitsekolah/'+id)
-        .then((res) => {
-            Unit.value = res.data
-    })
-  }
+  const actionDialog = ref('add');
+  const selectedItem = ref({});
 
+  const openDialog = (itemData: any,action : string) => {
+      visibleDialog.value = true;
+      actionDialog.value = action;
+      selectedItem.value = itemData;
+  }
 
 </script>

@@ -7,81 +7,93 @@
         </Button>
     </div>
 
-  <div class="rounded-md border overflow-hidden text-nowrap bg-white shadow-sm">
-    <DataTable :value="data.data" size="small" stripedRows scrollable>
+    <Card>
+        <template #content>
 
-      <Column field="foto" header="">            
-          <template #body="slotProps">
-              
-            <span class="cursor-pointer" @click="showPegawai(slotProps.data)">
-                <UserAvatar :url="slotProps.data.avatar_url" :name="slotProps.data.nama" :size="32" />
-            </span>
+        <div class="overflow-hidden text-nowrap shadow-sm">
+            <DataTable :value="data.data" size="small" class="text-sm" stripedRows scrollable>
 
-          </template>
-      </Column>
-      <Column field="nama" header="Nama">            
-          <template #body="slotProps">
-              <div class="truncate cursor-pointer" style="max-width: 200px" @click="showPegawai(slotProps.data)">
-                  {{ slotProps.data.nama }}
-              </div>
-              <div class="md:hidden text-xs opacity-50">
-                  {{ slotProps.data.nip }}
-              </div>
-          </template>
-      </Column>
-      <Column field="nip" header="NIP" class="hidden md:table-cell"></Column>
-      <Column field="email" header="Email" class="hidden md:table-cell">                       
-          <template #body="slotProps">
-              <div class="truncate">
-                  {{ slotProps.data.email }}
-              </div>
-          </template>
-      </Column>
-      <Column field="jenis_kelamin" header="JK" class="hidden xl:table-cell"></Column>
-      <Column field="status" header="Status" class="hidden md:table-cell"></Column>
-      <Column field="tanggal_masuk" header="Masuk" class="hidden 2xl:table-cell"></Column>
-      <Column field="tanggal_lahir" header="TTL" class="hidden 2xl:table-cell">                               
-        <template #body="slotProps">
-            <div class="truncate">
-                {{ slotProps.data.tempat_lahir }}, {{ slotProps.data.tanggal_lahir }}
+            <Column field="foto" header="">            
+                <template #body="slotProps">
+                    
+                    <span class="cursor-pointer" @click="showPegawai(slotProps.data)">
+                        <UserAvatar :url="slotProps.data.avatar_url" :name="slotProps.data.nama" :size="32" />
+                    </span>
+
+                </template>
+            </Column>
+            <Column field="nama" header="Nama">            
+                <template #body="slotProps">
+                    <div class="truncate cursor-pointer" style="max-width: 200px" @click="showPegawai(slotProps.data)">
+                        {{ slotProps.data.nama }}
+                    </div>
+                    <div class="md:hidden text-xs opacity-50">
+                        {{ slotProps.data.nip }}
+                    </div>
+                </template>
+            </Column>
+            <Column field="nip" header="NIP" class="hidden md:table-cell"></Column>
+            <Column field="email" header="Email" class="hidden lg:table-cell">                       
+                <template #body="slotProps">
+                    <div class="truncate">
+                        {{ slotProps.data.email }}
+                    </div>
+                </template>
+            </Column>
+            <Column field="jenis_kelamin" header="JK" class="hidden xl:table-cell"></Column>
+            <Column field="status" header="Status" class="hidden lg:table-cell">
+                <template #body="slotProps">
+                    <Badge :severity="slotProps.data.status == 'Aktif' ? 'success' : 'danger'">
+                        {{ slotProps.data.status }}
+                    </Badge>
+                </template>
+            </Column>
+            <Column field="tanggal_masuk" header="Masuk" class="hidden 2xl:table-cell"></Column>
+            <Column field="tanggal_lahir" header="TTL" class="hidden 2xl:table-cell">                               
+                <template #body="slotProps">
+                    <div class="truncate">
+                        {{ slotProps.data.tempat_lahir }}, {{ slotProps.data.tanggal_lahir }}
+                    </div>
+                </template>
+            </Column>
+            <Column :exportable="false"  header="">
+                <template #body="slotProps">                
+                    <div class="flex justify-end">
+                        <Button type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
+                            <Icon name="lucide:ellipsis-vertical" mode="svg"/>
+                        </Button>
+                    </div>
+                </template>
+            </Column>
+
+            </DataTable>
+            <div class="mt-2 md:flex md:justify-between md:items-center">
+                <div class="opacity-50 text-sm text-right md:text-left mx-3 mb-2 md:mb-0">  
+                    <span v-if="status === 'pending'" class="opacity-50">
+                        Loading....
+                    </span>
+                    <span v-else>
+                        Tampil {{ data.from }} sampai {{ data.to }} dari {{ data.total }}
+                    </span>
+                </div>
+                <Paginator
+                    :rows="data.per_page"
+                    :totalRecords="data.total"
+                    @page="onPaginate"
+                    :pt="{
+                        root: (event) => {
+                            const itemForPage =  data.per_page;
+                            const currentPage =  page - 1;
+                            event.state.d_first = itemForPage * currentPage;
+                        },
+                    }"
+                    >
+                </Paginator>
             </div>
+        </div>
         </template>
-      </Column>
-      <Column :exportable="false"  header="">
-          <template #body="slotProps">                
-              <div class="flex justify-end">
-                  <Button type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
-                    <Icon name="lucide:ellipsis-vertical" mode="svg"/>
-                  </Button>
-              </div>
-          </template>
-      </Column>
-
-    </DataTable>
-    <div class="mt-2 md:flex md:justify-between md:items-center">
-          <div class="opacity-50 text-sm text-right md:text-left mx-3 mb-2 md:mb-0">  
-              <span v-if="status === 'pending'" class="opacity-50">
-                  Loading....
-              </span>
-              <span v-else>
-                  Tampil {{ data.from }} sampai {{ data.to }} dari {{ data.total }}
-              </span>
-          </div>
-          <Paginator
-            :rows="data.per_page"
-            :totalRecords="data.total"
-            @page="onPaginate"
-            :pt="{
-                root: (event) => {
-                    const itemForPage =  data.per_page;
-                    const currentPage =  page - 1;
-                    event.state.d_first = itemForPage * currentPage;
-                },
-            }"
-            >
-          </Paginator>
-      </div>
-  </div>
+        
+    </Card>
 
   <Dialog v-model:visible="pegawaiDialog" :style="{ width: '30rem', minHeight: '50vh' }" :breakpoints="{ '1000px': '40rem', '768px': '90vw' }" :modal="true">
       <template v-if='pegawaiDialog'>
@@ -125,8 +137,6 @@
 </template>
 
 <script setup lang="ts">
-import UserAvatar from '~/components/User/UserAvatar.vue';
-
     definePageMeta({
         title: 'Semua Pegawai',
     })
