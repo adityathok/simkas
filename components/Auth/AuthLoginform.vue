@@ -13,15 +13,13 @@
         <div class="flex mb-5">
             <Checkbox v-model="form.remember" inputId="remember" name="remember" value="true" />
             <label for="remember" class="ml-2"> Remember </label>
-        </div>
-        
-        <div v-if="isLoading">
-            <ProgressSpinner v-if="isLoading" class="m-0" style="width: 30px; height: 30px" />
-            <span class="opacity-50 text-sm pb-2 inline-block">Memproses login..</span>            
-        </div>
+        </div>        
 
-        <div class="text-center">
-            <Button type="submit" label="Masuk" class="w-full" />
+        <div class="mt-5">
+            <Button type="submit" class="!px-20" :loading="isLoading">                
+                <span v-if="isLoading" class="flex gap-2 items-center"><Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses login..</span>
+                <span v-else>Masuk</span>
+            </Button>
         </div>
 
         <div v-if="errors" class="my-3">
