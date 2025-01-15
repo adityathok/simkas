@@ -14,9 +14,9 @@
 
         <Column field="nama" header="Nama">
           <template #body="slotProps">
-            <div @click="openDialog(slotProps.data,'view')" class="cursor-pointer">
+            <NuxtLink :to="'/unitsekolah/profile?id='+slotProps.data.id" class="cursor-pointer">
               {{ slotProps.data.nama }}
-            </div>
+            </NuxtLink>
           </template>
         </Column>
         <Column field="jenjang" header="Jenjang" class="hidden lg:table-cell"></Column>
@@ -25,14 +25,12 @@
         <Column field="email" header="Email" class="hidden xl:table-cell"></Column>
         <Column field="option">
             <template #body="slotProps">
-                <div class="flex justify-end items-center gap-1">
-                    <Button severity="info" variant="text" @click="openDialog(slotProps.data,'edit')">
-                      <Icon name="lucide:square-pen" mode="svg" />
-                    </Button>
-                    <NuxtLink :to="'/unitsekolah/edit?id='+slotProps.data.id" class="!bg-transparent !border-none !text-slate-800" variant="text" size="small">
-                      <Icon name="lucide:pencil" />
-                    </NuxtLink>
-                </div>
+                           
+              <div class="flex justify-end">
+                  <Button type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
+                      <Icon name="lucide:ellipsis-vertical" mode="svg"/>
+                  </Button>
+              </div>
             </template>
         </Column>
 
@@ -66,11 +64,24 @@
     </template>
   </Card>
 
-
   <Dialog v-model:visible="visibleDialog" :modal="true" header="Unit Sekolah" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <UnitSekolahFormEdit v-if="actionDialog === 'edit'" :data="selectedItem" />
     <UnitSekolahView v-else :data="selectedItem" />
   </Dialog>
+  
+  <Popover ref="popover" :dismissable="true">
+    <div v-if="selectedItem" class="flex flex-col">  
+      <Button @click="openDialog(selectedItem,'view')" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+        <Icon name="lucide:info" mode="svg"/> Preview
+      </Button>    
+      <Button @click="openDialog(selectedItem,'view')" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+        <Icon name="lucide:building" mode="svg"/> Profile
+      </Button> 
+      <Button @click="openDialog(selectedItem,'edit')" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+        <Icon name="lucide:pencil" mode="svg"/> Edit
+      </Button>
+    </div>
+  </Popover>
 
 </template>
 
@@ -92,16 +103,21 @@
       navigateTo('/unitsekolah?page='+page.value)
   };
 
-  const Unit = ref({});
-
   const visibleDialog = ref(false);
   const actionDialog = ref('add');
   const selectedItem = ref({});
+  const popover = ref();
 
   const openDialog = (itemData: any,action : string) => {
+      popover.value.hide();
       visibleDialog.value = true;
       actionDialog.value = action;
       selectedItem.value = itemData;
+  }
+  const displayPop = (event: Event, itemData: any) => {
+    popover.value.hide();
+    selectedItem.value = itemData;
+    popover.value.show(event);
   }
 
 </script>

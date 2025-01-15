@@ -40,7 +40,16 @@
                     </div>
                 </template>
             </Column>
-            <Column field="jenis_kelamin" header="JK" class="hidden xl:table-cell"></Column>
+            <Column field="jenis_kelamin" header="JK" class="hidden xl:table-cell">
+                <template #body="slotProps">
+                    <span v-if="slotProps.data.jenis_kelamin == 'Laki-laki'">
+                        L
+                    </span>
+                    <span v-else>
+                        P
+                    </span>
+                </template>
+            </Column>
             <Column field="status" header="Status" class="hidden lg:table-cell">
                 <template #body="slotProps">
                     <Badge :severity="slotProps.data.status == 'Aktif' ? 'success' : 'danger'">
