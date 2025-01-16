@@ -14,7 +14,7 @@
 
         <Column field="nama" header="Nama">
           <template #body="slotProps">
-            <NuxtLink :to="'/unitsekolah/profile?id='+slotProps.data.id" class="cursor-pointer">
+            <NuxtLink :to="'/unitsekolah/'+slotProps.data.id" class="cursor-pointer">
               {{ slotProps.data.nama }}
             </NuxtLink>
           </template>
@@ -51,7 +51,7 @@
               :totalRecords="data.total"
               @page="onPaginate"
               :pt="{
-                  root: (event) => {
+                  root: (event: any) => {
                       const itemForPage =  data.per_page;
                       const currentPage =  page - 1;
                       event.state.d_first = itemForPage * currentPage;
