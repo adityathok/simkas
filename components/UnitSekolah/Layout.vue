@@ -3,7 +3,7 @@
   <Card>
 
     <template #header>
-      <div class="bg-slate-900 min-h-[5em] md:min-h-[8em] rounded-t-xl">
+      <div class="bg-gradient-to-r from-cyan-500 to-blue-500 min-h-[5em] md:min-h-[8em] rounded-t-xl">
       </div>
     </template>
 
@@ -19,20 +19,7 @@
         </div>
       </div>
 
-      <Tabs value="/" class="my-5" scrollable>
-        <TabList>
-            <Tab v-for="tab in menus" :key="tab.label" :value="tab.route">
-                <!-- <router-link v-if="tab.route" v-slot="{ href, navigate }" :to="tab.route" custom>
-                    <a v-ripple :href="href" @click="navigate" class="flex items-center gap-2 text-inherit">
-                        <span>{{ tab.label }}</span>
-                    </a>
-                </router-link> -->
-                <NuxtLink :to="tab.route" class="flex items-center gap-2 text-inherit">
-                    <span>{{ tab.label }}</span>
-                </NuxtLink>
-            </Tab>
-        </TabList>
-    </Tabs>
+      <AppMenuTabs :items="menus" :active="route.path" class="mt-5 mb-4" />
 
     <slot />
 
@@ -42,8 +29,6 @@
 </template>
 
 <script setup lang="ts">
-import { Avatar } from 'primevue';
-
 const route = useRoute()
 const idUnit = route.params.id
 const client = useSanctumClient();
