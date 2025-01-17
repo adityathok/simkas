@@ -1,10 +1,10 @@
 <template>
   <UnitSekolahLayout>
+    <form @submit.prevent="handleFormSubmit">
 
     <div class="flex flex-col md:flex-row gap-4">
       <div class="md:flex-1">
 
-        <form  @submit.prevent="handleFormSubmit">
           <div v-for="item in fields" :key="item.key">
               <div class="border-b py-2 flex flex-col md:flex-row">
                 <div class="md:basis-1/4 font-semibold mb-1">
@@ -15,7 +15,7 @@
                 </div>
               </div>
           </div>
-          <div class="flex justify-end mt-4">
+          <!-- <div class="flex justify-end mt-4">
             <Button type="submit" :loading="isLoading">           
                 <span v-if="isLoading" class="flex gap-2 items-center">
                   <Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses..         
@@ -24,18 +24,35 @@
                   <Icon name="lucide:save" mode="svg"/> Simpan        
                 </span>
               </Button>
+          </div> -->
+
+      </div>
+      <div class="md:basis-1/4 xl:basis-1/5">
+        <div class="py-2 sticky">
+          <label for="logounit" class="block group cursor-pointer relative border min-h-[10rem] aspect-square rounded">              
+              <div class="absolute top-0 bottom-0 left-0 right-0 justify-center items-center flex">
+                <div class="p-3 group-hover:opacity-100 opacity-50">
+                  Upload Logo Lembaga
+                </div>
+              </div>
+              <img v-if="previewLogo" :src="previewLogo" alt="Image" class="w-full h-full aspect-square object-cover"/>
+              <InputText @change="handleFileUpload" type="file" id="logounit" class="hidden"/>
+          </label>
+          <div class="flex justify-end mt-4">
+            <Button type="submit" :loading="isLoading" class="w-full">
+              <span v-if="isLoading" class="flex gap-2 items-center">
+                <Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses..
+              </span>
+              <span v-else class="flex gap-2 items-center">
+                <Icon name="lucide:save" mode="svg"/> Simpan
+              </span>
+            </Button>
           </div>
-        </form>
-
-      </div>
-      <div class="md:basis-1/4">
-        <div class="bg-slate-100 rounded-lg p-4 my-2">
-          <div class="font-medium mb-4">Logo Sekolah</div>
         </div>
-      </div>
+    </div>       
     </div>
-
    
+  </form>
 
   </UnitSekolahLayout>
 </template>
@@ -113,6 +130,15 @@ const handleFormSubmit = async () => {
     toast.add({ severity: 'warn', summary: 'Gagal', detail: 'Terjadi kesalahan', life: 3000 });
     console.error(error)
   }
+}
+
+const previewLogo = ref('')
+const fileLogo = ref('')
+  function handleFileUpload(event: any) {
+    previewLogo.value = URL.createObjectURL(event.target.files[0]);
+    fileLogo.value = event.target.files[0]
+  }
+const handleFormSubmitLogo = async () => {  
 }
 
 </script>
