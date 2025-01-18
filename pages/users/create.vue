@@ -59,8 +59,7 @@
 
     const roles = ref([
         { name: 'Admin', value: 'admin' },
-        { name: 'Pemilik', value: 'pemilik' },
-        { name: 'Kasir', value: 'kasir' }
+        { name: 'Pemilik', value: 'pemilik' }
     ]);
     
     //nilai awal form

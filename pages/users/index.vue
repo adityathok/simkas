@@ -1,18 +1,24 @@
 <template>
 
-    <div class="rounded-md border overflow-hidden">
+    <Card>
+        <template #content>
                 
-        <DataTable :value="data.data" stripedRows scrollable scrollHeight="calc(100dvh - 235px)" tableStyle="min-width: 50rem">
+        <DataTable :value="data.data" class="text-sm" stripedRows scrollable>
             <Column field="avatar" header="">
                 <template #body="slotProps">
-                    <!-- <img v-if="slotProps.data.avatar" :src="urlStorage+slotProps.data.avatar" alt="Avatar user" class="max-h-7 rounded-full"> -->
                     <Avatar v-if="slotProps.data.avatar" :image="urlStorage+slotProps.data.avatar" shape="circle" />
                     <Avatar v-else :label="firstName(slotProps.data.name)" shape="circle" />
                 </template>
             </Column>
             <Column field="name" header="Nama"></Column>
             <Column field="email" header="Email"></Column>
-            <Column field="role" header="Role"></Column>
+            <Column field="roles" header="Role">
+                <template #body="slotProps">
+                    <Badge severity="info" v-for="(role, index) in slotProps.data.roles" :key="index" class="mr-1 mb-1 capitalize">
+                        {{ role }}
+                    </Badge>
+                </template>
+            </Column>
             <Column field="created_at" header="Terdaftar">
                 <template #body="slotProps">
                     {{ dateIndo(slotProps.data.created_at) }}
@@ -24,9 +30,9 @@
                         <NuxtLink :to="'/users/edit?id='+slotProps.data.id" class="!bg-transparent !border-none !text-slate-800" variant="text" size="small">
                             <Icon name="lucide:pencil" />
                         </NuxtLink>
-                        <Button v-if="useUser.currentUser.id!==slotProps.data.id" type="button" @click="confirmDelete(slotProps.data.id)" class="!bg-transparent !border-none !text-red-500" variant="text" size="small">
+                        <!-- <Button v-if="useUser.currentUser.id!==slotProps.data.id" type="button" @click="confirmDelete(slotProps.data.id)" class="!bg-transparent !border-none !text-red-500" variant="text" size="small">
                             <Icon name="lucide:trash-2" />
-                        </Button>
+                        </Button> -->
                     </div>
                 </template>
             </Column>
@@ -56,8 +62,8 @@
             >
             </Paginator>
         </div>
-
-    </div>
+        </template>
+    </Card>
 
     <Toast />
     <ConfirmDialog></ConfirmDialog>
