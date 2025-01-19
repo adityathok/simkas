@@ -1,19 +1,12 @@
 <template>
 
-    <Card class="border max-w-2xl mx-auto">
-
-        <template #title>
-            Edit Akun
-        </template>
-        <template #subtitle>
-            Ubah akun login {{ data.name }}
-        </template>
+    <Card class="max-w-2xl mx-auto">
 
         <template #content>
 
-            <div class="flex mb-4">
-                <NuxtLink :to="'/users/edit?id='+idUser" class="rounded-l py-1 px-4 bg-zinc-200">Profil</NuxtLink>
-                <NuxtLink :to="'/users/editakun?id='+idUser" class="rounded-r py-1 px-4 bg-blue-600 text-white">Akun</NuxtLink>
+            <div class="flex mb-4 border-b">
+                <NuxtLink :to="'/users/edit?id='+idUser" class="py-1 px-4 hover:bg-blue-100 hover:text-sky-600">Profil</NuxtLink>
+                <NuxtLink :to="'/users/editakun?id='+idUser" class="py-1 px-4 bg-blue-100 text-sky-600">Akun</NuxtLink>
             </div>
             
             <form action="" method="post" @submit.prevent="handleFormSubmit">
@@ -34,7 +27,10 @@
                 </div>
 
                 <div class="text-right">
-                    <Button label="Simpan" type="submit"/>
+                    <Button type="submit" :loading="isLoading">
+                        <Icon name="lucide:save" mode="svg"/>
+                        Simpan
+                    </Button>
                 </div>
             </form>
 
@@ -45,11 +41,15 @@
 </template>
 
 <script lang="ts" setup>
+    definePageMeta({
+        title: 'Edit Password Akun',
+    })
     const route = useRoute()
     const toast = useToast();
     const idUser = route.query.id || '';
     const client = useSanctumClient();
     const eror = ref({})
+    const isLoading = ref(false)
 
     const { data, status, error, refresh } = await useAsyncData(
         'users'+idUser,
@@ -62,7 +62,7 @@
     })
 
     const handleFormSubmit = async () => {
-
+        isLoading.value = true;
         try {
             await client('/api/users/password/'+data.value.id, {
                 method: 'POST',
@@ -76,6 +76,7 @@
             eror.value = e.bag;
             console.log(er);
         }
+        isLoading.value = false;
     }
 
 </script>

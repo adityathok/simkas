@@ -1,19 +1,12 @@
 <template>
 
-    <Card class="border max-w-2xl mx-auto">
-
-        <template #title>
-            Edit User
-        </template>
-        <template #subtitle>
-            Ubah profil {{ data.name }}
-        </template>
+    <Card class="max-w-2xl mx-auto">
 
         <template #content>
 
-            <div class="flex mb-4">
-                <NuxtLink :to="'/users/edit?id='+idUser" class="rounded-l py-1 px-4 bg-blue-600 text-white">Profil</NuxtLink>
-                <NuxtLink :to="'/users/editakun?id='+idUser" class="rounded-r py-1 px-4 bg-zinc-200">Akun</NuxtLink>
+            <div class="flex mb-4 border-b">
+                <NuxtLink :to="'/users/edit?id='+idUser" class="py-1 px-4 bg-blue-100 text-sky-600">Profil</NuxtLink>
+                <NuxtLink :to="'/users/editakun?id='+idUser" class="py-1 px-4 hover:bg-blue-100 hover:text-sky-600">Akun</NuxtLink>
             </div>
 
                 <form action="" method="post" @submit.prevent="handleFormSubmit">
@@ -35,7 +28,10 @@
                     </div>
 
                     <div class="text-right">
-                        <Button label="Simpan" type="submit"/>
+                        <Button type="submit" :loading="isLoading">
+                            <Icon name="lucide:save" mode="svg"/>
+                            Simpan
+                        </Button>
                     </div>
                 </form>
 
@@ -46,12 +42,17 @@
 </template>
 
 <script lang="ts" setup>
+    definePageMeta({
+        title: 'Edit Akun',
+    })
     const { isAuthenticated, user, refreshIdentity } = useSanctumAuth()
+    const useUser = useUserStore()
     const route = useRoute();
     const toast = useToast();
     const idUser = route.query.id || '';
     const client = useSanctumClient();
     const eror = ref({})
+    const isLoading = ref(false)
 
     if(idUser==''){
        await navigateTo('/')
@@ -68,7 +69,7 @@
     })
 
     const handleFormSubmit = async () => {
-
+        isLoading.value = true;
         try {
             await client('/api/users/'+data.value.id, {
                 method: 'PUT',
@@ -78,14 +79,15 @@
             toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil diperbarui', life: 3000 });
             eror.value = ({});
             //jika id sama dengan id user yang sedang login
-            // if(idUser == user.id){
-            //     await refreshIdentity()
-            // }
+            if(idUser == useUser.currentUser.id){
+                await refreshIdentity()
+            }
         } catch (er) {
             const e = useSanctumError(er);
             eror.value = e.bag;
             console.log(er);
         }
+        isLoading.value = false;
 
     }
 

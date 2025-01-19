@@ -30,9 +30,9 @@
                         <NuxtLink :to="'/users/edit?id='+slotProps.data.id" class="!bg-transparent !border-none !text-slate-800" variant="text" size="small">
                             <Icon name="lucide:pencil" />
                         </NuxtLink>
-                        <!-- <Button v-if="useUser.currentUser.id!==slotProps.data.id" type="button" @click="confirmDelete(slotProps.data.id)" class="!bg-transparent !border-none !text-red-500" variant="text" size="small">
+                        <Button v-if="useDelete(slotProps.data)" type="button" @click="confirmDelete(slotProps.data.id)" class="!bg-transparent !border-none !text-red-500" variant="text" size="small">
                             <Icon name="lucide:trash-2" />
-                        </Button> -->
+                        </Button>
                     </div>
                 </template>
             </Column>
@@ -65,14 +65,11 @@
         </template>
     </Card>
 
-    <Toast />
-    <ConfirmDialog></ConfirmDialog>
-
 </template>
 
 <script lang="ts" setup>
     definePageMeta({
-    title: 'Semua Akun',
+        title: 'Semua Akun',
     })
     const { urlStorage } = useGlobalStore()
     const useUser = useUserStore()
@@ -133,6 +130,20 @@
                 toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
             },
         });
+    };
+
+    const useDelete = (data: any) => {
+        
+        if(data.id===useUser.currentUser.id){
+            return false;
+        } 
+
+        var result = false;
+        const droles = data.roles;    
+        if(droles.length === 1 && droles[0] === 'admin'){
+            result = true;      
+        }
+        return result;
     };
 
 </script>
