@@ -2,7 +2,7 @@
   <UnitSekolahLayout>
     <form @submit.prevent="handleFormSubmit">
 
-    <div class="flex flex-col md:flex-row gap-4">
+    <div class="flex flex-col md:flex-row gap-4" :class="{'cursor-wait': isLoading}">
       <div class="md:flex-1">
 
           <div v-for="item in fields" :key="item.key">
@@ -10,21 +10,11 @@
                 <div class="md:basis-1/4 font-semibold mb-1">
                   <label>{{ item.label }}</label>
                 </div>
-                <div class="md:flex-1">
+                <div class="md:flex-1" :class="{'opacity-50 cursor-wait': isLoading}">
                   <InputText v-model="datas[item.key]" :type="item.type" class="w-full" />
                 </div>
               </div>
           </div>
-          <!-- <div class="flex justify-end mt-4">
-            <Button type="submit" :loading="isLoading">           
-                <span v-if="isLoading" class="flex gap-2 items-center">
-                  <Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses..         
-                </span>
-                <span v-else class="flex gap-2 items-center">
-                  <Icon name="lucide:save" mode="svg"/> Simpan        
-                </span>
-              </Button>
-          </div> -->
 
       </div>
       <div class="md:basis-1/4 xl:basis-1/5">
@@ -118,10 +108,17 @@ const fields = [
 
 const handleFormSubmit = async () => {  
   isLoading.value = true;
+  const formData = new FormData();
+  for (const key in fields) {
+    formData.append(fields[key].key, datas[fields[key].key]);
+  }
+  if(fileLogo.value){
+    formData.append('file_logo', fileLogo.value);
+  }
   try {
     const response = await client('/api/unitsekolah/'+idUnit, {
       method: 'PUT',
-      body: datas
+      body: formData
     })
     isLoading.value = false;
     toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Unit berhasil diperbarui', life: 3000 });
@@ -132,13 +129,11 @@ const handleFormSubmit = async () => {
   }
 }
 
-const previewLogo = ref('')
+const previewLogo = ref(datas.logo_url)
 const fileLogo = ref('')
-  function handleFileUpload(event: any) {
-    previewLogo.value = URL.createObjectURL(event.target.files[0]);
-    fileLogo.value = event.target.files[0]
-  }
-const handleFormSubmitLogo = async () => {  
+function handleFileUpload(event: any) {
+  previewLogo.value = URL.createObjectURL(event.target.files[0]);
+  fileLogo.value = event.target.files[0]
 }
 
 </script>

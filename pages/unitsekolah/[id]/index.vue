@@ -1,30 +1,45 @@
 <template>
-  <UnitSekolahLayout>
+    <UnitSekolahLayout>
 
+      
     <div class="flex flex-col md:flex-row gap-4">
-
-      <div class="basis-1/2">
-        <div class="border p-4 rounded-lg">
-          <div v-for="item in fields" :key="item.key">
-            <div class="border-b py-2 flex flex-col md:flex-row">
-              <div class="md:basis-1/4 font-semibold mb-1">{{ item.label }}</div>
-              <div class="md:flex-1">{{ data[item.key] }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
         
         <div class="basis-1/2">
+  
+          <div class="border p-4 rounded-lg mb-4">
+            <div class="font-bold mb-4">
+              Pegawai
+            </div>
+            <DataTable v-if="data.pegawais" :value="data.pegawais"  class="text-sm" stripedRows scrollable>
+              <Column field="nama" header="Nama"></Column>
+              <Column field="jabatan" header="Jabatan"></Column>
+            </DataTable>
+          </div>
+  
+        </div>
+  
+        <div class="basis-1/2">
           <div class="border p-4 rounded-lg">
-            <div class="font-bold">
-              Statistik
+            <div class="font-bold mb-4">
+              Informasi Profil
+            </div>
+            <div v-for="item in fields" :key="item.key">
+              <div class="border-t py-2 flex flex-col md:flex-row">
+                <div class="md:basis-1/4 font-semibold mb-1">{{ item.label }}</div>
+                <div class="md:flex-1">{{ data[item.key] }}</div>
+              </div>
+            </div>
+            <div class="text-end">
+              <Button as="router-link" :to="'/unitsekolah/'+idUnit+'/edit'" variant="link" size="small" class="!text-sm">
+                <Icon name="lucide:pen" mode="svg" /> Edit Profil
+              </Button>
             </div>
           </div>
         </div>
+  
+      </div>
 
-    </div>
-
-  </UnitSekolahLayout>
+    </UnitSekolahLayout>
 </template>
 
 <script setup lang="ts">
