@@ -41,7 +41,7 @@ const { data, status, error, refresh } = await useAsyncData(
 const menus = [
   {label: 'Profil', route: '/unitsekolah/'+idUnit+'/'},
   {label: 'Edit', route: '/unitsekolah/'+idUnit+'/edit'},
-  // {label: 'Info', route: '/unitsekolah/'+idUnit+'/info'},
+  {label: 'Pegawai', route: '/unitsekolah/'+idUnit+'/pegawai'},
   // {label: 'Alamat', route: '/unitsekolah/'+idUnit+'/alamat'},
 ]
 
