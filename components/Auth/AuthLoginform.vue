@@ -48,8 +48,15 @@
             await login(form.value)
         } catch (e) {
             const error = useSanctumError(e);
-            errors.value = true; 
-            console.error('Request failed not because of a validation', error.code);
+            //jika eror 419, hapus cookie csrf
+            if(error.code == 419){
+                useCookie('XSRF-TOKEN').value = null;
+                useCookie('laravel_session').value = null;
+                login(form.value)
+            } else {
+                errors.value = true; 
+                console.error('Request failed not because of a validation', error.code);
+            }
         } finally {
             isLoading.value = false; 
             return navigateTo('/')
