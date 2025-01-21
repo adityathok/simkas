@@ -1,5 +1,11 @@
 <template>  
   <UnitSekolahLayout>
+    
+    <div class="flex justify-end">
+        <Button @click="openDialog('','add')" size="small">
+          Tambah Pegawai
+        </Button>
+    </div>
 
     <DataTable v-if="data.data" :value="data.data"  class="text-sm" stripedRows scrollable>
       <Column field="nama" header="Nama"></Column>
@@ -24,6 +30,7 @@
     <!-- <UnitSekolahFormEdit v-if="actionDialog === 'edit'" :data="selectedItem" /> -->
     <!-- <UnitSekolahView v-else :data="selectedItem" /> -->
      <UnitSekolahJabatanEdit v-if="actionDialog === 'edit'" :data="selectedItem" @edit="refresh()"/>
+     <UnitSekolahJabatanAdd v-else :idunit="idUnit" @add="refresh()"/>
   </Dialog>
 
 </template>
