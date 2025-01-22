@@ -11,7 +11,11 @@
                   <label>{{ item.label }}</label>
                 </div>
                 <div class="md:flex-1" :class="{'opacity-50 cursor-wait': isLoading}">
-                  <InputText v-model="datas[item.key]" :type="item.type" class="w-full" />
+                  
+                  <Textarea v-if="item.type == 'textarea'" v-model="datas[item.key]" rows="5" cols="20" class="w-full" />
+                  <Select v-else-if="item.type == 'select'" v-model="datas[item.key]" :options="item.key=='jenjang'?getJenjang:item.options" placeholder="Pilih" />
+                  <InputText v-else v-model="datas[item.key]" :type="item.type" class="w-full" />
+
                 </div>
               </div>
           </div>
@@ -96,19 +100,21 @@ watch(
 
 const fields = [
   { label: 'Nama', key: 'nama', type: 'text' },
-  { label: 'Jenjang', key: 'jenjang', type: 'text' },
-  { label: 'Alamat', key: 'alamat', type: 'text' },
+  { label: 'Jenjang', key: 'jenjang', type: 'select', options: ['SD', 'SMP', 'SMA'] },
+  { label: 'Alamat', key: 'alamat', type: 'textarea' },
   { label: 'Desa', key: 'desa', type: 'text' },
   { label: 'Kecamatan', key: 'kecamatan', type: 'text' },
   { label: 'Kota', key: 'kota', type: 'text' },
   { label: 'Provinsi', key: 'provinsi', type: 'text' },
   { label: 'Kode Pos', key: 'kode_pos', type: 'text' },
-  { label: 'Status', key: 'status', type: 'text' },
-  { label: 'Tanggal Berdiri', key: 'tanggal_berdiri', type: 'text' },
+  { label: 'Status', key: 'status', type: 'select', options: ['aktif', 'nonaktif'] },
+  { label: 'Tanggal Berdiri', key: 'tanggal_berdiri', type: 'date' },
   { label: 'Whatsapp', key: 'whatsapp', type: 'text' },
   { label: 'Telepon', key: 'telepon', type: 'text' },
   { label: 'Email', key: 'email', type: 'text' },
 ]
+//dapatkan option jenjang
+const getJenjang = await client('/api/setting/jenjang');
 
 const handleFormSubmit = async () => {  
   isLoading.value = true;
