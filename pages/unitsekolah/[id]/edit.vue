@@ -28,7 +28,7 @@
               <img v-if="previewLogo" :src="previewLogo" alt="Image" class="w-full h-full aspect-square object-cover"/>
               <InputText @change="handleFileUpload" type="file" id="logounit" class="hidden"/>
           </label>
-          <div class="flex justify-end mt-4">
+          <div class="mt-4">
             <Button type="submit" :loading="isLoading" class="w-full">
               <span v-if="isLoading" class="flex gap-2 items-center">
                 <Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses..
@@ -36,6 +36,9 @@
               <span v-else class="flex gap-2 items-center">
                 <Icon name="lucide:save" mode="svg"/> Simpan
               </span>
+            </Button>
+            <Button type="button" class="w-full mt-2" @click="confirmDelete(datas.id)" severity="danger">
+              <Icon name="lucide:trash" mode="svg"/> Hapus Unit
             </Button>
           </div>
         </div>
@@ -55,6 +58,7 @@ const route = useRoute()
 const idUnit = route.params.id
 const toast = useToast();
 const client = useSanctumClient();
+const confirm = useConfirm();
 const isLoading = ref(false)
 
 const datas: Record<string, string> = reactive({
@@ -135,5 +139,28 @@ function handleFileUpload(event: any) {
   previewLogo.value = URL.createObjectURL(event.target.files[0]);
   fileLogo.value = event.target.files[0]
 }
+
+const confirmDelete = (id: string) => {
+    confirm.require({
+        message: 'Yakin untuk menghapus Unit ini ?',
+        header: 'Hapus Unit',
+        rejectLabel: 'Cancel',
+        rejectProps: {
+            label: 'Cancel',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptProps: {
+            label: 'Delete',
+            severity: 'danger'
+        },
+        accept: async () => {
+            await client('/api/unitsekolah/'+id, { method: 'DELETE' })
+            toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
+            navigateTo('/unitsekolah')
+        },
+    });
+};
+
 
 </script>

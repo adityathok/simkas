@@ -1,7 +1,7 @@
 <template>
 
   <div class="flex justify-end mb-5">
-      <Button as="router-link" to="/pegawai/add" size="small">
+      <Button @click="openDialog('','add')" size="small">
           <Icon name="lucide:circle-plus" mode="svg"/>
           Tambah
       </Button>
@@ -24,8 +24,7 @@
         <Column field="whatsapp" header="Whatsapp"  class="hidden sm:table-cell"></Column>
         <Column field="email" header="Email" class="hidden xl:table-cell"></Column>
         <Column field="option">
-            <template #body="slotProps">
-                           
+            <template #body="slotProps">                           
               <div class="flex justify-end">
                   <Button type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
                       <Icon name="lucide:ellipsis-vertical" mode="svg"/>
@@ -64,9 +63,10 @@
     </template>
   </Card>
 
-  <Dialog v-model:visible="visibleDialog" :modal="true" header="Unit Sekolah" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <Dialog v-model:visible="visibleDialog" :modal="true" :header="actionDialog === 'edit' ? 'Edit Unit Sekolah' : 'Tambah Unit Sekolah'" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <UnitSekolahFormEdit v-if="actionDialog === 'edit'" :data="selectedItem" />
-    <UnitSekolahView v-else :data="selectedItem" />
+    <UnitSekolahView v-else-if="actionDialog === 'view'" :data="selectedItem" />
+    <UnitSekolahFormAdd v-else />
   </Dialog>
   
   <Popover ref="popover" :dismissable="true">
@@ -74,10 +74,10 @@
       <Button @click="openDialog(selectedItem,'view')" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
         <Icon name="lucide:info" mode="svg"/> Preview
       </Button>    
-      <Button @click="openDialog(selectedItem,'view')" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+      <Button as="router-link" :to="'/unitsekolah/'+selectedItem.id" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
         <Icon name="lucide:building" mode="svg"/> Profile
       </Button> 
-      <Button @click="openDialog(selectedItem,'edit')" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+      <Button as="router-link" :to="'/unitsekolah/'+selectedItem.id+'/edit'" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
         <Icon name="lucide:pencil" mode="svg"/> Edit
       </Button>
     </div>
@@ -105,7 +105,7 @@
 
   const visibleDialog = ref(false);
   const actionDialog = ref('add');
-  const selectedItem = ref({});
+  const selectedItem = ref({} as any);
   const popover = ref();
 
   const openDialog = (itemData: any,action : string) => {

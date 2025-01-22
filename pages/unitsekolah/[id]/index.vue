@@ -10,10 +10,11 @@
             <div class="font-bold mb-4">
               Pegawai
             </div>
-            <DataTable v-if="data.pegawais" :value="data.pegawais"  class="text-sm" stripedRows scrollable>
+            <DataTable v-if="data?.pegawais.length > 0" :value="data.pegawais"  class="text-sm" stripedRows scrollable>
               <Column field="nama" header="Nama"></Column>
               <Column field="jabatan" header="Jabatan"></Column>
             </DataTable>
+            <Message v-else severity="warn">Belum ada pegawai</Message>
           </div>
   
         </div>

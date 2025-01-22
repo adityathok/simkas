@@ -11,11 +11,12 @@
 
       <div class="flex justify-start gap-3 items-center md:mt-[-3em]">
         <div>
-          <img src="~/public/default-ava-unit.jpg" alt="" class="rounded aspect-squarew-[5em] h-[5em] md:w-[9em] md:h-[9em]">
+          <img v-if="datas?.logo_url" :src="datas?.logo_url" alt="" class="rounded aspect-squarew-[5em] h-[5em] md:w-[9em] md:h-[9em]">
+          <img v-else src="~/public/default-ava-unit.jpg" alt="" class="rounded aspect-squarew-[5em] h-[5em] md:w-[9em] md:h-[9em]">
         </div>
         <div class="md:pt-3">
-          <div class="text-xl font-bold">{{ data.nama }}</div>
-          <span class="text-sm opacity-60">{{ data.jenjang }} </span>
+          <div class="text-xl font-bold">{{ datas?.nama||'-' }}</div>
+          <span class="text-sm opacity-60">{{ datas?.jenjang||'-' }} </span>
         </div>
       </div>
 
@@ -32,17 +33,23 @@
 const route = useRoute()
 const idUnit = route.params.id
 const client = useSanctumClient();
+const datas = ref({} as any)
 
-const { data, status, error, refresh } = await useAsyncData(
-    'unitsekolah-'+idUnit,
-    () => client('/api/unitsekolah/'+idUnit)
-)
+try {
+  const data = await client('/api/unitsekolah/'+idUnit)
+  datas.value = data
+} catch (e) {
+  const err = useSanctumError(e);
+  if(err.code == 404){
+    navigateTo('/unitsekolah')
+  }
+  console.log(err);
+}
 
 const menus = [
   {label: 'Profil', route: '/unitsekolah/'+idUnit+'/'},
   {label: 'Edit', route: '/unitsekolah/'+idUnit+'/edit'},
-  {label: 'Pegawai', route: '/unitsekolah/'+idUnit+'/pegawai'},
-  // {label: 'Alamat', route: '/unitsekolah/'+idUnit+'/alamat'},
+  {label: 'Pegawai', route: '/unitsekolah/'+idUnit+'/pegawai'}
 ]
 
 </script>
