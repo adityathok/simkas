@@ -122,7 +122,7 @@ const items = ref([
         items: [
             {
                 key: 'unit_create',
-                label: 'Daftar Unit',
+                label: 'Semua Unit',
                 href:'/unitsekolah',
             },
             {
