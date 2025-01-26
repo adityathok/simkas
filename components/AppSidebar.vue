@@ -126,9 +126,9 @@ const items = ref([
                 href:'/unitsekolah',
             },
             {
-                key: 'unit_add',
-                label: 'Tambah Unit',
-                href:'/unitsekolah/create',
+                key: 'unit_kelas',
+                label: 'Kelas',
+                href:'/kelas',
             },
             {
                 key: 'unit_add_2',
