@@ -27,10 +27,6 @@
               <Select filter v-model="form.unit_sekolah_id" :options="units" optionLabel="label" optionValue="value" placeholder="Pilih Unit" class="w-full" />
             </div>
 
-            <!-- <div v-else-if="item.key == 'tahun_ajaran'" class="w-full">
-              <Select filter v-model="form.tahun_ajaran" :options="data.tahun_ajaran_options" optionLabel="label" optionValue="value" placeholder="Pilih Unit" class="w-full" />
-            </div> -->
-
             <div v-else-if="item.key == 'tahun_ajaran'" class="w-full flex flex-row justify-start">
                 <InputText type="number" v-model.number="form.tahun_ajaran_1" class="w-20" />
                 <span class="px-1 py-3">/</span>

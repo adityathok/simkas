@@ -1,12 +1,28 @@
 <template>
 
-  <div class="flex justify-end mb-5">
-      <Button @click="openDialog('','add')" size="small">
-          <Icon name="lucide:circle-plus" mode="svg"/>
-          Tambah
+  <div class="flex gap-2 flex-col md:flex-row justify-end md:justify-between mb-5">
+
+    <Button @click="openDialog('','add')" size="small" class="w-[6rem]">
+      <Icon name="lucide:circle-plus" mode="svg"/>
+      Tambah
+    </Button>
+
+    <form class="flex gap-1 flex-col md:flex-row justify-end" @submit.prevent="handleSearch">
+      <InputText v-model="cariKelas" class="w-40" placeholder="Cari Kelas" />
+      <Select filter v-model="cariUnit" :options="data_unitsekolah" showClear optionLabel="label" optionValue="value" placeholder="Pilih Unit" />    
+      <div class="w-full flex flex-row justify-start">
+        <InputText type="number" v-model="cariTahunMulai" class="w-20" />
+        <span class="px-1 py-3">/</span>
+        <InputText type="number" v-model="cariTahunSelesai" class="w-20" />
+      </div>
+      <Button type="submit" size="small" class="ml-2 min-w-10">
+        <Icon name="lucide:search" mode="svg"/>
       </Button>
+    </form>
+
   </div>
 
+  
   
   <Card>
     <template #content>
@@ -98,17 +114,30 @@
 </template>
 
 <script setup lang="ts">
-import { KelasFormAdd } from '#components';
-
   definePageMeta({
       title: 'Kelas',
   })
   const route = useRoute();
   const page = ref(route.query.page ? Number(route.query.page) : 1);
+  const { tahunAjaran, tahunMulai, tahunSelesai } = useTahunAjaran();
+
+  const cariKelas = ref('');
+  const cariUnit = ref('');
+  const cariTahunMulai = ref(tahunMulai.value as any);
+  const cariTahunSelesai = ref(tahunSelesai.value as any);
+
   const client = useSanctumClient();
   const { data, status, error, refresh } = await useAsyncData(
       'kelas-page-'+page.value,
-      () => client('/api/kelas?page='+page.value)
+      () => client('/api/kelas',{
+          params: {
+              page: page.value,
+              unit: cariUnit.value,
+              tahun_mulai: cariTahunMulai.value,
+              tahun_selesai: cariTahunSelesai.value,
+              cari: cariKelas.value
+          }
+      })
   )
   
   const onPaginate = (event: { page: number }) => {
@@ -141,4 +170,14 @@ import { KelasFormAdd } from '#components';
     selectedItem.value = itemData;
     popover.value.show(event);
   }
+
+  const { data: data_unitsekolah, status: status_unitsekolah, error: error_unitsekolah, refresh: refresh_unitsekolah } = await useAsyncData(
+      'option-unitsekolah',
+      () => client('/api/form-options/unitsekolah')
+  )
+
+  const handleSearch = async () => {
+    refresh()
+  }
+
 </script>
