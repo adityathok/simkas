@@ -15,7 +15,7 @@
 
         <Column field="nama" header="Nama">
           <template #body="slotProps">
-            <NuxtLink :to="'/unitsekolah/'+slotProps.data.id" class="cursor-pointer">
+            <NuxtLink :to="'/kelas/'+slotProps.data.id" class="cursor-pointer">
               {{ slotProps.data.nama }}
             </NuxtLink>
           </template>
@@ -28,16 +28,21 @@
         </Column>
         <Column field="unit_sekolah" header="Unit"  class="hidden sm:table-cell">
           <template #body="slotProps">
-              {{ slotProps.data.unit_sekolah?.nama }}
+              {{ slotProps.data.unit }}
           </template>
         </Column>
-        <Column field="wali_id" header="Wali Kelas" class="hidden xl:table-cell"></Column>
+        <Column field="wali_id" header="Wali Kelas" class="hidden xl:table-cell">          
+          <template #body="slotProps">
+            {{ slotProps.data.wali }}
+          </template>
+        </Column>
         <Column field="option">
             <template #body="slotProps">                           
-              <div class="flex justify-end">
-                  <Button type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
-                      <Icon name="lucide:ellipsis-vertical" mode="svg"/>
-                  </Button>
+              <div class="flex justify-end relative">
+                <span v-if="popover.visible" class="absolute top-0 right-0 w-full h-full z-10"></span>
+                <Button :disabled="popover.visible" type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
+                    <Icon name="lucide:ellipsis-vertical" mode="svg"/>
+                </Button>
               </div>
             </template>
         </Column>
@@ -72,9 +77,29 @@
     </template>
   </Card>
 
+  <Dialog v-model:visible="visibleDialog" :modal="true" header="Tambah Kelas" :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <KelasFormAdd @add="refresh()" />
+  </Dialog>
+
+  <Popover ref="popover" :dismissable="true">
+    <div class="text-xs border-b pb-2 opacity-50">
+      {{ selectedItem?.nama }}
+    </div>
+    <div v-if="selectedItem" class="flex flex-col">    
+      <Button as="router-link" :to="'/kelas/'+selectedItem.id" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+        Profile
+      </Button> 
+      <Button as="router-link" :to="'/kelas/'+selectedItem.id+'/edit'" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+        Edit
+      </Button>
+    </div>
+  </Popover>
+
 </template>
 
 <script setup lang="ts">
+import { KelasFormAdd } from '#components';
+
   definePageMeta({
       title: 'Kelas',
   })
@@ -95,7 +120,15 @@
   const visibleDialog = ref(false);
   const actionDialog = ref('add');
   const selectedItem = ref({} as any);
-  const popover = ref();
+  const popover = ref({
+    visible: false,
+    show: (event: Event) => {
+      popover.value.visible = true;
+    },
+    hide: () => {
+      popover.value.visible = false;
+    },
+  });
 
   const openDialog = (itemData: any,action : string) => {
       popover.value.hide();
