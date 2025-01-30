@@ -1,5 +1,6 @@
 export const useGlobalStore = defineStore('global', () => {
     const config = useSanctumConfig();
+    const client = useSanctumClient();
 
     const opensidebar = ref(false)
 
@@ -8,10 +9,22 @@ export const useGlobalStore = defineStore('global', () => {
     }
 
     const urlStorage = config.baseUrl+'/storage/'
-  
+
+    //fungsi infoApp
+    const infoApp = ref({
+        lembaga: ''
+    })
+
+    //set infoApp
+    function setInfoApp(data) {
+        infoApp.value = data
+    }
+
     return { 
         opensidebar,
         toggelsidebar,
-        urlStorage
+        urlStorage,
+        setInfoApp,
+        infoApp
     }
 })

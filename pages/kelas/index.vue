@@ -39,7 +39,7 @@
         <Column field="tingkat" header="Tingkat" class="hidden sm:table-cell"></Column>
         <Column field="tahun_ajaran" header="Tahun" class="hidden sm:table-cell">
           <template #body="slotProps">
-              {{ slotProps.data.tahun_ajaran }}
+            {{ slotProps.data.tahun_ajaran?.replace("_", "/") }}
           </template>
         </Column>
         <Column field="unit_sekolah" header="Unit"  class="hidden sm:table-cell">
@@ -173,7 +173,7 @@
 
   const { data: data_unitsekolah, status: status_unitsekolah, error: error_unitsekolah, refresh: refresh_unitsekolah } = await useAsyncData(
       'option-unitsekolah',
-      () => client('/api/form-options/unitsekolah')
+      () => client('/api/option/unitsekolah')
   )
 
   const handleSearch = async () => {

@@ -118,7 +118,7 @@ const filteredTingkat = computed(() => {
 const handleFormSubmit = async () => {  
   isLoading.value = true;
   //ubah value form
-  form.value.tahun_ajaran = form.value.tahun_ajaran_1 + '/' + form.value.tahun_ajaran_2;
+  form.value.tahun_ajaran = form.value.tahun_ajaran_1 + '_' + form.value.tahun_ajaran_2;
   
   try {
     const res = await client('/api/kelas/', { method: 'POST', body: form.value });
