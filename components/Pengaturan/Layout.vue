@@ -4,13 +4,16 @@
       <template #content>
 
         <div class="flex flex-col md:flex-row min-h-[80vh]">
-          <div class="md:basis-1/4 lg:basis-1/5 md:pr-5">
+          <div class="md:basis-1/4 lg:basis-1/5 md:pr-10">
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto mb-5">
               <div class="flex md:flex-col mb-3 text-nowrap">
-                <div v-for="menu in menus" :key="menu.href" class="flex-1 md:basis-full">
-                  <NuxtLink :to="menu.href" class="block rounded mr-1 md:mb-1 py-2 px-4 hover:text-sky-700 hover:bg-gray-100 border border-slate-50" :class="{ 'bg-gray-100 text-sky-600 border-slate-200': isActive(menu.href) }">
-                    {{ menu.label }}
+                <div v-for="menu in menus" :key="menu.href" class="border-b flex-1 md:basis-full py-1">
+                  <NuxtLink :to="menu.href" class="flex justify-start items-center rounded py-2 px-4 hover:text-sky-700 hover:bg-gray-100" :class="{ 'bg-gray-100 text-sky-600 border-slate-200': isActive(menu.href) }">
+                    
+                    <Icon v-if="menu.icon" :name="menu.icon" mode="svg" :ssr="true" class="mr-2"/>
+                    <span>{{ menu.label }}</span>
+                    
                   </NuxtLink>
                 </div>
               </div>
@@ -22,7 +25,7 @@
             <h3 class="font-bold text-xl">
               {{ $route.meta.caption }}
             </h3>
-            <hr class="mt-2 mb-5">
+            <hr class="mt-2 mb-5 md:mb-10">
             <slot name="content" />
           </div>
         </div>
@@ -40,10 +43,10 @@ const isActive = (path: string) => {
 }
 
 const menus = [
-  {label: 'Lembaga', href: '/pengaturan'},
-  {label: 'Tahun Ajaran', href: '/pengaturan/tahunajaran'},
-  {label: 'Jenjang', href: '/pengaturan/jenjang'},
-  {label: 'Jabatan', href: '/pengaturan/jabatan'},
+  {label: 'Lembaga', href: '/pengaturan',icon: 'lucide:landmark',},
+  {label: 'Tahun Ajaran', href: '/pengaturan/tahunajaran',icon: 'lucide:calendar-clock',},
+  {label: 'Jenjang', href: '/pengaturan/jenjang',icon: 'lucide:layers',},
+  {label: 'Jabatan', href: '/pengaturan/jabatan',icon: 'lucide:book-user',},
 ]
 
 </script>

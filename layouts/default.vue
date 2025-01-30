@@ -21,5 +21,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+  const client = useSanctumClient(); 
+  const { setInfoApp,infoApp } = useGlobalStore()   
+  const { data } = await useAsyncData(
+      'app',
+      () => client('/infoapp')
+  )
+  setInfoApp(data.value)
 </script>

@@ -158,7 +158,29 @@ const items = ref([
         key: 'pengaturan',
         label: 'Pengaturan',
         icon: 'lucide:settings',
-        href:'/pengaturan',
+        // href:'/pengaturan',
+        items: [
+            {
+                key: 'pengaturan_lembaga',
+                label: 'Lembaga',
+                href:'/pengaturan',
+            },
+            {
+                key: 'pengaturan_tahunajaran',
+                label: 'Tahun Ajaran',
+                href:'/pengaturan/tahunajaran',
+            },
+            {
+                key: 'pengaturan_jenjang',
+                label: 'Jenjang',
+                href:'/pengaturan/jenjang',
+            },
+            {
+                key: 'pengaturan_jabatan',
+                label: 'Jabatan',
+                href:'/pengaturan/jabatan',
+            },
+        ]
     },
     {
         key: 'users',

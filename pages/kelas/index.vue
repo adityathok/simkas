@@ -27,6 +27,10 @@
   <Card>
     <template #content>
 
+      <div v-if="status == 'pending'">
+        Loading..
+      </div>
+
       <DataTable :value="data.data"  class="text-sm" stripedRows scrollable>
 
         <Column field="nama" header="Nama">

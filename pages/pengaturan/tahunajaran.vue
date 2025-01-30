@@ -3,6 +3,11 @@
   <PengaturanLayout>
     <template #content>
       
+      <div class="text-end mb-4">        
+        <Button @click="openDialog('','add')" size="small" class="md:!px-2">
+            <Icon name="lucide:circle-plus" mode="svg"/> Tambah
+        </Button>
+      </div>
       
       <DataTable :value="data" size="small" class="text-sm text-nowrap" stripedRows scrollable>
         <Column field="nama" header="Tahun Ajaran">
@@ -18,7 +23,7 @@
         <Column field="options" header="">
           <template #body="slotProps">
             <div class="flex justify-end">
-              <Button severity="secondary" variant="text" class="md:!px-2">
+              <Button @click="openDialog(slotProps.data,'edit')" severity="secondary" variant="text" class="md:!px-2">
                 <Icon name="lucide:pencil" mode="svg"/>
               </Button>
               <Button @click="confirmDelete(slotProps.data.id)" severity="danger" variant="text" class="md:!px-2">
@@ -32,6 +37,11 @@
     </template>
     </PengaturanLayout>
 
+    <Dialog v-model:visible="visibleDialog" :modal="true" :header="actionDialog === 'edit' ? 'Edit Tahun Ajaran' : 'Tambah Tahun Ajaran'" :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+      <TahunAjaranFormEdit v-if="actionDialog === 'edit'" :data="selectedItem" @update="refresh()" />
+      <TahunAjaranFormEdit v-else @update="refresh()" />
+    </Dialog>
+
 </template>
 
 <script setup lang="ts">
@@ -42,11 +52,21 @@ definePageMeta({
 const toast = useToast();
 const client = useSanctumClient();
 const isLoading = ref(false)
+const visibleDialog = ref(false);
+const actionDialog = ref('add');
+const selectedItem = ref({} as any);
 
 const { data, status, error, refresh } = await useAsyncData(
     'tahun-ajaran',
     () => client('/api/tahunajaran')
 )
+
+
+const openDialog = (itemData: any,action : string) => {
+  visibleDialog.value = true;
+  actionDialog.value = action;
+  selectedItem.value = itemData;
+}
 
 const confirm = useConfirm();
 const confirmDelete = (id : any) => {

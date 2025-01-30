@@ -6,8 +6,15 @@
     </div>
     
     <div v-else>
-        <div class="fixed top-0 end-0 start-0 bottom-0 flex justify-center items-center backdrop-blur-sm z-50">
-            <ProgressSpinner strokeWidth="8" />
+        <div class="fixed top-0 end-0 start-0 bottom-0 flex justify-center items-center backdrop-blur-sm z-50 p-3">
+            
+            <div class="bg-white p-4 border border-yellow-400 rounded shadow text-center">
+                <div>
+                    <ProgressSpinner strokeWidth="4" />
+                </div>
+                Sepertinya ada kesalahan pada server.
+                <br>Silahkan muat ulang halaman, atau hubungi admin
+            </div>
         </div>
     </div>
 
