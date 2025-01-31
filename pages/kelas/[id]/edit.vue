@@ -1,9 +1,13 @@
-<script setup lang="ts"></script>
-
 <template>
-  <div>
-    Page: kelas/[id]/edit
-  </div>
+  <KelasLayout>
+    <div>
+    Page: kelas/[id]/index
+    </div>
+  </KelasLayout>
 </template>
 
-<style scoped></style>
+<script setup lang="ts">
+definePageMeta({
+  title: 'Edit Kelas',
+})
+</script>
