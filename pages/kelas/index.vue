@@ -15,7 +15,7 @@
         <span class="px-1 py-3">/</span>
         <InputText type="number" v-model="cariTahunSelesai" class="w-20" />
       </div>
-      <Button type="submit" size="small" class="ml-2 min-w-10">
+      <Button type="submit" size="small" class="md:ml-2 md:min-w-10">
         <Icon name="lucide:search" mode="svg"/>
       </Button>
     </form>

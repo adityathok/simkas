@@ -76,29 +76,18 @@ const fields = [
 ]
 
 const { tahunAjaran, tahunMulai, tahunSelesai } = useTahunAjaran();
-
-const form = ref({
-  tahun_ajaran_1: tahunMulai as any,
-  tahun_ajaran_2: tahunSelesai as any,
-  tahun_ajaran: '',
-  unit_sekolah_id: '',
-  nama: '',
-  tingkat: '',
-  wali_id: '',
-})
-
-const tahun_ajaran_options = ref({} as any)
+const tahun_ajaran = ref({} as any)
 const units = ref({} as any)
 const pegawais = ref({} as any)
 const { data, status, error, refresh } = await useAsyncData(
-    'option-add-kelas', () => client('/api/form-options/option-add-kelas')
+    'option-add-kelas', () => client('/api/option/add_kelas')
 )
-if(data){
-  tahun_ajaran_options.value = data.value.tahun_ajaran_options.map((tahun: any) => ({
-    value: tahun,
-    label: tahun,
-  }))
-  units.value = data.value.unit_sekolah.map((unit: any) => ({
+if(data){ 
+  tahun_ajaran.value = {
+      mulai: data.value.tahun_ajaran.tahun_mulai,
+      selesai: data.value.tahun_ajaran.tahun_selesai,
+  }
+   units.value = data.value.unit_sekolah.map((unit: any) => ({
     value: unit.id,
     label: unit.nama,
   }))
@@ -110,9 +99,19 @@ if(data){
   }));
 }
 
+const form = ref({
+  tahun_ajaran_1: tahun_ajaran.value.mulai,
+  tahun_ajaran_2: tahunSelesai as any,
+  tahun_ajaran: '',
+  unit_sekolah_id: '',
+  nama: '',
+  tingkat: '',
+  wali_id: '',
+})
+
 const filteredTingkat = computed(() => {
   const sekolah = data.value.unit_sekolah.find((s: { id: string; }) => s.id === form.value.unit_sekolah_id);
-  return sekolah ? sekolah.tingkat : [];
+  return sekolah ? sekolah.tingkats : [];
 });
 
 const handleFormSubmit = async () => {  

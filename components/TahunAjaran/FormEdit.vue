@@ -56,6 +56,8 @@ const tahunAjaran = computed(() => {
 })
 
 const form = reactive({
+  id: '',
+  nama: '',
   tahun_ajaran_1: tahunAjaran.value[0],
   tahun_ajaran_2: tahunAjaran.value[1],
   mulai: data?.mulai,
