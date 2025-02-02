@@ -71,6 +71,7 @@
       {id: 'telepon',label: 'Telepon',type: 'text'},
       {id: 'email',label: 'Email',type: 'text'},
       {id: 'logo',label: 'Logo',type: 'file',grid: 'md:col-span-full'},
+      {id: 'tingkat',label: 'Tingkat',type: 'text'},
     ]
 
     const form = ref<Record<string, any>>({

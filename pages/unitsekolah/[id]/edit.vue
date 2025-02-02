@@ -79,6 +79,7 @@ const datas: Record<string, string> = reactive({
   whatsapp: '',
   telepon: '',
   email: '',
+  tingkat: '',
 })
 
 const { data, status, error, refresh } = await useAsyncData(
@@ -112,6 +113,7 @@ const fields = [
   { label: 'Whatsapp', key: 'whatsapp', type: 'text' },
   { label: 'Telepon', key: 'telepon', type: 'text' },
   { label: 'Email', key: 'email', type: 'text' },
+  { label: 'Tingkat', key: 'tingkat', type: 'text' },
 ]
 //dapatkan option jenjang
 const getJenjang = await client('/api/setting/jenjang');

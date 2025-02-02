@@ -9,10 +9,10 @@
 
     <form class="flex gap-1 flex-col md:flex-row justify-end" @submit.prevent="handleSearch">
       <InputText v-model="cariKelas" class="w-40" placeholder="Cari Kelas" />
-      <Select filter v-model="cariUnit" :options="data_unitsekolah" showClear optionLabel="label" optionValue="value" placeholder="Pilih Unit" />    
+      <Select class="w-40" filter v-model="cariUnit" :options="data_unitsekolah" showClear optionLabel="label" optionValue="value" placeholder="Pilih Unit" />    
       <div class="w-full flex flex-row justify-start">
         <InputText type="number" v-model="cariTahunMulai" class="w-20" />
-        <span class="px-1 py-3">/</span>
+        <span class="px-1 py-2">/</span>
         <InputText type="number" v-model="cariTahunSelesai" class="w-20" />
       </div>
       <Button type="submit" size="small" class="md:ml-2 md:min-w-10">
