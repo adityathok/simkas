@@ -167,7 +167,7 @@
     const client = useSanctumClient();
     const { data, status, error, refresh } = await useAsyncData(
         'pegawai-page-'+page.value,
-        () => client('/api/pegawai/?page='+page.value)
+        () => client('/api/pegawai?page='+page.value)
     )
 
     const onPaginate = (event: { page: number }) => {

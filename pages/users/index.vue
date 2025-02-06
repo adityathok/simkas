@@ -81,7 +81,7 @@
     const client = useSanctumClient();
     const { data, status, error, refresh } = await useAsyncData(
         'users',
-        () => client('/api/users/?page='+page.value)
+        () => client('/api/users?page='+page.value)
     )
     
     const onPaginate = (event: { page: number }) => {
