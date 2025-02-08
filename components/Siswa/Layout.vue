@@ -1,7 +1,7 @@
 <template>
 
   <div v-if="fetchData">    
-    <div class="bg-gradient-to-tr from-sky-100 to-purple-200 min-h-[5em] md:min-h-[6em] mb-3 rounded-xl px-6 py-5 shadow-sm">        
+    <div class="bg-gradient-to-tr from-sky-100 to-sky-200 min-h-[5em] md:min-h-[6em] mb-3 rounded-xl px-6 py-5 shadow-sm">        
         <div class="flex justify-start gap-3 items-center">
           <div>
             <div class="aspect-square bg-slate-100 rounded min-w-[5rem] md:min-w-[8rem]">
@@ -12,9 +12,9 @@
               <h3 class="md:text-xl font-bold">
                 {{ data?.nama||'-' }}
               </h3>
-              <small>
+              <div class="text-sm">
                 {{ data?.kelas?.nama||'-' }} | {{ data?.kelas?.tahun_ajaran||'-' }}
-              </small>
+              </div>
             </div>
         </div>
       </div>

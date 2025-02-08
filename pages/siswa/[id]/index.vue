@@ -14,7 +14,7 @@
           </template>
           <template #content>            
             <div v-for="item in profilSiswa" :key="item.key" class="border-b py-1 flex flex-col md:flex-row">
-                  <div class="md:basis-1/4 font-bold">
+                  <div class="md:basis-1/3 font-bold pe-1">
                      {{ item.label }}
                   </div>
                   <div class="md:flex-1">
@@ -30,6 +30,9 @@
                     </span>
 
                   </div>
+               </div>
+               <div class="text-end">
+                  <Button as="router-link" variant="text" :to="`/siswa/${idUnit}/edit`" size="small" class="mt-2">Edit</Button>
                </div>
           </template>
         </Card>

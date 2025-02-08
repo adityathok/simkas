@@ -1,13 +1,13 @@
 <template>
-  <div class="overflow-x-auto">
-    <div class="flex flex-row gap-4 my-5 text-nowrap">
+  <div class="overflow-x-auto py-2 my-2">
+    <div class="flex flex-row gap-4 my-1 text-nowrap">
       
       <div v-for="item in dataCards" :key="item.title" class="md:basis-1/3 min-w-[250px]">
         <div class="bg-white py-4 shadow rounded-xl relative ps-20 pe-4 text-right overflow-hidden">
-          <div>
+          <div class="text-sm">
             {{ item.title }}
           </div>
-          <div class="font-bold text-xl md:text-2xl text-cyan-600 mt-2">
+          <div class="font-bold text-xl md:text-2xl text-sky-600 mt-2">
             {{ formatCurrency(item.value) }}
           </div>
           <div class="absolute bottom-0 start-0 opacity-10 p-3">
