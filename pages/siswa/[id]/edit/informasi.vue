@@ -1,10 +1,10 @@
 <template>
   
-  <SiswaLayout @kelasdata="handleSiswaData">
+  <SiswaLayoutEdit>
     <div>
-      Page: siswa/[id]/ediy
+      Page: siswa/[id]/edit/informasi
     </div>
-  </SiswaLayout>
+  </SiswaLayoutEdit>
 
 </template>
 
@@ -12,6 +12,9 @@
 definePageMeta({
   title: 'Edit Siswa',
 })
+const route = useRoute()
+const idUnit = route.params.id
+const client = useSanctumClient();
 const datasiswa = ref({} as any)
 const handleSiswaData = (data: any) => {
   datasiswa.value = data
@@ -19,4 +22,3 @@ const handleSiswaData = (data: any) => {
 
 
 </script>
-

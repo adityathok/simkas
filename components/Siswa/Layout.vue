@@ -1,24 +1,25 @@
 <template>
 
-  <div v-if="fetchData">    
-    <div class="bg-gradient-to-tr from-sky-100 to-sky-200 min-h-[5em] md:min-h-[6em] mb-3 rounded-xl px-6 py-5 shadow-sm">        
+  <div v-if="fetchData">
+    
+    <div class="bg-sky-100 min-h-[5em] md:min-h-[6em] mb-10 mx-[-1.5rem] mt-[-1.5rem] px-6 pt-5 md:px-10 shadow-xs">        
         <div class="flex justify-start gap-3 items-center">
           <div>
             <div class="aspect-square bg-slate-100 rounded min-w-[5rem] md:min-w-[8rem]">
 
             </div>
           </div>
-            <div>
-              <h3 class="md:text-xl font-bold">
-                {{ data?.nama||'-' }}
-              </h3>
-              <div class="text-sm">
-                {{ data?.kelas?.nama||'-' }} | {{ data?.kelas?.tahun_ajaran||'-' }}
-              </div>
-            </div>
+          <div class="ps-2">
+            <h3 class="md:text-xl font-bold">
+              {{ data?.nama||'-' }}
+            </h3>
+            <NuxtLink :to="'/kelas/'+data?.kelas?.id" class="text-sm hover:underline">
+              {{ data?.kelas?.nama||'-' }} | {{ data?.kelas?.tahun_ajaran||'-' }}
+            </NuxtLink>
+          </div>
         </div>
+        <AppMenuTabs :items="menus" :active="route.path" class="mt-2" />
       </div>
-      <AppMenuTabs :items="menus" :active="route.path" class="mb-4" />
       
       <slot/>
 

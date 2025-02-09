@@ -1,8 +1,10 @@
 <template>
   
   <SiswaLayout @siswadata="handleSiswaData">
-    <SiswaIndexCards/>
-    <div class="flex flex-col md:flex-row gap-4">
+
+    <SiswaIndexCards class="mb-5 md:mb-8"/>
+
+    <div class="flex flex-col md:flex-row gap-4 md:gap-8">
 
       <div class="md:flex-1">
         
