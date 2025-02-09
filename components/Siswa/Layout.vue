@@ -5,8 +5,8 @@
     <div class="bg-sky-100 min-h-[5em] md:min-h-[6em] mb-10 mx-[-1.5rem] mt-[-1.5rem] px-6 pt-5 md:px-10 shadow-xs">        
         <div class="flex justify-start gap-3 items-center">
           <div>
-            <div class="aspect-square bg-slate-100 rounded min-w-[5rem] md:min-w-[8rem]">
-
+            <div class="aspect-square bg-slate-100 rounded w-[5rem] md:w-[8rem]">
+              <img v-if="data?.avatar_url" :src="data?.avatar_url" alt="" width="300" class="aspect-square object-cover rounded">
             </div>
           </div>
           <div class="ps-2">
