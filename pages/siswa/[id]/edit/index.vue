@@ -10,19 +10,25 @@
 
       <div v-for="item in fields" :key="item.key" class="border-b py-3 flex flex-col md:flex-row">
         <div class="md:basis-1/4 lg:basis-1/6 font-semibold mb-1">
-          <label>{{ item.label }}</label>
+          <label :for="item.key">{{ item.label }}</label>
         </div>
         <div class="md:flex-1">
 
-          <div v-if="item.type == 'select'">
-            <Select v-model="form[item.key]" :options="item.options" placeholder="Pilih" class="w-full" />
+          <div v-if="status=='pending'">
+            <Skeleton height="2rem" class="mb-2"/>
           </div>
-          <InputText v-else v-model="form[item.key]" :type="item.type" class="w-full" />
+          <div v-else>
+            
+            <div v-if="item.type == 'select'">
+              <Select v-model="form[item.key]" :id="item.key" :options="item.options" placeholder="Pilih" class="w-full" />
+            </div>
+            <InputText v-else v-model="form[item.key]" :id="item.key" :type="item.type" class="w-full" />
 
-          <div v-if="errors[item.key]">
-            <Message severity="error" closable class="my-1">
-              {{ errors[item.key][0] }}
-            </Message>
+            <div v-if="errors[item.key]">
+              <Message severity="error" closable class="my-1">
+                {{ errors[item.key][0] }}
+              </Message>
+            </div>
           </div>
 
         </div>

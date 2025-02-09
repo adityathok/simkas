@@ -1,24 +1,28 @@
 <template>
      
   <form @submit.prevent="handleFormSubmit">    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
 
-      <div v-for="field in formFields" :key="field.key">
+      <div v-for="field in formFields" :key="field.key" class="border-b py-3 flex flex-col md:flex-row">
 
-        <label :for="field.key" class="block mb-1">{{ field.label }}</label>
-        
-        <template v-if="isLoad">
-          <Skeleton height="2rem" class="mb-2"></Skeleton>
-        </template>
-        <template v-else>
-        
-          <InputText v-if="field.type == 'date'" type="date" v-model="form[field.key]" :id="field.key" class="w-full" />
+        <div class="md:basis-1/4 lg:basis-1/6 font-semibold mb-1">
+          <label :for="field.key">{{ field.label }}</label>
+        </div>
 
-          <Textarea v-else-if="field.type == 'textarea'" :id="field.key" class="w-full" v-model="form[field.key]" />
+        <div class="md:flex-1">
+          <template v-if="isLoad">
+            <Skeleton height="2rem" class="mb-2"></Skeleton>
+          </template>
+          <template v-else>
+          
+            <InputText v-if="field.type == 'date'" type="date" v-model="form[field.key]" :id="field.key" class="w-full" />
 
-          <InputText v-else :id="field.key" class="w-full" v-model="form[field.key]" />
+            <Textarea v-else-if="field.type == 'textarea'" :id="field.key" class="w-full" v-model="form[field.key]" />
 
-        </template>
+            <InputText v-else :id="field.key" class="w-full" v-model="form[field.key]" />
+
+          </template>
+        </div>
 
       </div>
 

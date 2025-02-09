@@ -9,8 +9,9 @@
             <Menu :model="items" class="hidden md:block">              
               <template #item="{ item, props }">
                 <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-                  <a v-ripple :href="href" v-bind="props.action" @click="navigate">
-                      <span class="ml-2">{{ item.label }}</span>
+                  <a v-ripple :href="href" v-bind="props.action" @click="navigate" :class="{'bg-gray-100 border-slate-200': isRouteActive(item.route) }">
+                      <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="me-1"/>
+                      <span>{{ item.label }}</span>
                   </a>
                 </router-link>
               </template>
@@ -31,11 +32,12 @@
   </SiswaLayout>
 
   <Dialog v-model:visible="visible" modal header="Menu Edit Profile" :style="{ width: '25rem' }">
-    <Menu :model="items">              
+    <Menu :model="items" class="md:hidden">              
       <template #item="{ item, props }">
         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-          <a v-ripple :href="href" v-bind="props.action" @click="navigate">
-              <span class="ml-2">{{ item.label }}</span>
+          <a v-ripple :href="href" v-bind="props.action" @click="navigate" :class="{'bg-gray-100 border-slate-200': isRouteActive(item.route) }">
+              <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="me-1"/>
+              <span>{{ item.label }}</span>
           </a>
         </router-link>
       </template>
@@ -50,16 +52,29 @@ const idUnit = route.params.id
 const items = ref([
     {
         label: 'Profil',
-        route: '/siswa/'+idUnit+'/edit'
+        route: '/siswa/'+idUnit+'/edit',
+        icon: 'lucide:user'
     },
     {
         label: 'Alamat',
-        route: '/siswa/'+idUnit+'/edit/alamat'
+        route: '/siswa/'+idUnit+'/edit/alamat',
+        icon: 'lucide:map'
     },
     {
         label: 'Informasi',
-        route: '/siswa/'+idUnit+'/edit/informasi'
+        route: '/siswa/'+idUnit+'/edit/informasi',
+        icon: 'lucide:info'
+    },
+    {
+        label: 'Foto',
+        route: '/siswa/'+idUnit+'/edit/foto',
+        icon: 'lucide:square-user'
     },
 ]);
 const visible = ref(false);
+
+const isRouteActive = (path: string) => {
+  return route.path === path;
+}
+
 </script>

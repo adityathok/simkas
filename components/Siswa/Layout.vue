@@ -49,16 +49,6 @@ const { data: fetchData, status, error, refresh } = await useAsyncData(
  // Ensure data is reactive
  data.value = fetchData.value
 
-// Confirm reactivity setup
-// console.log('Initial data:', data.value)
-
-//emit
-// const emit = defineEmits(['siswadata'])
-watch(fetchData, (newValue) => {
-  console.log('Watch:',newValue)
-  // emit('siswadata', 'KIKIRI')
-})
-
 const menus = [
   {label: 'Profil', route: '/siswa/'+idUnit+'/'},
   {label: 'Edit', route: '/siswa/'+idUnit+'/edit'},

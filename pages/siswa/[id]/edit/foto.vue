@@ -3,10 +3,10 @@
   <SiswaLayoutEdit>
 
     <div class="text-xl font-bold mb-3 md:mb-6">
-      Edit Alamat Siswa
+      Edit Foto Siswa
     </div>
 
-    <UserFormAlamat :iduser="data.user_id" /> 
+    <UserFormAvatar :iduser="data.user_id" /> 
 
   </SiswaLayoutEdit>
 
