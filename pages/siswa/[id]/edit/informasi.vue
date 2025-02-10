@@ -14,7 +14,7 @@
         </div>
         <div class="md:flex-1">
 
-          <div v-if="status=='pending'">
+          <div v-if="statusForm=='pending'">
             <Skeleton height="2rem" class="mb-2"/>
           </div>
           <div v-else>
@@ -60,8 +60,10 @@ const { data, status, error, refresh } = await useAsyncData(
   'siswa-'+idUnit,
   () => client('/api/siswa/'+idUnit)
 )
-//dapatkan usermeta dan update ke form
-const getmeta = client('/api/usermeta/'+data.value.user_id, {
+
+const { data: dataForm, status: statusForm, error: errorForm, refresh: refreshForm } = await useAsyncData(
+  'usermeta-'+data.value.user_id,
+  () => client('/api/usermeta/'+data.value.user_id, {
     method: 'GET',
     params: {
       'meta_key[]': [
@@ -105,11 +107,11 @@ const getmeta = client('/api/usermeta/'+data.value.user_id, {
         'pembiayaan_mos',
         'pembiayaan_spp',
         'pembiayaan_spp_sub'
-      ]  
+      ]
     }
-}).then((res) => {
-  Object.assign(form, res)
-})
+  })
+)
+Object.assign(form, dataForm.value)
 
 const fields = ref([
   { label: 'NIK', key: 'nik', type: 'text' },

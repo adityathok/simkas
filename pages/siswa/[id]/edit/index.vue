@@ -34,9 +34,13 @@
         </div>
       </div>
       <div class="text-end">
-        <Button type="submit" class="mt-4">
-          <Icon name="lucide:save" mode="svg"/>
-          Simpan
+        <Button type="submit" class="mt-4" :loading="isLoading">
+          <div v-if="isLoading" class="flex items-center gap-1">
+            <Icon name="lucide:loader" mode="svg" class="animate-spin"/> <span>Memproses..</span>
+          </div>
+          <div v-else class="flex items-center gap-1">
+            <Icon name="lucide:save" mode="svg"/> <span>Simpan</span>
+          </div>
         </Button>
       </div>
 
@@ -108,6 +112,12 @@ const fields = ref([
     label: 'Email',
     key: 'email',
     type: 'text'
+  },
+  {
+    label: 'Status',
+    key: 'status',
+    type: 'select',
+    options: ['Aktif', 'Keluar', 'Pindah', 'Lulus']
   },
 ])
 

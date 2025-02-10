@@ -25,7 +25,12 @@
                       {{ dataSiswa.tempat_lahir }}, {{ dataSiswa.tanggal_lahir }}
                     </span>
                     <span v-else-if="item.key == 'kelas'">
-                      {{ dataSiswa.kelas.nama }}, {{ dataSiswa.kelas.tahun_ajaran }}
+                      <NuxtLink :to="'/kelas/'+dataSiswa.kelas.id" class="cursor-pointer hover:underline">
+                        {{ dataSiswa.kelas.nama }}, {{ dataSiswa.kelas.tahun_ajaran }}
+                      </NuxtLink>
+                    </span>
+                    <span v-else-if="item.key == 'status'">
+                       <SiswaStatusBadge :status="dataSiswa.status" />
                     </span>
                     <span v-else>
                       {{ dataSiswa[item.key] }}
@@ -38,6 +43,8 @@
                </div>
           </template>
         </Card>
+
+        <SiswaIndexAlamat :datasiswa="dataSiswa" class="my-5 md:my-8"/>
 
       </div>
       <div class="md:basis-1/2">
