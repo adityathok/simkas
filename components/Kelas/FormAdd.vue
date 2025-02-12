@@ -118,7 +118,7 @@ const handleFormSubmit = async () => {
   form.value.tahun_ajaran = form.value.tahun_ajaran_1 + '/' + form.value.tahun_ajaran_2;
   
   try {
-    const res = await client('/api/kelas/', { method: 'POST', body: form.value });
+    const res = await client('/api/kelas', { method: 'POST', body: form.value });
     toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Kelas berhasil ditambahkan', life: 3000 });
     emit('add')
   } catch (error) {

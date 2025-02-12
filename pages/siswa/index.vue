@@ -1,7 +1,7 @@
 <template>
     
     <div class="flex justify-end mb-5">
-        <Button as="router-link" to="/pegawai/add" size="small">
+        <Button as="router-link" to="/siswa/create" size="small">
             <Icon name="lucide:user-plus" mode="svg"/>
             Tambah
         </Button>
