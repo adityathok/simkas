@@ -16,6 +16,10 @@
         </div>
       </div>
 
+      <div class="text-end">
+        <Button as="router-link" variant="text" :to="`/siswa/${datasiswa.id}/edit/alamat`" size="small" class="mt-2">Edit</Button>
+      </div>
+
     </template>
   </Card>
 </template>

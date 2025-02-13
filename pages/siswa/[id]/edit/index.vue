@@ -14,7 +14,7 @@
         </div>
         <div class="md:flex-1">
 
-          <div v-if="status=='pending'">
+          <div v-if="data?.status == 'pending'">
             <Skeleton height="2rem" class="mb-2"/>
           </div>
           <div v-else>
@@ -61,10 +61,8 @@ const toast = useToast();
 const isLoading = ref(false)
 const errors = ref({} as any)
 
-const { data, status, error, refresh } = await useAsyncData(
-  'siswa-'+idUnit,
-  () => client('/api/siswa/'+idUnit)
-)
+// Access to the cached value of dataSiswa
+const { data } = useNuxtData('siswa-'+idUnit)
 
 const fields = ref([
   {

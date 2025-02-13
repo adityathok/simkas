@@ -13,9 +13,13 @@
             <h3 class="md:text-xl font-bold">
               {{ data?.nama||'-' }}
             </h3>
-            <NuxtLink :to="'/kelas/'+data?.kelas?.id" class="text-sm hover:underline">
-              {{ data?.kelas?.nama||'-' }} | {{ data?.kelas?.tahun_ajaran||'-' }}
-            </NuxtLink>
+
+            <div>
+              <NuxtLink v-if="data.kelas" :to="'/kelas/'+data?.kelas?.id" class="text-sm hover:underline">
+                {{ data?.kelas?.nama||'-' }} | {{ data?.kelas?.tahun_ajaran||'-' }}
+              </NuxtLink>
+            </div>
+
           </div>
         </div>
         <AppMenuTabs :items="menus" :active="route.path" class="mt-2" />

@@ -20,9 +20,7 @@ const route = useRoute()
 const idUnit = route.params.id
 const client = useSanctumClient();
 
-const { data, status, error, refresh } = await useAsyncData(
-  'siswa-'+idUnit,
-  () => client('/api/siswa/'+idUnit)
-)
+// Access to the cached value of dataSiswa
+const { data } = useNuxtData('siswa-'+idUnit)
 
 </script>

@@ -25,8 +25,11 @@
                       {{ dataSiswa.tempat_lahir }}, {{ dataSiswa.tanggal_lahir }}
                     </span>
                     <span v-else-if="item.key == 'kelas'">
-                      <NuxtLink :to="'/kelas/'+dataSiswa.kelas.id" class="cursor-pointer hover:underline">
+                      <NuxtLink v-if="dataSiswa.kelas" :to="'/kelas/'+dataSiswa.kelas.id" class="cursor-pointer hover:underline">
                         {{ dataSiswa.kelas.nama }}, {{ dataSiswa.kelas.tahun_ajaran }}
+                      </NuxtLink>
+                      <NuxtLink v-else :to="'/siswa/'+idUnit+'/edit/kelas'">
+                        <Badge severity="info"> <Icon name="lucide:edit" mode="svg" class="me-2"/> Atur Kelas</Badge>
                       </NuxtLink>
                     </span>
                     <span v-else-if="item.key == 'status'">
@@ -72,6 +75,8 @@
 </template>
 
 <script setup lang="ts">
+import { Badge } from 'primevue';
+
 definePageMeta({
   title: 'Profil Siswa',
 })
@@ -85,10 +90,13 @@ const handleSiswaData = (data: any) => {
   datasiswa.value = data
 }
 
-const { data: dataSiswa, status, error, refresh } = await useAsyncData(
-  'siswa-'+idUnit,
-  () => client('/api/siswa/'+idUnit)
-)
+// const { data: dataSiswa, status, error, refresh } = await useAsyncData(
+//   'siswa-'+idUnit,
+//   () => client('/api/siswa/'+idUnit)
+// )
+
+// Access to the cached value of dataSiswa
+const { data: dataSiswa } = useNuxtData('siswa-'+idUnit)
 
 const profilSiswa = [
   {label: 'Nama', key: 'nama'},
@@ -130,6 +138,7 @@ const dataTagihan = ref([
     "jumlah": 100000
   }
 ])
+
 
 </script>
 

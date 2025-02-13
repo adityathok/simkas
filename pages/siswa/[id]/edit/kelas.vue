@@ -7,18 +7,20 @@
     </div>
 
     <form @submit.prevent="handleFormSubmit">
-      <div v-for="item in fields" :key="item.key" class="border-b py-3">
+      <div v-for="item in fields" :key="item.key" class="border-b py-3 flex flex-col md:flex-row">
 
-        <div v-if="statusForm=='pending'">
-          <Skeleton height="2rem" class="mb-2"/>
+        <div class="md:basis-1/4 lg:basis-1/5 font-semibold mb-1">
+          <label :for="item.key">{{ item.label }}</label>
         </div>
-        <div v-else class="flex flex-col md:flex-row">
-            <div class="md:basis-1/4 lg:basis-1/5 font-semibold mb-1">
-              <label :for="item.key">{{ item.label }}</label>
-            </div>
-            <div class="md:flex-1">
-                <InputText v-model="form[item.key]" :id="item.key" :type="item.type" class="w-full" />
-            </div>
+        <div class="md:flex-1">
+
+          <div v-if="statusForm=='pending'">
+            <Skeleton height="2rem" class="mb-2"/>
+          </div>
+          <div v-else>
+            <InputText v-model="form[item.key]" :id="item.key" :type="item.type" class="w-full" />
+          </div>
+
         </div>
 
       </div>

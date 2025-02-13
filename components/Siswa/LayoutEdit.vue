@@ -70,6 +70,11 @@ const items = ref([
         route: '/siswa/'+idUnit+'/edit/foto',
         icon: 'lucide:square-user'
     },
+    {
+        label: 'Kelas',
+        route: '/siswa/'+idUnit+'/edit/kelas',
+        icon: 'lucide:notebook'
+    },
 ]);
 const visible = ref(false);
 
