@@ -6,6 +6,12 @@
       Edit Kelas Siswa
     </div>
 
+    <div class="text-end">
+      <Button @click="openDialog('','add')" size="small">
+        <Icon name="lucide:plus" mode="svg"/> Tambah
+      </Button>
+    </div>
+
     <DataTable :value="dataKelas"  class="text-sm" stripedRows scrollable>
       
       <Column field="nama" header="Kelas" />
@@ -22,6 +28,10 @@
 
   </SiswaLayoutEdit>
 
+  <Dialog v-model:visible="visibleDialog" :modal="true" header="Tambah Kelas" :style="{ width: '40rem' }">
+    <SiswaFormKelas :idSiswa="idUnit" :action="actionDialog" @submit="refreshKelas()"/>
+  </Dialog>
+
 </template>
 
 <script setup lang="ts">
@@ -31,19 +41,20 @@ definePageMeta({
 const route = useRoute()
 const idUnit = route.params.id
 const client = useSanctumClient();
-const isLoading = ref(false)
-const errors = ref({})
-const toast = useToast();
-
-const form: Record<any, any> = reactive({} as any)
-
-// Access to the cached value of dataSiswa
-const { data } = useNuxtData('siswa-'+idUnit)
 
 const { data: dataKelas, status: statusKelas, error: errorKelas, refresh: refreshKelas } = await useAsyncData(
   'siswakelas-'+idUnit,
   () => client('/api/siswakelas?id_siswa='+idUnit)
 )
 
+const visibleDialog = ref(false);
+const actionDialog = ref('add');
+const selectedItem = ref({} as any);
+
+const openDialog = (itemData: any,action : string) => {
+    visibleDialog.value = true;
+    actionDialog.value = action;
+    selectedItem.value = itemData;
+}
 
 </script>
