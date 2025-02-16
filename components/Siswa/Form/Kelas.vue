@@ -25,8 +25,10 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps(['idSiswa','action'])
+const props = defineProps(['idSiswa','data','action'])
 const idSiswa = props.idSiswa
+const dataSK = props.data
+const action = props.action
 const isLoading = ref(false)
 const client = useSanctumClient();
 const toast = useToast();
@@ -52,19 +54,38 @@ const form = reactive({
   active: false
 } as any)
 
-console.log(dataSiswa);
+//jika action = edit, set form sesuai data
+if(action == 'edit') {
+  form.kelas_id = dataSK.kelas_id
+  form.active = dataSK.active==1?true:false
+  form.kelas_old = dataSK.kelas_id
+}
 
 const handleFormSubmit = async () => {  
   isLoading.value = true;
-  try {
-    await client('/api/siswakelas', { method: 'POST', body: form });
-    toast.add({ severity: 'error', summary: 'Gagal', detail: 'Kelas gagal ditambahkan', life: 3000 });
-    emit('submit')
-  } catch (error) {
-    const er = useSanctumError(error);
-    console.log(er);
-    toast.add({ severity: 'error', summary: 'Gagal', detail: 'Kelas gagal ditambahkan,'+er.msg, life: 3000 });
+
+  if(action == 'edit') {
+    try {
+      await client('/api/siswakelas/'+dataSK.kelas_id, { method: 'PUT', body: form });
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Kelas berhasil diubah', life: 3000 });
+      emit('submit')
+    } catch (error) {
+      const er = useSanctumError(error);
+      console.log(er);
+      toast.add({ severity: 'error', summary: 'Gagal', detail: 'Kelas gagal diubah,'+er.msg, life: 3000 });
+    }
+  } else {
+    try {
+      await client('/api/siswakelas', { method: 'POST', body: form });
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Kelas berhasil ditambahkan', life: 3000 });
+      emit('submit')
+    } catch (error) {
+      const er = useSanctumError(error);
+      console.log(er);
+      toast.add({ severity: 'error', summary: 'Gagal', detail: 'Kelas gagal ditambahkan,'+er.msg, life: 3000 });
+    }
   }
+
   isLoading.value = false;
 }
 
