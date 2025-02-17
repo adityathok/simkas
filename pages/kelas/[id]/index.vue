@@ -43,9 +43,20 @@
             <Icon name="lucide:users" mode="svg" class="inline" /> Daftar Siswa
           </div>
           <div>
-            <DataTable :value="siswas"  class="text-sm" stripedRows scrollable>
-              <Column field="nama" header="Nama"></Column>
+            <DataTable :value="datakelas.siswa"  class="text-sm" stripedRows scrollable>
+              <Column field="nama" header="Nama">
+                <template #body="slotProps">
+                  <div class="flex justify-start items-center">
+                    <UserAvatar :url="slotProps.data.avatar_url" :name="slotProps.data.nama" :size="32" class="min-w-[32px] rounded-full me-2"/>
+
+                    <NuxtLink :to="'/siswa/'+slotProps.data.siswa_id" target="_blank" class="cursor-pointer hover:underline">
+                      {{ slotProps.data.nama }}
+                    </NuxtLink>
+                  </div>
+                </template>
+              </Column>
               <Column field="nis" header="NIS"></Column>
+              <Column field="nisn" header="NISN"></Column>
             </DataTable>
           </div>
         </div>
