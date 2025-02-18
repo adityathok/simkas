@@ -12,9 +12,22 @@
                 </div>
                 <div class="md:flex-1" :class="{'opacity-50 cursor-wait': isLoading}">
                   
-                  <Textarea v-if="item.type == 'textarea'" v-model="datas[item.key]" rows="5" cols="20" class="w-full" />
-                  <Select v-else-if="item.type == 'select'" v-model="datas[item.key]" :options="item.key=='jenjang'?getJenjang:item.options" placeholder="Pilih" />
-                  <InputText v-else v-model="datas[item.key]" :type="item.type" class="w-full" />
+
+                  <div v-if="item.array">
+                     <div v-if="item.array" v-for="(index, i) in datas[item.key]" :key="i">
+                      <InputText v-model="datas[item.key][i]" :type="item.type" class="w-full" />
+                      <Button class="mt-2" @click="datas[item.key].splice(i, 1)" severity="danger">Hapus</Button>
+                    </div> 
+                  </div>
+                  <div v-else>
+                    <Textarea v-if="item.type == 'textarea'" v-model="datas[item.key]" rows="5" cols="20" class="w-full" />
+                    <Select v-else-if="item.type == 'select'" v-model="datas[item.key]" :options="item.key=='jenjang'?getJenjang:item.options" placeholder="Pilih" />
+                    <InputText v-else v-model="datas[item.key]" :type="item.type" class="w-full" />
+                  </div>
+
+                  <Message v-if="errors[item.key]" severity="error" class="mt-1" closable>
+                    {{ errors[item.key][0] }}
+                  </Message>
 
                 </div>
               </div>
@@ -64,6 +77,7 @@ const toast = useToast();
 const client = useSanctumClient();
 const confirm = useConfirm();
 const isLoading = ref(false)
+const errors = ref({} as any)
 
 const datas: Record<string, string> = reactive({
   nama: '',
@@ -113,7 +127,8 @@ const fields = [
   { label: 'Whatsapp', key: 'whatsapp', type: 'text' },
   { label: 'Telepon', key: 'telepon', type: 'text' },
   { label: 'Email', key: 'email', type: 'text' },
-  { label: 'Tingkat', key: 'tingkat', type: 'text' },
+  { label: 'Tingkat', key: 'tingkat', type: 'text', array: true },
+  { label: 'Rombel', key: 'rombel', type: 'text', array: true },
 ]
 //dapatkan option jenjang
 const getJenjang = await client('/api/setting/jenjang');
@@ -136,6 +151,8 @@ const handleFormSubmit = async () => {
     toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Unit berhasil diperbarui', life: 3000 });
   } catch (error) {
     isLoading.value = false;
+    const er = useSanctumError(error);
+    errors.value = er.bag;
     toast.add({ severity: 'warn', summary: 'Gagal', detail: 'Terjadi kesalahan', life: 3000 });
     console.error(error)
   }

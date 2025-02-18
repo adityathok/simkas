@@ -53,6 +53,7 @@ const fields = [
   { label: 'Whatsapp', key: 'whatsapp', type: 'text' },
   { label: 'Telepon', key: 'telepon', type: 'text' },
   { label: 'Email', key: 'email', type: 'text' },
+  { label: 'Tingkat', key: 'tingkat', type: 'text', array: true },
 ]
 
 //watch input ada perubahan

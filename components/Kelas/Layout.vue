@@ -1,6 +1,14 @@
 <template>
   
-  <Card v-if="status == 'success'">
+  <div v-if="error" class="flex flex-col justify-center items-center p-5">
+    <Icon name="lucide:archive-x" mode="svg" size="4em" class="text-yellow-500"/>
+    <Message severity="warn" class="my-5">Kelas tidak ditemukan !</Message>
+    <Button as="router-link" to="/kelas">
+      <Icon name="lucide:chevron-left" mode="svg" /> Kembali
+    </Button>
+  </div>
+
+  <Card v-else>
 
     <template #header>
       <div class="bg-gradient-to-r from-gray-800 to-teal-800 min-h-[5em] md:min-h-[6em] rounded-t-xl text-white px-6 py-5">        
@@ -26,13 +34,6 @@
     </template>
 
   </Card>
-  <div v-else class="flex flex-col justify-center items-center p-5">
-    <Icon name="lucide:archive-x" mode="svg" size="4em" class="text-yellow-500"/>
-    <Message severity="warn" class="my-5">Kelas tidak ditemukan !</Message>
-    <Button as="router-link" to="/kelas">
-      <Icon name="lucide:chevron-left" mode="svg" /> Kembali
-    </Button>
-  </div>
 
 </template>
 
@@ -47,6 +48,8 @@ const { data: dataKelas, status, error, refresh } = await useAsyncData(
   'kelas-'+idUnit,
   () => client('/api/kelas/'+idUnit)
 )
+
+console.log(error)
 
 if (status.value == 'success' && dataKelas) {
   emit('kelasdata', dataKelas.value);
