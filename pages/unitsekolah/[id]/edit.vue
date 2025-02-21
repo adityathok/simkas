@@ -14,10 +14,17 @@
                   
 
                   <div v-if="item.array">
-                     <div v-if="item.array" v-for="(index, i) in datas[item.key]" :key="i">
-                      <InputText v-model="datas[item.key][i]" :type="item.type" class="w-full" />
-                      <Button class="mt-2" @click="datas[item.key].splice(i, 1)" severity="danger">Hapus</Button>
+                     <div v-if="item.array" v-for="(index, i) in datas[item.key]" :key="i" class="flex flex-row pb-1">
+                      <InputText v-model="datas[item.key][i]" :type="item.type" class="w-full !rounded-r-none" />
+                      <Button class="!rounded-l-none" @click="removeItem(item.key,i)" type="button" severity="danger">
+                        X
+                      </Button>
                     </div> 
+                    <div class="text-end">                      
+                      <Button size="small" @click="addItem(item.key)" type="button" severity="success">
+                        + Tambah
+                      </Button>
+                    </div>
                   </div>
                   <div v-else>
                     <Textarea v-if="item.type == 'textarea'" v-model="datas[item.key]" rows="5" cols="20" class="w-full" />
@@ -79,7 +86,7 @@ const confirm = useConfirm();
 const isLoading = ref(false)
 const errors = ref({} as any)
 
-const datas: Record<string, string> = reactive({
+const datas: Record<string, any> = reactive({
   nama: '',
   jenjang: '',
   alamat: '',
@@ -93,8 +100,12 @@ const datas: Record<string, string> = reactive({
   whatsapp: '',
   telepon: '',
   email: '',
-  tingkat: '',
+  tingkat: [''],
+  rombel: [''],
 })
+const dataTingkat = ref({} as any)
+const dataRombel = ref({} as any)
+
 
 const { data, status, error, refresh } = await useAsyncData(
     'unitsekolah-'+idUnit,
@@ -108,6 +119,9 @@ watch(
     if (newData) {
       // Isi ulang `datas` dengan data yang baru
       Object.assign(datas, newData)
+
+      dataTingkat.value = newData.tingkat
+      dataRombel.value = newData.rombel
     }
   },
   { immediate: true } // Jalankan sekali segera setelah watch dipasang
@@ -137,11 +151,22 @@ const handleFormSubmit = async () => {
   isLoading.value = true;
   const formData = new FormData();
   for (const key in fields) {
-    formData.append(fields[key].key, datas[fields[key].key]);
+    if(fields[key].key != 'tingkat' && fields[key].key != 'rombel'){
+      formData.append(fields[key].key, datas[fields[key].key]);
+    }
   }
   if(fileLogo.value){
     formData.append('file_logo', fileLogo.value);
   }
+
+  //append array tingkat dan rombel
+  for (const key in dataTingkat.value) {
+    formData.append('tingkat[]', dataTingkat.value[key]);
+  }
+  for (const key in dataRombel.value) {
+    formData.append('rombel[]', dataRombel.value[key]);
+  }
+  
   try {
     const response = await client('/api/unitsekolah/'+idUnit, {
       method: 'PUT',
@@ -163,6 +188,17 @@ const fileLogo = ref('')
 function handleFileUpload(event: any) {
   previewLogo.value = URL.createObjectURL(event.target.files[0]);
   fileLogo.value = event.target.files[0]
+}
+
+function removeItem(key : string,index : number){
+  if(key == 'rombel'){
+    dataRombel.value.splice(index, 1);
+  } else {
+    dataTingkat.value.splice(index, 1);
+  }
+}
+function addItem(key : string){
+  dataTingkat.value.push('');
 }
 
 const confirmDelete = (id: string) => {
