@@ -198,7 +198,11 @@ function removeItem(key : string,index : number){
   }
 }
 function addItem(key : string){
-  dataTingkat.value.push('');
+  if(key == 'rombel'){
+    dataRombel.value.push('');
+  } else {
+    dataTingkat.value.push('');
+  }
 }
 
 const confirmDelete = (id: string) => {
