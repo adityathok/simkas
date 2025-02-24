@@ -50,7 +50,8 @@ try {
 const menus = [
   {label: 'Profil', route: '/unitsekolah/'+idUnit+'/'},
   {label: 'Edit', route: '/unitsekolah/'+idUnit+'/edit'},
-  {label: 'Pegawai', route: '/unitsekolah/'+idUnit+'/pegawai'}
+  {label: 'Pegawai', route: '/unitsekolah/'+idUnit+'/pegawai'},
+  {label: 'Kelas', route: '/unitsekolah/'+idUnit+'/kelas'}
 ]
 
 </script>
