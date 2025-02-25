@@ -6,7 +6,7 @@
           Login
         </h1>
       </div>
-      <AuthLoginForm />
+      <AuthLogin/>
     </template>
     
     <template v-if="isLogin">
