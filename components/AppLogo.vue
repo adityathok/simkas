@@ -1,8 +1,8 @@
 <template>
     
-    <div v-if="infoApp" class="flex items-center gap-2">
+    <div v-if="infoApp" class="flex items-center gap-2 max-w-[11rem]">
         <img src="~/public/logo.png" alt="Logo App" class="max-h-10">
-        <span class="text-sm">{{ infoApp?.lembaga }}</span>
+        <span class="text-sm font-bold">{{ infoApp?.lembaga }}</span>
     </div>
     
     <div v-else>

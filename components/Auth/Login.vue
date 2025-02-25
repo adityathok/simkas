@@ -1,6 +1,6 @@
 <template>
     
-  <form @submit.prevent="handleFormSubmit">
+  <form @submit.prevent="handleFormSubmit" class="w-full">
       <div class="mb-3">
           <label for="email">Email</label>
           <InputText id="email" v-model="form.email" type="text" size="large" class="w-full"/>
@@ -16,7 +16,7 @@
       </div>        
 
       <div class="mt-5">
-          <Button type="submit" class="!px-20" :loading="isLoading">                
+          <Button type="submit" class="!px-20 w-full" :loading="isLoading">                
               <span v-if="isLoading" class="flex gap-2 items-center"><Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses login..</span>
               <span v-else>Masuk</span>
           </Button>
