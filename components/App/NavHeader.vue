@@ -15,9 +15,18 @@
                       </Button>
                   </span>
                   <span class="hidden md:block">
-                      <Button severity="secondary" variant="text">
+                      <Button severity="secondary" variant="text" label="Show Search" @click="visibleSearch = true">
                           <Icon name="lucide:search" mode="svg" />
                       </Button>
+
+                      <Dialog v-model:visible="visibleSearch" modal header="Pencarian" :style="{ width: '50rem' }">
+                        <form class="flex">
+                          <Input type="text" placeholder="Pencarian" class="w-full border border-gray-300 px-5 py-3 !rounded-none" />
+                          <Button class="!px-10 !rounded-none">
+                            <Icon name="lucide:search" mode="svg" />
+                          </Button>
+                        </form>
+                      </Dialog>
                   </span>
                   <span class="md:hidden">
                       <AppLogo />
@@ -46,6 +55,7 @@
 const useGlobal = useGlobalStore()
 const useUser = useUserStore()
 const user = useSanctumUser();
+const visibleSearch = ref(false);
 
 const { toLogout } = useAuth()
 const avatar = user.value.avatar ? user.value.avatar : '';
