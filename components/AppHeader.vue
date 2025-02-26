@@ -1,15 +1,28 @@
 <template>
-    <header class="sticky z-[5] bg-white w-full py-4 sm:px-6">
+    <header class="sticky top-0 shadow-sm z-[5] bg-white w-full py-4 px-4 sm:px-6">
             <div class="flex items-center justify-between">
 
                 <div class="flex items-center justify-start">
                     
-                    <button type="button" @click="$router.back()" class="py-1 px-2">
-                        <Icon name="lucide:chevron-left" mode="svg" />
-                    </button>
-                    <h1 class="text-lg font-medium text-gray-900">
-                        {{ $route.meta.title }}
-                    </h1>
+                    <div class="xl:hidden ms-1">
+                        <Button @click="useGlobal.toggelsidebar()" size="small" severity="secondary" variant="link">
+                            <Icon name="lucide:menu" mode="svg" size="1.5rem"/>
+                        </Button>
+                    </div>
+                    <span class="hidden md:block">
+                        <Button severity="secondary" variant="text" @click="$router.back()">
+                            <Icon name="lucide:move-left" mode="svg" />
+                        </Button>
+                    </span>
+                    <span class="hidden md:block">
+                        <Button severity="secondary" variant="text">
+                            <Icon name="lucide:search" mode="svg" />
+                        </Button>
+                    </span>
+                    <span class="md:hidden">
+                        <AppLogo />
+                    </span>
+
                 </div>
 
                 <div class="flex items-center justify-end">
@@ -21,12 +34,6 @@
                     <Avatar v-else :label="firstName(user.name)" shape="circle" class="cursor-pointer" @click="toggleAvatar" />
 
                     <Menu ref="menu" id="avatar_menu" :model="menuAvatar" :popup="true" />
-
-                    <div class="md:hidden ms-1">
-                        <Button @click="useGlobal.toggelsidebar()" size="small" severity="secondary" variant="link">
-                            <Icon name="lucide:menu" />
-                        </Button>
-                    </div>
 
                 </div>
             </div>
