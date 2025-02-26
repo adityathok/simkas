@@ -10,11 +10,11 @@
             </div>
             <div class="body-wrapper w-full bg-white">
 
-                <AppHeader />
+                <AppNavHeader />
 
                 <div class="container mx-auto min-h-[85vh] p-6">
 
-                    <div class="relative overflow-hidden bg-blue-100 rounded-md min-h-20 flex justify-start items-center px-5 py-3 md:py-5 xl:py-6 mb-6">
+                    <div v-if="$route.meta.title" class="relative overflow-hidden bg-blue-100 rounded-md min-h-20 flex justify-start items-center px-5 py-3 md:py-5 xl:py-6 mb-6">
                         <div>
                             <h1 class="text-lg md:text-xl font-medium text-slate-900">
                                 {{ $route.meta.title }}
