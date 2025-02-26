@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white shadow-sm p-3 md:px-6 mb-3">
+    <header class="sticky z-[5] bg-white w-full py-4 sm:px-6">
             <div class="flex items-center justify-between">
 
                 <div class="flex items-center justify-start">
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-    </div>
+    </header>
     
 </template>
 

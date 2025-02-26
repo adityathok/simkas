@@ -25,7 +25,7 @@
             }"
         >
             <template #item="{ item }">
-                <button v-if="item.items" v-ripple :class="[classLink,{'bg-blue-600 text-white hover:text-slate-500 shadow' : isActive(item.href)}]">
+                <button type="button" v-if="item.items" v-ripple :class="[classLink,{'bg-blue-600 text-white hover:text-slate-500 shadow' : isActive(item.href)}]">
                     <span class="flex justify-start items-center">
                         <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="mr-2"/>
                         <span>{{ item.label }}</span>
