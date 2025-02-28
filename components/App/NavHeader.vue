@@ -19,13 +19,8 @@
                           <Icon name="lucide:search" mode="svg" />
                       </Button>
 
-                      <Dialog v-model:visible="visibleSearch" modal header="Pencarian" :style="{ width: '50rem' }">
-                        <form class="flex">
-                          <Input type="text" placeholder="Pencarian" class="w-full border border-gray-300 px-5 py-3 !rounded-none" />
-                          <Button class="!px-10 !rounded-none">
-                            <Icon name="lucide:search" mode="svg" />
-                          </Button>
-                        </form>
+                      <Dialog v-model:visible="visibleSearch" modal header="Pencarian" :closeOnEscape="true" :dismissableMask="true" :style="{ width: '50rem' }">
+                        <AppNavCariSiswa/>
                       </Dialog>
                   </span>
                   <span class="md:hidden">

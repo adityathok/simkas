@@ -85,7 +85,6 @@ onMounted(() => {
             }
         }
     }
-    console.log(expandedKeys.value)
 })
 
 watch(() => expandedKeys, () => {
