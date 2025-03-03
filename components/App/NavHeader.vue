@@ -20,7 +20,7 @@
                       </Button>
 
                       <Dialog v-model:visible="visibleSearch" modal header="Pencarian" :closeOnEscape="true" :dismissableMask="true" :style="{ width: '50rem' }">
-                        <AppNavCariSiswa/>
+                        <AppNavCariSiswa @openSiswa="visibleSearch = false"/>
                       </Dialog>
                   </span>
                   <span class="md:hidden">
