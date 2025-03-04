@@ -61,6 +61,8 @@
 
 <script setup lang="ts">
 const emit = defineEmits(['add'])
+const props = defineProps(['idunit'])
+const idUnit = ref(props.idunit || '')
 const isLoading = ref(false)
 const toast = useToast();
 const client = useSanctumClient();
@@ -84,18 +86,18 @@ const pegawais = ref({} as any)
 const { data, status, error, refresh } = await useAsyncData(
     'option-add-kelas', () => client('/api/option/add_kelas')
 )
-if(data){
-   units.value = data.value.unit_sekolah.map((unit: any) => ({
-    value: unit.id,
-    label: unit.nama,
-  }))
-  pegawais.value = data.value.pegawai.map((user: { user_id: any; nama: string;nip: string; avatar: string; }) => ({
-    value: user.user_id,
-    label: user.nama,
-    nip: user.nip,
-    image: user.avatar
-  }));
-}
+// if(data){
+//    units.value = data.value.unit_sekolah.map((unit: any) => ({
+//     value: unit.id,
+//     label: unit.nama,
+//   }))
+//   pegawais.value = data.value.pegawai.map((user: { user_id: any; nama: string;nip: string; avatar: string; }) => ({
+//     value: user.user_id,
+//     label: user.nama,
+//     nip: user.nip,
+//     image: user.avatar
+//   }));
+// }
 
 const form = ref({
   tahun_ajaran_1: data.value.tahun_ajaran.tahun_mulai,

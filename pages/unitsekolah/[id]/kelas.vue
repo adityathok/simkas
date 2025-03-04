@@ -28,10 +28,10 @@
       <Column field="act" header="">
         <template #body="slotProps">
           <div class="flex justify-end items-center">
-            <Button severity="secondary" variant="text" @click="$router.push('/kelas/'+slotProps.data.id)" v-tooltip="'Edit'">
+            <Button severity="secondary" variant="text" @click="$router.push('/kelas/'+slotProps.data.id)" class="!px-1" v-tooltip="'Edit'">
               <Icon name="lucide:square-pen" mode="svg"/>
             </Button>
-            <Button severity="danger" variant="text" @click="confirmDelete(slotProps.data.id)" v-tooltip="'Hapus'">
+            <Button severity="danger" variant="text" @click="confirmDelete(slotProps.data.id)" class="!px-1" v-tooltip="'Hapus'">
                 <Icon name="lucide:trash" mode="svg"/>
             </Button>
           </div>
@@ -41,8 +41,8 @@
 
   </UnitSekolahLayout>
 
-  <Dialog v-model:visible="visibleDialog" :modal="true" header="Tambah Kelas" :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <KelasFormAdd @add="refresh()" />
+  <Dialog v-model:visible="visibleDialog" :modal="true" header="Tambah Kelas" :style="{ width: '40rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <KelasFormCreate @add="refresh()" :idunit="idUnit" />
   </Dialog>
 
 </template>
