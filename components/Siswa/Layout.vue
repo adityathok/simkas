@@ -2,8 +2,8 @@
 
   <div v-if="fetchData">
     
-    <div class="bg-sky-100 min-h-[5em] md:min-h-[6em] mb-10 mx-[-1.5rem] mt-[-1.5rem] px-6 pt-5 md:px-10 shadow-xs">        
-        <div class="flex justify-start gap-3 items-center">
+    <div class="rounded-xl min-h-[5em] md:min-h-[6em] mb-5 shadow-sm overflow-hidden bg-white">        
+        <div class="flex justify-start gap-3 items-center p-5">
           <div>
             <div class="aspect-square bg-slate-100 rounded w-[5rem] md:w-[8rem]">
               <img v-if="data?.avatar_url" :src="data?.avatar_url" alt="" width="300" class="aspect-square object-cover rounded">
@@ -15,14 +15,16 @@
             </h3>
 
             <div>
-              <NuxtLink v-if="data.kelas" :to="'/kelas/'+data?.kelas?.id" class="text-sm hover:underline">
-                {{ data?.kelas?.nama||'-' }} | {{ data?.kelas?.tahun_ajaran||'-' }}
+              <NuxtLink v-if="data.kelas_siswa" :to="'/kelas/'+data?.kelas_siswa?.id" class="text-sm hover:underline">
+                {{ data?.kelas_siswa?.nama||'-' }} | {{ data?.kelas_siswa?.tahun_ajaran||'-' }}
               </NuxtLink>
             </div>
 
           </div>
         </div>
-        <AppMenuTabs :items="menus" :active="route.path" class="mt-2" />
+        <div class="bg-slate-100 px-2">
+          <AppMenuTabs :items="menus" :active="route.path" class="mt-2" />
+        </div>
       </div>
       
       <slot/>

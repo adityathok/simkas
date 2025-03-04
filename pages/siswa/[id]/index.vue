@@ -25,8 +25,8 @@
                       {{ dataSiswa.tempat_lahir }}, {{ dataSiswa.tanggal_lahir }}
                     </span>
                     <span v-else-if="item.key == 'kelas'">
-                      <NuxtLink v-if="dataSiswa.kelas" :to="'/kelas/'+dataSiswa.kelas.id" class="cursor-pointer hover:underline">
-                        {{ dataSiswa.kelas.nama }}, {{ dataSiswa.kelas.tahun_ajaran }}
+                      <NuxtLink v-if="dataSiswa.kelas_siswa" :to="'/kelas/'+dataSiswa.kelas_siswa.id" class="cursor-pointer hover:underline">
+                        {{ dataSiswa.kelas_siswa.nama }}, {{ dataSiswa.kelas_siswa.tahun_ajaran }}
                       </NuxtLink>
                       <NuxtLink v-else :to="'/siswa/'+idUnit+'/edit/kelas'">
                         <Badge severity="info"> <Icon name="lucide:edit" mode="svg" class="me-2"/> Atur Kelas</Badge>

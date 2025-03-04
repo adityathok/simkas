@@ -8,7 +8,7 @@
                     <AppNavSidebar/>
                 </div>
             </div>
-            <div class="body-wrapper w-full bg-white">
+            <div class="body-wrapper w-full bg-sky-50">
 
                 <AppNavHeader />
 

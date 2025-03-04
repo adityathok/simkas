@@ -17,7 +17,7 @@
 
       <NuxtLink :to="'/siswa/'+item.id" @click="emit('openSiswa')" class="rounded-md p-2 border-b flex justify-start items-center gap-2 hover:bg-slate-900 hover:text-white">
         <div>
-          <Avatar v-if="item.avatar_url" :image="item.avatar_url" shape="circle" />
+          <UserAvatar v-if="item.avatar_url" :url="item.avatar_url" :name="item.nama" :size="50" />
         </div>
         <div>
           {{ item.nama }}

@@ -55,7 +55,12 @@ const toast = useToast();
 const form: Record<any, any> = reactive({} as any)
 
 // Access to the cached value of dataSiswa
-const { data } = useNuxtData('siswa-'+idUnit)
+// const { data } = useNuxtData('siswa-'+idUnit)
+
+const { data } = await useAsyncData(
+  'siswa-'+idUnit,
+  () => client('/api/siswa/'+idUnit)
+)
 
 const { data: dataForm, status: statusForm, error: errorForm, refresh: refreshForm } = await useAsyncData(
   'usermeta-'+data.value.user_id,
