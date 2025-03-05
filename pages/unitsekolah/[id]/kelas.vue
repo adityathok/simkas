@@ -1,14 +1,18 @@
 <template>
   <UnitSekolahLayout>
 
-    <div class="flex justify-end items-center">
+    <div class="flex justify-end items-center gap-2">
+      <span v-if="status == 'pending'">
+        <Icon name="lucide:loader" mode="svg" class="animate-spin"/>
+      </span>
+      <Select v-model="filterTahun" :options="optionTahunAjaran" optionLabel="label" optionValue="value"/>
       <Button @click="openDialog('','add')" size="small">
         <Icon name="lucide:circle-plus" mode="svg"/>
         Tambah
       </Button>
     </div>
     
-    <DataTable :value="data.data"  class="text-sm" stripedRows scrollable>
+    <DataTable v-if="data.data.length > 0" :value="data.data"  class="text-sm" stripedRows scrollable>
       <Column field="nama" header="Kelas">        
         <template #body="slotProps">
           <NuxtLink :to="'/kelas/'+slotProps.data.id" target="_blank" class="cursor-pointer hover:underline">
@@ -39,6 +43,8 @@
       </Column>
     </DataTable>
 
+    <Message v-else severity="warn">Tidak ada data..</Message>
+
   </UnitSekolahLayout>
 
   <Dialog v-model:visible="visibleDialog" :modal="true" header="Tambah Kelas" :style="{ width: '40rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
@@ -59,9 +65,30 @@ const confirm = useConfirm();
 const isLoading = ref(false)
 const errors = ref({} as any)
 
+
+const filterTahun = ref('')
+  const { data:optionTahunAjaran } = await useAsyncData(
+      'option-tahun_ajaran',
+      () => client('/api/option/tahun_ajaran')
+  )
+  //jika optionTahunAjaran sudah dapat
+  onMounted(() => {
+    filterTahun.value = optionTahunAjaran.value.find((item: { active: number; }) => item.active === 1)?.value || '';
+  })
+
+  //watch filterTahun
+  watch(() => filterTahun.value, () => {
+    refresh()
+  })
+
 const { data, status, error, refresh } = await useAsyncData(
     'unitsekolahkelas-'+idUnit,
-    () => client('/api/unitsekolahkelas/'+idUnit)
+    () => client('/api/unitsekolahkelas/'+idUnit,
+    {
+      params:{
+        tahun_ajaran: filterTahun.value
+      }
+    })
 )
 
 const confirmDelete = (id : any) => {
@@ -90,5 +117,6 @@ const confirmDelete = (id : any) => {
   const openDialog = (itemData: any,action : string) => {
       visibleDialog.value = true;
   }
+
 
 </script>

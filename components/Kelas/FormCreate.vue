@@ -1,8 +1,6 @@
 <template>  
 <form @submit.prevent="handleFormSubmit">
 
-  <SelectButton v-model="valueBuat" optionLabel="label" optionValue="value" :options="optionsBuat" class="mb-2"/>
-
   <div v-for="item in fields" :key="item.key" class="border-b py-2 flex flex-col md:flex-row">
       
       <div class="md:basis-1/4 font-semibold mb-1">
@@ -50,12 +48,6 @@ const isLoading = ref(false)
 const toast = useToast();
 const client = useSanctumClient();
 const errors = ref({} as any)
-
-const valueBuat = ref('satu');
-const optionsBuat = ref([
-    { label: 'Satu Kelas', value: 'satu' },
-    { label: 'Kelas dari Data Tingkat & Rombel', value: 'tingkat' }
-]);
 
 const fields = [
   { label: 'Tahun Ajaran', key: 'tahun_ajaran', type: 'select' },

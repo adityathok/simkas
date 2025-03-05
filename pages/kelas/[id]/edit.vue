@@ -1,5 +1,6 @@
 <template>
   <KelasLayout @kelasdata="handleKelasData">
+    
     <form @submit.prevent="handleFormSubmit">
      <div v-for="item in fields" :key="item.key">
         <div class="border-b py-2 flex flex-col md:flex-row">
@@ -35,15 +36,7 @@
             </div>
             
             <div v-else-if="item.key == 'tingkat'" class="w-full">
-              <!-- <Select filter v-model="form.tingkat" :options="filteredTingkat" placeholder="Pilih Tingkat" class="w-full" :disabled="filteredTingkat.length === 0">
-                <template #value="slotProps">
-                  {{ slotProps.value.toString() }}
-                </template>
-                <template #option="slotProps">
-                  {{ slotProps.option.toString() }}
-                </template>
-              </Select> -->
-              <Select filter v-model="form.tingkat" :options="filteredTingkat" placeholder="Pilih Tingkat" class="w-full" :disabled="filteredTingkat.length === 0"/>
+              <Select filter v-model="form.tingkat" :options="filteredTingkat" placeholder="Pilih Tingkat" class="w-full" />
             </div>
 
             <InputText v-else-if="item.key == 'nama'" v-model="form.nama" :type="item.type" class="w-full" />
