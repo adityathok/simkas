@@ -14,6 +14,8 @@
 
         <Select v-if="item.key == 'tingkat'" :options="filteredTingkat" v-model="form.tingkat" />
 
+        <Select v-if="item.key == 'rombel'" :options="filteredRombel" v-model="form.rombel" />
+
         <Select v-if="item.key == 'wali'" filter :options="dataOptions.pegawai" optionLabel="label" optionValue="value" v-model="form.wali_id" />
         
         <InputText v-if="item.key == 'nama'" v-model="form.nama" :type="item.type" class="w-full" />
@@ -54,6 +56,7 @@ const fields = [
   { label: 'Unit Sekolah', key: 'unit_sekolah', type: 'select' },
   { label: 'Nama Kelas', key: 'nama', type: 'text' },
   { label: 'Tingkat', key: 'tingkat', type: 'select' },
+  { label: 'Rombel', key: 'rombel', type: 'select' },
   { label: 'Wali', key: 'wali', type: 'select' },
 ]
 
@@ -62,6 +65,7 @@ const form = reactive({
   tahun_ajaran: '',
   nama: '',
   tingkat: '',
+  rombel:'',
   wali_id:''
 })
 
@@ -77,6 +81,11 @@ onMounted(() => {
 const filteredTingkat = computed(() => {
   const sekolah = dataOptions.value.unit_sekolah.find((s: { id: string; }) => s.id === form.unit_sekolah_id);
   return sekolah ? sekolah.tingkat : [];
+});
+
+const filteredRombel = computed(() => {
+  const sekolah = dataOptions.value.unit_sekolah.find((s: { id: string; }) => s.id === form.unit_sekolah_id);
+  return sekolah ? sekolah.rombel : [];
 });
 
 const handleFormSubmit = async () => {  
