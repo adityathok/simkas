@@ -32,6 +32,19 @@
           </div>
         </div>
 
+        <DataTable v-model:selection="selectedKelasFrom" :value="siswaFrom" class="text-sm" stripedRows scrollable>
+          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+          <Column field="nama" header="Nama" />
+        </DataTable>
+
+        <div class="text-end mt-2">
+          <Button @click="handleMoveSiswa">
+            Pindahkan 
+            <Icon v-if="isLoading" name="lucide:loader" mode="svg" class="animate-spin" />
+            <Icon v-else name="lucide:circle-arrow-out-up-right" mode="svg" />
+          </Button>
+        </div>
+
       </div>
       <div class="md:basis-1/2 p-4 min-h-[40rem]">
 
@@ -57,6 +70,11 @@
             <div v-else class="bg-slate-100 text-slate-300 p-2 rounded-md">Kelas tidak tersedia</div>
           </div>
         </div>
+      
+        <DataTable :value="siswaTo" class="text-sm" stripedRows scrollable>
+          <Column field="nama" header="Nama" />
+        </DataTable>
+
       </div>
       
     </div>
@@ -123,15 +141,68 @@ const { data: oKelasTo, status: sKelasTo, refresh: refreshoptionKelasTo } = awai
       }
     })
 )
+
+const { data: siswaFrom, status: sSiswaFrom, refresh: fSiswaFrom } = await useAsyncData('siswafrom', () =>
+    client('/api/siswakelas/'+kelasFrom.value)
+);
+//watch kelasFrom
+watch(() => kelasFrom.value, () =>{
+  fSiswaFrom()
+})
+
 //watch tahunTo & unitTo
 watch(() => tahunTo.value, () => {
   refreshoptionKelasTo()
 })
 watch(() => unitTo.value, () => {
   refreshoptionKelasTo()
+  fSiswaFrom()
 })
 watch(() => oKelasTo.value, () => {
   optionKelasTo.value = oKelasTo.value
 })
+
+const selectedKelasFrom = ref();
+
+const { data: siswaTo, status: ssiswaTo, refresh: fSiswaTo } = await useAsyncData('siswato', () =>
+    client('/api/siswakelas/'+kelasTo.value)
+);
+//watch kelasTo
+watch(() => kelasTo.value, () =>{
+  fSiswaTo()
+})
+
+const toast = useToast();
+const isLoading = ref(false)
+
+const handleMoveSiswa = async () => {
+  if(selectedKelasFrom.value){
+
+    isLoading.value = true
+
+    //ambil id siswa nya saja
+    const siswaIds = selectedKelasFrom.value.map((item: { id: any, user_id: any }) => ({
+      user_id: item.user_id,
+      siswa_id: item.id
+    }));
+    
+    try {
+      await client('/api/siswakelas/naik_kelas', {
+        method: 'POST',
+        body: {
+          siswa: siswaIds,
+          kelas_from: kelasFrom.value,
+          kelas_to: kelasTo.value
+        }
+      })
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Perubahan berhasil disimpan', life: 3000 });
+    } catch (er) {
+      const e = useSanctumError(er);
+      console.log(e.bag);
+      toast.add({ severity: 'error', summary: 'Gagal', detail: 'Perubahan gagal disimpan', life: 3000 });
+    }
+    isLoading.value = false
+  }
+}
 
 </script>
