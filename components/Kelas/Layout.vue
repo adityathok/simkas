@@ -11,7 +11,7 @@
   <Card v-else>
 
     <template #header>
-      <div class="bg-linear-to-r from-gray-800 to-teal-800 min-h-[5em] md:min-h-[6em] rounded-t-xl text-white px-6 py-5">        
+      <div class="bg-teal-800 min-h-[5em] md:min-h-[6em] rounded-t-xl text-white px-6 py-5">        
         <div class="md:flex justify-start md:justify-between gap-3 items-center">
             <div>
               <h3 class="text-3xl font-bold">
@@ -49,31 +49,15 @@ const { data: dataKelas, status, error, refresh } = await useAsyncData(
   () => client('/api/kelas/'+idUnit)
 )
 
-console.log(error)
-
 if (status.value == 'success' && dataKelas) {
   emit('kelasdata', dataKelas.value);
 } else if (status.value == 'error') {
   console.log(status.value)
 }
 
-// try {
-//   const data = await client('/api/kelas/'+idUnit)
-//   datas.value = data
-//   emit('kelasdata', data)
-// } catch (e) {
-//   const err = useSanctumError(e);
-//   if(err.code == 404){
-//     toast.add({ severity: 'error', summary: 'Gagal', detail: 'Kelas tidak ditemukan', life: 3000 });
-//     navigateTo('/kelas')
-//   }
-//   console.log(err);
-// }
-
 const menus = [
   {label: 'Profil', route: '/kelas/'+idUnit+'/'},
   {label: 'Edit', route: '/kelas/'+idUnit+'/edit'},
-  // {label: 'Siswa', route: '/kelas/'+idUnit+'/pegawai'}
 ]
 
 </script>

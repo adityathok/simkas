@@ -39,9 +39,17 @@
 
       <div class="md:flex-1">
         <div class="border min-h-10 w-full p-3 rounded-sm">
-          <div class="mb-3">
-            <Icon name="lucide:users" mode="svg" class="inline" /> Daftar Siswa
+          
+          <div class="flex justify-between items-center mb-3">
+            <div class="mb-1">
+              <Icon name="lucide:users" mode="svg" class="inline" /> Daftar Siswa
+            </div>
+            <Button severity="success" size="small" @click="openDialog()">
+              <Icon name="lucide:user-plus" mode="svg" /> 
+              <div class="hidden md:inline-block">Tambah Siswa</div> 
+            </Button>
           </div>
+
           <div>
 
             <DataTable :value="siswaKelas"  class="text-sm" stripedRows scrollable>
@@ -77,6 +85,16 @@
     </div>
 
   </KelasLayout>
+
+  <Dialog v-model:visible="visibleDialog" :modal="true" header="Tambah Siswa di Kelas" :style="{ width: '40rem' }">
+    <form @submit.prevent="handleAddSiswa">
+      <FormSelectSiswa @selected="onSiswaSelect" />
+      <div class="text-end">
+        <Button>Tambah</Button>
+      </div>
+    </form>
+  </Dialog>
+
 </template>
 
 <script setup lang="ts">
@@ -127,4 +145,17 @@ const confirmDelete = (data: any) => {
         },
     });
 };
+
+const visibleDialog = ref(false);
+const openDialog = () => {
+    visibleDialog.value = true;
+}
+
+const loadAddSiswa = ref(false)
+const handleAddSiswa  = async () => { 
+}
+
+function onSiswaSelect(selected: { id: number; label: string }) {
+  console.log(selected)
+}
 </script>
