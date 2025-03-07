@@ -1,7 +1,7 @@
 <template>  
   <div class="card flex flex-col gap-6 items-center justify-center max-w-sm">
 
-        <label for="avatar" class="relative border rounded min-h-20 overflow-hidden cursor-pointer block w-full bg-white hover:bg-slate-200">          
+        <label for="avatar" class="relative border rounded-sm min-h-20 overflow-hidden cursor-pointer block w-full bg-white hover:bg-slate-200">          
           <Image v-if="previewFoto" :src="previewFoto" alt="Image"/>
           <div class="flex flex-col justify-center items-center p-5 w-full hover:bg-slate-50 opacity-30 hover:opacity-50 z-10 absolute top-0 left-0 right-0 bottom-0">
             <Icon name="lucide:upload-cloud" mode="svg"/>

@@ -15,8 +15,8 @@
 
                   <div v-if="item.array">
                      <div v-if="item.array" v-for="(index, i) in datas[item.key]" :key="i" class="flex flex-row pb-1">
-                      <InputText v-model="datas[item.key][i]" :type="item.type" class="w-full !rounded-r-none" />
-                      <Button class="!rounded-l-none" @click="removeItem(item.key,i)" type="button" severity="danger">
+                      <InputText v-model="datas[item.key][i]" :type="item.type" class="w-full rounded-r-none!" />
+                      <Button class="rounded-l-none!" @click="removeItem(item.key,i)" type="button" severity="danger">
                         X
                       </Button>
                     </div> 
@@ -43,7 +43,7 @@
       </div>
       <div class="md:basis-1/4 xl:basis-1/5">
         <div class="py-2 sticky">
-          <label for="logounit" class="block group cursor-pointer relative border min-h-[10rem] aspect-square rounded">              
+          <label for="logounit" class="block group cursor-pointer relative border min-h-[10rem] aspect-square rounded-sm">              
               <div class="absolute top-0 bottom-0 left-0 right-0 justify-center items-center flex">
                 <div class="p-3 group-hover:opacity-100 opacity-50">
                   Upload Logo Lembaga

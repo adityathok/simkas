@@ -48,7 +48,7 @@
         </div>
         <div class="lg:basis-1/4 md:ps-5 py-10 md:py-2 border-t md:border-t-0">
           <form @submit.prevent="handleFormSubmitLogo">
-            <label for="logolembaga" class="block group cursor-pointer relative border min-h-[10rem] rounded">
+            <label for="logolembaga" class="block group cursor-pointer relative border min-h-[10rem] rounded-sm">
               <div class="absolute top-0 bottom-0 left-0 right-0 justify-center items-center flex">
                 <div class="p-3 group-hover:opacity-100 opacity-50">
                   Upload Logo Lembaga

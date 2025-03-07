@@ -11,7 +11,7 @@
   <Card v-else>
 
     <template #header>
-      <div class="bg-gradient-to-r from-gray-800 to-teal-800 min-h-[5em] md:min-h-[6em] rounded-t-xl text-white px-6 py-5">        
+      <div class="bg-linear-to-r from-gray-800 to-teal-800 min-h-[5em] md:min-h-[6em] rounded-t-xl text-white px-6 py-5">        
         <div class="md:flex justify-start md:justify-between gap-3 items-center">
             <div>
               <h3 class="text-3xl font-bold">

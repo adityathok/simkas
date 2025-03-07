@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col md:flex-row gap-2 border-2 rounded-md bg-white shadow-sm">
+    <div class="flex flex-col md:flex-row gap-2 border-2 rounded-md bg-white shadow-xs">
       
       <div class="md:basis-1/2 border-b-2 md:border-b-0 md:border-r-2 min-h-[40rem] p-4 relative">
 
@@ -82,7 +82,7 @@
           <Column field="act" header="">
             <template #body="slotProps">
               <div class="flex justify-end">
-                <Button severity="danger" variant="text" class="!py-1" @click="confirmDelete(slotProps.data,kelasTo)">
+                <Button severity="danger" variant="text" class="py-1!" @click="confirmDelete(slotProps.data,kelasTo)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                 </Button>
               </div>

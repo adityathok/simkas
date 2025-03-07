@@ -18,7 +18,7 @@
                     
                     <InputText v-if="field.type == 'text'" :id="field.id" v-model="form[field.id]" type="text" size="large" class="w-full"/>
 
-                    <img v-if="field.type == 'file'" :src="logoUrl" alt="" :id="'preview-'+field.id" class="rounded mb-2">
+                    <img v-if="field.type == 'file'" :src="logoUrl" alt="" :id="'preview-'+field.id" class="rounded-sm mb-2">
                     <InputText v-if="field.type == 'file'" @change="handleFileUpload" type="file" :id="field.id" class="w-full"/>
 
                     <Message v-if="errorForm && errorForm[field.id]" class="mt-1" severity="warn">{{ errorForm[field.id][0] }}</Message>

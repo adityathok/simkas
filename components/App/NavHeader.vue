@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-0 shadow-sm z-[5] bg-white w-full py-4 px-4 sm:px-6">
+  <header class="sticky top-0 shadow-xs z-5 bg-white w-full py-4 px-4 sm:px-6">
           <div class="flex items-center justify-between">
 
               <div class="flex items-center justify-start">
@@ -30,7 +30,7 @@
               </div>
 
               <div class="flex items-center justify-end">
-                  <Button class="me-2 !bg-transparent !text-slate-600 !border-none" variant="text">
+                  <Button class="me-2 bg-transparent! text-slate-600! border-none!" variant="text">
                       <Icon name="bi:bell" />
                   </Button>
                   

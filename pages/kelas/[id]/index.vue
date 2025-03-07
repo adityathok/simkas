@@ -4,7 +4,7 @@
     <div class="flex flex-col md:flex-row gap-4">      
 
       <div class="md:basis-1/4">
-        <div class="border min-h-10 w-full p-3 rounded">
+        <div class="border min-h-10 w-full p-3 rounded-sm">
           <div class="mb-3">
             <Icon name="lucide:user" mode="svg" class="inline" /> Wali Kelas
           </div>
@@ -12,7 +12,7 @@
             {{ datakelas.wali.name }}
           </div>
         </div>
-        <div class="border min-h-10 w-full p-3 rounded mt-4">
+        <div class="border min-h-10 w-full p-3 rounded-sm mt-4">
           <div class="mb-3">
             <Icon name="lucide:info" mode="svg" class="inline" /> Info Kelas
           </div>
@@ -38,7 +38,7 @@
       </div>
 
       <div class="md:flex-1">
-        <div class="border min-h-10 w-full p-3 rounded">
+        <div class="border min-h-10 w-full p-3 rounded-sm">
           <div class="mb-3">
             <Icon name="lucide:users" mode="svg" class="inline" /> Daftar Siswa
           </div>

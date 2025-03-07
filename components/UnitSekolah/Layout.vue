@@ -7,8 +7,8 @@
         
         <div class="flex justify-start gap-3 items-center">
           <div>
-            <img v-if="datas?.logo_url" :src="datas?.logo_url" alt="" class="aspect-square object-cover rounded w-[3em] h-[3em] md:w-[6em] md:h-[6em]">
-            <img v-else src="~/public/default-ava-unit.jpg" alt="" class="aspect-square object-cover rounded w-[3em] h-[3em] md:w-[6em] md:h-[6em]">
+            <img v-if="datas?.logo_url" :src="datas?.logo_url" alt="" class="aspect-square object-cover rounded-sm w-[3em] h-[3em] md:w-[6em] md:h-[6em]">
+            <img v-else src="~/public/default-ava-unit.jpg" alt="" class="aspect-square object-cover rounded-sm w-[3em] h-[3em] md:w-[6em] md:h-[6em]">
           </div>
           <div class="md:pt-3">
             <div class="text-xl font-bold">{{ datas?.nama||'-' }}</div>

@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import Aura from '@primevue/themes/aura';
 import { definePreset } from '@primevue/themes';
+import { defineNuxtConfig } from 'nuxt/config';
+import tailwindcss from "@tailwindcss/vite";
 
 const MyPreset = definePreset(Aura, {
   semantic: {
@@ -24,14 +26,24 @@ export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  css: ['~/assets/css/main.css'],  
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    },
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
   },
-  modules: ['@primevue/nuxt-module', 'nuxt-auth-sanctum', '@nuxt/icon', '@pinia/nuxt'], 
+  css: ['~/assets/css/main.css'],  
+  // postcss: {
+  //   plugins: {
+  //     tailwindcss: {},
+  //     autoprefixer: {},
+  //   },
+  // },
+  modules: [
+    '@primevue/nuxt-module',
+    'nuxt-auth-sanctum',
+    '@nuxt/icon',
+    '@pinia/nuxt',
+  ], 
   sanctum: {
       baseUrl: process.env.BACKEND_URL,
       redirectIfAuthenticated: true,

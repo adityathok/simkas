@@ -6,8 +6,8 @@
       <form @submit.prevent="handleFormSubmit">
 
         <div v-for="(jabatan,i) in jabatans" :key="i" class="py-1 flex">
-          <InputText class="w-full !rounded-e-none" v-model="jabatans[i]" />
-          <Button class="!rounded-s-none" @click="removeList(i)" severity="danger">
+          <InputText class="w-full rounded-e-none!" v-model="jabatans[i]" />
+          <Button class="rounded-s-none!" @click="removeList(i)" severity="danger">
             <Icon name="lucide:x" mode="svg"/>
           </Button>
         </div>

@@ -10,7 +10,7 @@
     <Card>
         <template #content>
 
-        <div class="overflow-hidden text-nowrap shadow-sm">
+        <div class="overflow-hidden text-nowrap shadow-xs">
             <DataTable :value="data.data" size="small" class="text-sm" stripedRows scrollable>
 
             <Column field="foto" header="">            
@@ -125,19 +125,19 @@
   </Dialog>
 
     <Popover ref="op" :dismissable="true">
-        <div v-if="selectedItem" class="rounded flex flex-col">            
+        <div v-if="selectedItem" class="rounded-sm flex flex-col">            
             
             <div class="truncate border-b text-xs pb-2 opacity-50" style="max-width: 100px">
                 {{ selectedItem.nama }}  
             </div>       
             
-            <Button @click="showPegawai(selectedItem)" severity="secondary" variant="text" size="small" class="w-full !justify-start">
+            <Button @click="showPegawai(selectedItem)" severity="secondary" variant="text" size="small" class="w-full justify-start!">
                 <Icon name="lucide:eye" mode="svg"/> Lihat
             </Button>
-            <Button as="router-link" severity="info" variant="text" size="small" :to="'/pegawai/edit?id='+selectedItem.id" class="w-full !justify-start">
+            <Button as="router-link" severity="info" variant="text" size="small" :to="'/pegawai/edit?id='+selectedItem.id" class="w-full justify-start!">
                 <Icon name="lucide:pencil" mode="svg"/> Edit
             </Button>
-            <Button v-if="useUser.currentUser.id!==selectedItem.user_id" @click="confirmDelete(selectedItem.id)" severity="danger" variant="text" size="small" class="w-full !justify-start">
+            <Button v-if="useUser.currentUser.id!==selectedItem.user_id" @click="confirmDelete(selectedItem.id)" severity="danger" variant="text" size="small" class="w-full justify-start!">
                 <Icon name="lucide:trash" mode="svg"/> Hapus
             </Button>
         </div>

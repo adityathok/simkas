@@ -13,10 +13,10 @@
       <Column field="action" header="">        
         <template #body="slotProps">             
           <div class="flex justify-end gap-1">
-              <Button @click="openDialog(slotProps.data,'edit')" type="button" variant="text" severity="secondary" class="!px-1">
+              <Button @click="openDialog(slotProps.data,'edit')" type="button" variant="text" severity="secondary" class="px-1!">
                   <Icon name="lucide:pen" mode="svg"/>
               </Button>
-              <Button @click="confirmDelete(slotProps.data.id)" type="button" variant="text" severity="danger"  class="!px-1">
+              <Button @click="confirmDelete(slotProps.data.id)" type="button" variant="text" severity="danger"  class="px-1!">
                   <Icon name="lucide:trash" mode="svg"/>
               </Button>
           </div>

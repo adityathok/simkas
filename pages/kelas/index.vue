@@ -106,10 +106,10 @@
       {{ selectedItem?.nama }}
     </div>
     <div v-if="selectedItem" class="flex flex-col">    
-      <Button as="router-link" :to="'/kelas/'+selectedItem.id" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+      <Button as="router-link" :to="'/kelas/'+selectedItem.id" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
         Profile
       </Button> 
-      <Button as="router-link" :to="'/kelas/'+selectedItem.id+'/edit'" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+      <Button as="router-link" :to="'/kelas/'+selectedItem.id+'/edit'" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
         Edit
       </Button>
     </div>

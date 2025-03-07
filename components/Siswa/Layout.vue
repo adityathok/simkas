@@ -2,11 +2,11 @@
 
   <div v-if="fetchData">
     
-    <div class="rounded-xl min-h-[5em] md:min-h-[6em] mb-5 shadow-sm overflow-hidden bg-white">        
+    <div class="rounded-xl min-h-[5em] md:min-h-[6em] mb-5 shadow-xs overflow-hidden bg-white">        
         <div class="flex justify-start gap-3 items-center p-5">
           <div>
-            <div class="aspect-square bg-slate-100 rounded w-[5rem] md:w-[8rem]">
-              <img v-if="data?.avatar_url" :src="data?.avatar_url" alt="" width="300" class="aspect-square object-cover rounded">
+            <div class="aspect-square bg-slate-100 rounded-sm w-[5rem] md:w-[8rem]">
+              <img v-if="data?.avatar_url" :src="data?.avatar_url" alt="" width="300" class="aspect-square object-cover rounded-sm">
             </div>
           </div>
           <div class="ps-2">

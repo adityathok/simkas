@@ -16,7 +16,7 @@
       </div>        
 
       <div class="mt-5">
-          <Button type="submit" class="!px-20 w-full" :loading="isLoading">                
+          <Button type="submit" class="px-20! w-full" :loading="isLoading">                
               <span v-if="isLoading" class="flex gap-2 items-center"><Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses login..</span>
               <span v-else>Masuk</span>
           </Button>

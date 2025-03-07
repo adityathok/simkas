@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full left-0 top-0 w-64 fixed bg-slate-50 z-[6] border-r border-border px-4">
+  <div class="h-full left-0 top-0 w-64 fixed bg-slate-50 z-6 border-r border-border px-4">
     
     <div class="p-6 flex items-center brand-logo overflow-hidden">
       <AppLogo />
@@ -8,17 +8,17 @@
     <ScrollPanel style="width: 100%; height: calc(100vh - 7rem)">
         <PanelMenu
         :model="items"
-        class="w-full border-none rounded-none !gap-0"
+        class="w-full border-none rounded-none gap-0!"
         :pt="{
             panel: (options) => ({
                 class: [
-                    '!border-none',
-                    '!bg-transparent'
+                    'border-none!',
+                    'bg-transparent!'
                 ]
             }),
             rootList: (options) => ({
                 class: [
-                    '!ps-0',
+                    'ps-0!',
                 ]
             })
         }"
@@ -36,7 +36,7 @@
                         <Icon v-else name="lucide:chevron-up" mode="svg" :ssr="true"/>
                     </div>
                 </button>
-                <NuxtLink v-else :to="item.route" :class="[classLink,{'!bg-blue-500 !text-white':isActive(item.route)}]" @click="useGlobal.toggelsidebar">
+                <NuxtLink v-else :to="item.route" :class="[classLink,{'bg-blue-500! text-white!':isActive(item.route)}]" @click="useGlobal.toggelsidebar">
                     <span class="flex justify-start items-center w-full">
                         <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="mr-2"/>
                         <Icon v-else name="lucide:circle" size="8" mode="svg" :ssr="true" class="mr-2"/>

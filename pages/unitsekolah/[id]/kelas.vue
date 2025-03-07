@@ -32,10 +32,10 @@
       <Column field="act" header="">
         <template #body="slotProps">
           <div class="flex justify-end items-center">
-            <Button severity="secondary" variant="text" @click="$router.push('/kelas/'+slotProps.data.id)" class="!px-1" v-tooltip="'Edit'">
+            <Button severity="secondary" variant="text" @click="$router.push('/kelas/'+slotProps.data.id)" class="px-1!" v-tooltip="'Edit'">
               <Icon name="lucide:square-pen" mode="svg"/>
             </Button>
-            <Button severity="danger" variant="text" @click="confirmDelete(slotProps.data.id)" class="!px-1" v-tooltip="'Hapus'">
+            <Button severity="danger" variant="text" @click="confirmDelete(slotProps.data.id)" class="px-1!" v-tooltip="'Hapus'">
                 <Icon name="lucide:trash" mode="svg"/>
             </Button>
           </div>

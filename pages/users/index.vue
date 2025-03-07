@@ -27,10 +27,10 @@
             <Column field="option" header=" ">
                 <template #body="slotProps">
                     <div class="flex justify-end items-center">
-                        <NuxtLink :to="'/users/edit?id='+slotProps.data.id" class="!bg-transparent !border-none !text-slate-800" variant="text" size="small">
+                        <NuxtLink :to="'/users/edit?id='+slotProps.data.id" class="bg-transparent! border-none! text-slate-800!" variant="text" size="small">
                             <Icon name="lucide:pencil" />
                         </NuxtLink>
-                        <Button v-if="useDelete(slotProps.data)" type="button" @click="confirmDelete(slotProps.data.id)" class="!bg-transparent !border-none !text-red-500" variant="text" size="small">
+                        <Button v-if="useDelete(slotProps.data)" type="button" @click="confirmDelete(slotProps.data.id)" class="bg-transparent! border-none! text-red-500!" variant="text" size="small">
                             <Icon name="lucide:trash-2" />
                         </Button>
                     </div>

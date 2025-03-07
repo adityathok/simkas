@@ -17,7 +17,7 @@
               </template>
             </Menu>
 
-            <Button @click="visible = true" severity="info" class="w-full mb-4 md:!hidden">
+            <Button @click="visible = true" severity="info" class="w-full mb-4 md:hidden!">
               <Icon name="lucide:settings" mode="svg"/>
               Menu Edit Siswa
             </Button>

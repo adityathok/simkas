@@ -4,7 +4,7 @@
     <template #content>
       
       <div class="text-end mb-4">        
-        <Button @click="openDialog('','add')" size="small" class="md:!px-2">
+        <Button @click="openDialog('','add')" size="small" class="md:px-2!">
             <Icon name="lucide:circle-plus" mode="svg"/> Tambah
         </Button>
       </div>
@@ -23,10 +23,10 @@
         <Column field="options" header="">
           <template #body="slotProps">
             <div class="flex justify-end">
-              <Button @click="openDialog(slotProps.data,'edit')" severity="secondary" variant="text" class="md:!px-2">
+              <Button @click="openDialog(slotProps.data,'edit')" severity="secondary" variant="text" class="md:px-2!">
                 <Icon name="lucide:pencil" mode="svg"/>
               </Button>
-              <Button @click="confirmDelete(slotProps.data.id)" severity="danger" variant="text" class="md:!px-2">
+              <Button @click="confirmDelete(slotProps.data.id)" severity="danger" variant="text" class="md:px-2!">
                 <Icon name="lucide:trash" mode="svg"/>
               </Button>
             </div>

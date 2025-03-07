@@ -3,7 +3,7 @@
     <div class="flex w-full min-h-screen">
         <div class="xl:ms-64 flex w-full">
 
-            <div class="xl:block hidden" :class="{'!block relative z-20':useGlobal.opensidebar}">
+            <div class="xl:block hidden" :class="{'block! relative z-20':useGlobal.opensidebar}">
                 <div class="flex">
                     <AppNavSidebar/>
                 </div>

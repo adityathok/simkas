@@ -3,7 +3,7 @@
     <div class="flex flex-row gap-4 my-1 text-nowrap">
       
       <div v-for="item in dataCards" :key="item.title" class="md:basis-1/3 min-w-[250px]">
-        <div class="bg-white py-4 shadow rounded-xl relative ps-20 pe-4 text-right overflow-hidden">
+        <div class="bg-white py-4 shadow-sm rounded-xl relative ps-20 pe-4 text-right overflow-hidden">
           <div class="text-sm">
             {{ item.title }}
           </div>

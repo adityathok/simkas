@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="text-end">
-              <Button as="router-link" :to="'/unitsekolah/'+idUnit+'/edit'" variant="link" size="small" class="!text-sm">
+              <Button as="router-link" :to="'/unitsekolah/'+idUnit+'/edit'" variant="link" size="small" class="text-sm!">
                 <Icon name="lucide:pen" mode="svg" /> Edit Profil
               </Button>
             </div>

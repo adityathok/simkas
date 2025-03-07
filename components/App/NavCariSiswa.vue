@@ -1,8 +1,8 @@
 <template>
   <form @submit.prevent="handleFormSubmit">
     <div class="flex border border-slate-200 rounded-lg overflow-hidden">
-        <InputText id="inputCari" type="text" v-model="form.cari" placeholder="Ketik nama/nis siswa.." class="w-full !border-none px-5 py-3 !rounded-none" />
-        <Button type="submit" severity="secondary" variant="text" class="!rounded-none">
+        <InputText id="inputCari" type="text" v-model="form.cari" placeholder="Ketik nama/nis siswa.." class="w-full border-none! px-5 py-3 rounded-none!" />
+        <Button type="submit" severity="secondary" variant="text" class="rounded-none!">
             <Icon name="lucide:search" mode="svg" />
         </Button>
     </div>

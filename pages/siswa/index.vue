@@ -75,13 +75,13 @@
 
     <Popover ref="popover" :dismissable="true">
       <div v-if="selectedItem" class="flex flex-col">  
-        <Button @click="openDialog(selectedItem,'view')" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+        <Button @click="openDialog(selectedItem,'view')" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
           <Icon name="lucide:info" mode="svg"/> Preview
         </Button>    
-        <Button as="router-link" :to="'/siswa/'+selectedItem.id" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+        <Button as="router-link" :to="'/siswa/'+selectedItem.id" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
           <Icon name="lucide:building" mode="svg"/> Profile
         </Button> 
-        <Button as="router-link" :to="'/siswa/'+selectedItem.id+'/edit'" severity="secondary" variant="text" size="small" class="!w-full !flex !justify-start">
+        <Button as="router-link" :to="'/siswa/'+selectedItem.id+'/edit'" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
           <Icon name="lucide:pencil" mode="svg"/> Edit
         </Button>
       </div>
