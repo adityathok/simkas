@@ -46,7 +46,7 @@
           <label for="logounit" class="block group cursor-pointer relative border min-h-[10rem] aspect-square rounded-sm">              
               <div class="absolute top-0 bottom-0 left-0 right-0 justify-center items-center flex">
                 <div class="p-3 group-hover:opacity-100 opacity-50">
-                  Upload Logo Lembaga
+                  Upload Logo Sekolah
                 </div>
               </div>
               <img v-if="previewLogo" :src="previewLogo" alt="Image" class="w-full h-full aspect-square object-cover"/>

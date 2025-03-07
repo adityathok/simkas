@@ -1,7 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import Aura from '@primevue/themes/aura';
 import { definePreset } from '@primevue/themes';
-import { defineNuxtConfig } from 'nuxt/config';
 import tailwindcss from "@tailwindcss/vite";
 
 const MyPreset = definePreset(Aura, {
@@ -32,12 +31,6 @@ export default defineNuxtConfig({
     ],
   },
   css: ['~/assets/css/main.css'],  
-  // postcss: {
-  //   plugins: {
-  //     tailwindcss: {},
-  //     autoprefixer: {},
-  //   },
-  // },
   modules: [
     '@primevue/nuxt-module',
     'nuxt-auth-sanctum',

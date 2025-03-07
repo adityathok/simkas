@@ -3,7 +3,7 @@
   <Card>
 
     <template #header>
-      <div class="bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-slate-800 via-slate-700 to-slate-800 min-h-[5em] md:min-h-[8em] rounded-t-xl text-white p-5">
+      <div class="bg-sky-800 min-h-[5em] md:min-h-[8em] rounded-t-xl text-white p-5">
         
         <div class="flex justify-start gap-3 items-center">
           <div>
