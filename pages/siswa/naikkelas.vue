@@ -37,11 +37,15 @@
           <Column field="nama" header="Nama" />
         </DataTable>
 
+        <div v-if="sSiswaFrom=='pending'" class="flex items-center gap-1">
+          <Icon name="lucide:loader" mode="svg" class="animate-spin" /> Memuat data siswa..
+        </div>
+
         <div class="text-end mt-2">
           <Button @click="handleMoveSiswa">
-            Pindahkan 
+            Proses 
             <Icon v-if="isLoading" name="lucide:loader" mode="svg" class="animate-spin" />
-            <Icon v-else name="lucide:circle-arrow-out-up-right" mode="svg" />
+            <Icon v-else name="lucide:user-round-cog" mode="svg" />
           </Button>
         </div>
 
@@ -66,14 +70,29 @@
               Kelas
               <Icon v-if="sKelasTo=='pending'" name="lucide:loader" mode="svg" class="inline animate-spin"/>
             </label>
-            <Select v-if="optionKelasTo.length > 0" v-model="kelasTo" :options="optionKelasTo" optionLabel="label" optionValue="value" class="w-full"/>
-            <div v-else class="bg-slate-100 text-slate-300 p-2 rounded-md">Kelas tidak tersedia</div>
+            <div class="w-full">
+              <Select v-if="optionKelasTo.length > 0" v-model="kelasTo" :options="optionKelasTo" optionLabel="label" optionValue="value" class="w-full"/>
+              <div v-else class="bg-slate-100 text-slate-300 p-2 rounded-md">Kelas tidak tersedia</div>
+            </div>
           </div>
         </div>
       
         <DataTable :value="siswaTo" class="text-sm" stripedRows scrollable>
           <Column field="nama" header="Nama" />
+          <Column field="act" header="">
+            <template #body="slotProps">
+              <div class="flex justify-end">
+                <Button severity="danger" variant="text" class="!py-1" @click="confirmDelete(slotProps.data,kelasTo)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                </Button>
+              </div>
+            </template>
+          </Column>
         </DataTable>
+
+        <div v-if="ssiswaTo=='pending'" class="flex items-center gap-1">
+          <Icon name="lucide:loader" mode="svg" class="animate-spin" /> Memuat data siswa..
+        </div>
 
       </div>
       
@@ -85,6 +104,7 @@ definePageMeta({
   title: 'Naik Kelas',
 })
 const client = useSanctumClient()
+const confirm = useConfirm();
 
 const tahunFrom = ref('')
 const tahunTo = ref('')
@@ -176,7 +196,23 @@ const toast = useToast();
 const isLoading = ref(false)
 
 const handleMoveSiswa = async () => {
-  if(selectedKelasFrom.value){
+
+  if(!kelasFrom.value){
+    toast.add({ severity: 'warn', summary: 'Gagal', detail: 'Kelas asal belum ada', life: 3000 });
+    return false;
+  }
+  
+  if(!kelasTo.value){
+    toast.add({ severity: 'warn', summary: 'Gagal', detail: 'Kelas tujuan belum ada', life: 3000 });
+    return false;
+  }
+
+  if(!selectedKelasFrom.value){
+    toast.add({ severity: 'warn', summary: 'Gagal', detail: 'Belum ada siswa yang dipilih', life: 3000 });
+    return false;
+  }
+
+  if(selectedKelasFrom.value && kelasFrom.value && kelasTo.value ){
 
     isLoading.value = true
 
@@ -195,6 +231,7 @@ const handleMoveSiswa = async () => {
           kelas_to: kelasTo.value
         }
       })
+      fSiswaTo()
       toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Perubahan berhasil disimpan', life: 3000 });
     } catch (er) {
       const e = useSanctumError(er);
@@ -205,4 +242,31 @@ const handleMoveSiswa = async () => {
   }
 }
 
+//confirm hapus siswa dari kelas
+const confirmDelete = (data: any,idkelas: any) => {
+    confirm.require({
+        message: 'Yakin untuk menghapus siswa dari kelas ?',
+        header: 'Hapus Siswa',
+        rejectLabel: 'Batal',
+        rejectProps: {
+            label: 'Batal',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptProps: {
+            label: 'Hapus',
+            severity: 'danger'
+        },
+        accept: async () => {
+            try {
+              await client('/api/siswakelas/'+idkelas+'?siswa='+data.id, { method: 'DELETE' }) 
+              fSiswaTo()
+              toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
+            }  catch(er) {
+              console.log(er)
+              toast.add({ severity: 'error', summary: 'Gagal', detail: 'Perubahan gagal disimpan', life: 3000 });
+            }
+        },
+    });
+};
 </script>
