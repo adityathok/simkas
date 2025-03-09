@@ -8,7 +8,7 @@
 
     </div>
 
-    <Dialog v-model:visible="visibleDialog" :modal="true" header="Tambah Siswa di Kelas" :style="{ width: '30rem' }">
+    <Dialog v-model:visible="visibleDialog" :modal="true" header="Cari siswa" :style="{ width: '30rem' }">
       <InputText
           type="text"
           v-model="searchQuery"
@@ -19,6 +19,11 @@
         
         <div>
 
+          <div v-if="isLoading" class="flex items-center py-2 opacity-50 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin lucide lucide-loader"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+            Mencari siswa..
+          </div>
+
           <div v-if="result" class="hasilCari border-t mt-4">
             <div v-for="item in result" :key="item.id">
 
@@ -26,9 +31,12 @@
                 <div>
                   <UserAvatar v-if="item.avatar_url" :url="item.avatar_url" :name="item.nama" :size="50" />
                 </div>
-                <div>
+                <div class="w-full">
                   {{ item.nama }}
-                  <div class="text-sm opacity-50 mt-1">{{ item.nis }}</div>
+                  <div class="w-full text-sm mt-1 flex justify-between">
+                    <span class="opacity-50 ">{{ item.nis }}</span>
+                    <SiswaStatusBadge :status="item.status" />
+                  </div>
                 </div>
               </div>
 
@@ -87,8 +95,8 @@ const onSearch  = async () => {
 
 // Interface untuk opsi siswa
 interface Option {
-  id: number;
-  label: string;
+  id: string;
+  user_id: string;
 }
 
 const emit = defineEmits<{

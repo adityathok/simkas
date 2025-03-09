@@ -88,9 +88,30 @@
 
   <Dialog v-model:visible="visibleDialog" :modal="true" header="Tambah Siswa di Kelas" :style="{ width: '40rem' }">
     <form @submit.prevent="handleAddSiswa">
-      <FormSelectSiswa @selected="onSiswaSelect" />
+          
+
+      <div class="flex flex-col md:flex-row mb-3">
+        <div class="md:basis-1/4 mb-1">
+          <label>Siswa</label>
+        </div>
+        <div class="md:flex-1">
+          <FormSelectSiswa @selected="onSiswaSelect" />
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row">
+        <div class="md:basis-1/4 mb-1">
+          <label>Aktif</label>
+        </div>
+        <div class="md:flex-1">
+          <ToggleSwitch v-model="formSiswaAdd.active" />
+        </div>
+      </div>
+
       <div class="text-end">
-        <Button>Tambah</Button>
+        <Button type="submit"  class="flex items-center gap-2">
+          <Icon v-if="loadAddSiswa" name="lucide:loader" mode="svg" class="animate-spin" />
+          Tambah
+        </Button>
       </div>
     </form>
   </Dialog>
@@ -152,10 +173,27 @@ const openDialog = () => {
 }
 
 const loadAddSiswa = ref(false)
-const handleAddSiswa  = async () => { 
+const formSiswaAdd = reactive({
+  siswa_id:'' as any,
+  user_id:'' as any,
+  kelas_id : idKelas,
+  active: true
+})
+function onSiswaSelect(selected: { id: any; user_id: any; }) {
+  formSiswaAdd.siswa_id = selected.id
+  formSiswaAdd.user_id = selected.user_id
 }
-
-function onSiswaSelect(selected: { id: number; label: string }) {
-  console.log(selected)
+const handleAddSiswa  = async () => { 
+  loadAddSiswa.value = true
+  try {
+    await client('/api/siswakelas', { method: 'POST', body: formSiswaAdd });
+    toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Siswa berhasil ditambahkan', life: 3000 });
+    fsiswaKelas()
+  } catch (error) {
+    const er = useSanctumError(error);
+    console.log(er);
+    toast.add({ severity: 'error', summary: 'Gagal', detail: 'Siswa gagal ditambahkan,'+er.msg, life: 3000 });
+  }
+  loadAddSiswa.value = false
 }
 </script>

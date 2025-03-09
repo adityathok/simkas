@@ -8,17 +8,22 @@
         </div>
         <div class="md:flex-1">
 
-          <Select v-if="item.type == 'select'" filter v-model="form[item.key]" :id="item.key" :options="item.options" optionLabel="label" optionValue="value" placeholder="Pilih" class="w-full" />
+          <Select v-if="item.type == 'select' && item.key=='tahun_ajaran'" filter v-model="form[item.key]" :id="item.key" :options="item.options" optionLabel="label" optionValue="value" placeholder="Pilih" class="w-full" />
+          <Select v-else-if="item.type == 'select'&& item.key=='unit_sekolah_id'" filter v-model="form[item.key]" :id="item.key" :options="item.options" optionLabel="label" optionValue="value" placeholder="Pilih" class="w-full" />
+
+          <Select v-else-if="item.type == 'select'&& item.key=='kelas_id'" filter v-model="form[item.key]" :id="item.key" :options="data_kelas" optionLabel="label" optionValue="value" placeholder="Pilih Kelas" class="w-full" />
+
           <ToggleSwitch v-else-if="item.type == 'toggle'" v-model="form[item.key]" />
           <InputText v-else :id="item.key" class="w-full" v-model="form[item.key]" />
 
         </div>
       </div>
     </div>
-    <div class="text-end mt-4">
-      <Button type="submit" :loading="isLoading">
-        <Icon name="lucide:save" mode="svg"/> Simpan
-      </Button>
+    <div class="text-end mt-4">      
+      <Button type="submit" :loading="isLoading" class="flex items-center gap-2">
+          <Icon v-if="isLoading" name="lucide:loader" mode="svg" class="animate-spin" />
+          Tambah
+        </Button>
     </div>
 
   </form>
@@ -37,22 +42,51 @@ const emit = defineEmits(['submit'])
 // Access to the cached value of dataSiswa
 const { data:dataSiswa } = useNuxtData('siswa-'+idSiswa)
 
-const { data: data_kelas } = await useAsyncData(
-  'option-kelas',
-  () => client('/api/option/kelas')
-)
-
-const fields = [
-  { label: 'Kelas', key: 'kelas_id', type: 'select', options: data_kelas.value },
-  { label: 'Aktif', key: 'active', type: 'toggle' },
-]
-
 const form = reactive({
+  tahun_ajaran : '',
+  unit_sekolah_id : '',
   siswa_id : idSiswa,
   user_id : dataSiswa.value.user_id,
   kelas_id : '',
   active: false
 } as any)
+
+const { data:optionTahunAjaran } = await useAsyncData(
+    'option-tahun_ajaran',
+    () => client('/api/option/tahun_ajaran')
+)
+const { data:optionUnit} = await useAsyncData(
+    'option-unitsekolah',
+    () => client('/api/option/unitsekolah')
+)
+const data_kelas = ref('' as any)
+const { data: dataKelas,refresh: fDataKelas } = await useAsyncData(
+    'option-datakelas',
+    () => client('/api/option/kelas',
+    {
+      params: {
+        tahun_ajaran: form.tahun_ajaran,
+        unit_sekolah: form.unit_sekolah_id
+      }
+    }
+  )
+)
+data_kelas.value = dataKelas.value
+
+// Fungsi untuk memperbarui data saat form berubah
+watch(form, () => {
+  fDataKelas() // Refresh data saat form berubah
+});
+watch(dataKelas, () => {
+  data_kelas.value = dataKelas.value
+});
+
+const fields = [
+  { label: 'Tahun Ajaran', key: 'tahun_ajaran', type: 'select', options: optionTahunAjaran.value },
+  { label: 'Unit', key: 'unit_sekolah_id', type: 'select', options: optionUnit.value },
+  { label: 'Kelas', key: 'kelas_id', type: 'select', options: data_kelas.value },
+  { label: 'Aktif', key: 'active', type: 'toggle' },
+]
 
 //jika action = edit, set form sesuai data
 if(action == 'edit') {
