@@ -75,6 +75,11 @@ const items = ref([
         route: '/siswa/'+idUnit+'/edit/kelas',
         icon: 'lucide:notebook'
     },
+    {
+        label: 'Wali',
+        route: '/siswa/'+idUnit+'/edit/wali',
+        icon: 'lucide:users-round'
+    }
 ]);
 const visible = ref(false);
 
