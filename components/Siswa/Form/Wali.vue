@@ -18,7 +18,7 @@
     <div class="text-end mt-4">      
       <Button type="submit" :loading="isLoading" class="flex items-center gap-2">
           <Icon v-if="isLoading" name="lucide:loader" mode="svg" class="animate-spin" />
-          Tambah
+          Simpan
         </Button>
     </div>
 
@@ -49,19 +49,36 @@ const fields = [
   { label: 'Alamat', key: 'alamat', type: 'textarea' },
 ]
 
-const form = reactive({} as any)
+let form = reactive({} as any)
+
+//jika action = edit & ada data
+if(action == 'edit' && dataWali){
+  form = dataWali
+}
 
 const handleFormSubmit  = async () => { 
   isLoading.value = true
   form.siswa_id = idSiswa
-  try {
-    await client('/api/siswawali', { method: 'POST', body: form });
-    toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Wali berhasil ditambahkan', life: 3000 });
-    emit('submit')
-  } catch (error) {
-    const er = useSanctumError(error);
-    console.log(er);
-    toast.add({ severity: 'error', summary: 'Gagal', detail: 'Wali gagal ditambahkan,'+er.msg, life: 3000 });
+  if(action == 'add'){
+    try {
+      await client('/api/siswawali', { method: 'POST', body: form });
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Wali berhasil ditambahkan', life: 3000 });
+      emit('submit')
+    } catch (error) {
+      const er = useSanctumError(error);
+      console.log(er);
+      toast.add({ severity: 'error', summary: 'Gagal', detail: 'Wali gagal ditambahkan,'+er.msg, life: 3000 });
+    }
+  } else if(action == 'edit'){
+    try {
+      await client('/api/siswawali/'+form.id, { method: 'PUT', body: form });
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Data Wali berhasil diubah', life: 3000 });
+      emit('submit')
+    } catch (error) {
+      const er = useSanctumError(error);
+      console.log(er);
+      toast.add({ severity: 'error', summary: 'Gagal', detail: 'Data Wali gagal diubah,'+er.msg, life: 3000 });
+    }
   }
   isLoading.value = false
 }

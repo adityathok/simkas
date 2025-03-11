@@ -31,7 +31,7 @@
 
   </SiswaLayoutEdit>
 
-  <Dialog v-model:visible="visibleDialog" :modal="true" header="Tambah Wali Siswa" :style="{ width: '40rem' }">
+  <Dialog v-model:visible="visibleDialog" :modal="true" :header="actionDialog=='edit'?'Edit Wali':'Tambah Wali'" :style="{ width: '40rem' }">
     <SiswaFormWali :action="actionDialog" :idSiswa="idSiswa" :data="dataWali" @submit="refresh"/>
   </Dialog>
 
