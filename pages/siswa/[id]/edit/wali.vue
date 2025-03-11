@@ -8,7 +8,13 @@
     </div>
 
     <DataTable :value="data"  class="text-sm" stripedRows scrollable>
-        <Column field="nama" header="Nama" />
+        <Column field="nama" header="Nama">
+          <template #body="slotProps">
+            <div class="cursor-pointer hover:underline" @click="openDialog('view',slotProps.data)">
+              {{ slotProps.data.nama }}
+            </div>
+          </template>
+        </Column>
         <Column field="hubungan" header="Hubungan" />
         <Column field="pekerjaan" header="Pekerjaan" />
         <Column field="telepon" header="Telepon" />
@@ -31,8 +37,14 @@
 
   </SiswaLayoutEdit>
 
-  <Dialog v-model:visible="visibleDialog" :modal="true" :header="actionDialog=='edit'?'Edit Wali':'Tambah Wali'" :style="{ width: '40rem' }">
-    <SiswaFormWali :action="actionDialog" :idSiswa="idSiswa" :data="dataWali" @submit="refresh"/>
+  <Dialog 
+    v-model:visible="visibleDialog" 
+    :modal="true"
+    :header="actionDialog === 'edit' ? 'Edit Wali' : actionDialog === 'add' ? 'Tambah Wali' : 'Profil Wali Siswa'"
+    :style="{ width: '40rem' }"
+  >
+    <SiswaWaliForm v-if="actionDialog=='add' || actionDialog=='edit'" :action="actionDialog" :idSiswa="idSiswa" :data="dataWali" @submit="refresh"/>
+    <SiswaWaliView v-else :data="dataWali" @edit="openDialog('edit',dataWali)" />
   </Dialog>
 
 </template>
