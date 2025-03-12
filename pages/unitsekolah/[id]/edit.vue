@@ -55,14 +55,14 @@
           <div class="mt-4">
             <Button type="submit" :loading="isLoading" class="w-full">
               <span v-if="isLoading" class="flex gap-2 items-center">
-                <Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses..
+                <Icon class="animate-spin" name="lucide:loader" /> Memproses..
               </span>
               <span v-else class="flex gap-2 items-center">
-                <Icon name="lucide:save" mode="svg"/> Simpan
+                <Icon name="lucide:save" /> Simpan
               </span>
             </Button>
             <Button type="button" class="w-full mt-2" @click="confirmDelete(datas.id)" severity="danger">
-              <Icon name="lucide:trash" mode="svg"/> Hapus Unit
+              <Icon name="lucide:trash" /> Hapus Unit
             </Button>
           </div>
         </div>

@@ -46,7 +46,7 @@
           <div v-if="errors">
             <Message severity="warn" class="mt-3" closable>
               <div class="flex items-center gap-2">
-                <Icon name="lucide:search-x" mode="svg" /> Siswa tidak ditemukan
+                <Icon name="lucide:search-x"  /> Siswa tidak ditemukan
               </div>
             </Message>
           </div>

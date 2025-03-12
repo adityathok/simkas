@@ -10,7 +10,7 @@
               <template #item="{ item, props }">
                 <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                   <a v-ripple :href="href" v-bind="props.action" @click="navigate" :class="{'bg-gray-100 border-slate-200': isRouteActive(item.route) }">
-                      <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="me-1"/>
+                      <Icon v-if="item.icon" :name="item.icon"  :ssr="true" class="me-1"/>
                       <span>{{ item.label }}</span>
                   </a>
                 </router-link>
@@ -18,7 +18,7 @@
             </Menu>
 
             <Button @click="visible = true" severity="info" class="w-full mb-4 md:hidden!">
-              <Icon name="lucide:settings" mode="svg"/>
+              <Icon name="lucide:settings" />
               Menu Edit Siswa
             </Button>
 
@@ -36,7 +36,7 @@
       <template #item="{ item, props }">
         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
           <a v-ripple :href="href" v-bind="props.action" @click="navigate" :class="{'bg-gray-100 border-slate-200': isRouteActive(item.route) }">
-              <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="me-1"/>
+              <Icon v-if="item.icon" :name="item.icon"  :ssr="true" class="me-1"/>
               <span>{{ item.label }}</span>
           </a>
         </router-link>

@@ -3,7 +3,7 @@
 
     <div class="text-end mb-3">
       <Button @click="openDialog('add','')" size="small">
-        <Icon name="lucide:plus" mode:="svg" /> Tambah
+        <Icon name="lucide:plus" /> Tambah
       </Button>
     </div>
 
@@ -24,10 +24,10 @@
             <div class="flex justify-end items-center gap-1">
 
               <Button severity="info" variant="text" class="!px-1" @click="openDialog('edit',slotProps.data)">
-                <Icon name="lucide:square-pen" mode="svg"/>
+                <Icon name="lucide:square-pen" />
               </Button>
               <Button severity="danger" variant="text" class="!px-1" @click="confirmDelete(slotProps.data.id)">
-                <Icon name="lucide:trash" mode="svg"/>
+                <Icon name="lucide:trash" />
               </Button>
 
             </div>

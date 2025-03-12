@@ -29,17 +29,17 @@
                 <button v-if="item.items" :class="classLink">
                     <div class="flex justify-between items-center w-full">
                         <span class="flex justify-start items-center w-full">
-                            <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="mr-2"/>
+                            <Icon v-if="item.icon" :name="item.icon"  :ssr="true" class="mr-2"/>
                             <span>{{ item.label }}</span>
                         </span>                    
-                        <Icon v-if="expandedKeys[item.key!]" name="lucide:chevron-down" mode="svg" :ssr="true"/>
-                        <Icon v-else name="lucide:chevron-up" mode="svg" :ssr="true"/>
+                        <Icon v-if="expandedKeys[item.key!]" name="lucide:chevron-down"  :ssr="true"/>
+                        <Icon v-else name="lucide:chevron-up"  :ssr="true"/>
                     </div>
                 </button>
                 <NuxtLink v-else :to="item.route" :class="[classLink,{'bg-blue-500! text-white!':isActive(item.route)}]" @click="useGlobal.toggelsidebar">
                     <span class="flex justify-start items-center w-full">
-                        <Icon v-if="item.icon" :name="item.icon" mode="svg" :ssr="true" class="mr-2"/>
-                        <Icon v-else name="lucide:circle" size="8" mode="svg" :ssr="true" class="mr-2"/>
+                        <Icon v-if="item.icon" :name="item.icon"  :ssr="true" class="mr-2"/>
+                        <Icon v-else name="lucide:circle" size="8"  :ssr="true" class="mr-2"/>
                         <span>{{ item.label }}</span>
                     </span>
                 </NuxtLink>

@@ -21,7 +21,7 @@
           </div>
           <div class="text-end mt-5">
             <Button type="submit" label="Simpan" :loading="isLoading">
-              <Icon name="lucide:save" mode="svg"/> 
+              <Icon name="lucide:save" /> 
               <span v-if="isLoading">
                   Memproses..         
               </span>  

@@ -3,13 +3,13 @@
     <div class="flex border border-slate-200 rounded-lg overflow-hidden">
         <InputText id="inputCari" type="text" v-model="form.cari" placeholder="Ketik nama/nis siswa.." class="w-full border-none! px-5 py-3 rounded-none!" />
         <Button type="submit" severity="secondary" variant="text" class="rounded-none!">
-            <Icon name="lucide:search" mode="svg" />
+            <Icon name="lucide:search"  />
         </Button>
     </div>
   </form>
 
   <div v-if="isLoading" class="flex justify-start items-center opacity-50 my-2">
-    <Icon name="lucide:loader" mode="svg" class="animate-spin mr-2"/> mohon tunggu ..
+    <Icon name="lucide:loader"  class="animate-spin mr-2"/> mohon tunggu ..
   </div>
 
   <div v-if="result" class="hasilCari border-t mt-4">
@@ -31,7 +31,7 @@
   <div v-if="errors">
     <Message severity="warn" class="mt-3" closable>
       <div class="flex items-center gap-2">
-        <Icon name="lucide:search-x" mode="svg" /> Siswa tidak ditemukan
+        <Icon name="lucide:search-x"  /> Siswa tidak ditemukan
       </div>
     </Message>
   </div>

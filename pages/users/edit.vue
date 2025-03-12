@@ -29,7 +29,7 @@
 
                     <div class="text-right">
                         <Button type="submit" :loading="isLoading">
-                            <Icon name="lucide:save" mode="svg"/>
+                            <Icon name="lucide:save" />
                             Simpan
                         </Button>
                     </div>

@@ -33,7 +33,7 @@
 
             <div class="flex justify-end mt-4">
               <Button type="submit" label="Simpan" :loading="isLoading">
-                <Icon name="lucide:save" mode="svg"/> 
+                <Icon name="lucide:save" /> 
                 <span v-if="isLoading">
                     Memproses..         
                 </span>  
@@ -59,7 +59,7 @@
             </label>
             <div class="flex justify-end my-2">
               <Button type="submit" label="Simpan" :loading="isLoading">
-                <Icon name="lucide:upload" mode="svg"/> Simpan Gambar
+                <Icon name="lucide:upload" /> Simpan Gambar
               </Button>
             </div>
           </form>

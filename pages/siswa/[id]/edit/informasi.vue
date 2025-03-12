@@ -25,7 +25,7 @@
       <div class="flex justify-end mt-4">
 
         <Button type="submit" label="Simpan" :loading="isLoading">
-          <Icon name="lucide:save" mode="svg"/> 
+          <Icon name="lucide:save" /> 
           <span v-if="isLoading">
               Memproses..         
           </span>  

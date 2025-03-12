@@ -11,7 +11,7 @@
     </div>
     <div class="text-end mt-4">   
       <Button type="submit" class="flex items-center gap-2" @click="emit('edit')">
-        <Icon name="lucide:pencil" mode="svg"/>
+        <Icon name="lucide:pencil" />
         Edit
       </Button>
     </div>

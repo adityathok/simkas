@@ -17,7 +17,7 @@
 
       <div class="mt-5">
           <Button type="submit" class="px-20! w-full" :loading="isLoading">                
-              <span v-if="isLoading" class="flex gap-2 items-center"><Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses login..</span>
+              <span v-if="isLoading" class="flex gap-2 items-center"><Icon class="animate-spin" name="lucide:loader" /> Memproses login..</span>
               <span v-else>Masuk</span>
           </Button>
       </div>
@@ -43,7 +43,8 @@
 
   async function handleFormSubmit() {
       isLoading.value = true; 
-      errors.value = false; 
+      errors.value = false;
+      form.value.remember = form.value.remember[0]
       try {
           await login(form.value)
       } catch (e) {

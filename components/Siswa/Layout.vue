@@ -32,10 +32,10 @@
   </div>
 
   <div v-else class="flex flex-col justify-center items-center p-5">
-    <Icon name="lucide:user-x" mode="svg" size="4em"/>
+    <Icon name="lucide:user-x"  size="4em"/>
     <h1 class="mt-3 mb-5 text-xl">! Data Siswa Tidak Ditemukan</h1>
     <Button as="router-link" to="/siswa">
-      <Icon name="lucide:chevron-left" mode="svg" /> Kembali
+      <Icon name="lucide:chevron-left"  /> Kembali
     </Button>
   </div>
 

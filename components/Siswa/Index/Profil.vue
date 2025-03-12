@@ -3,7 +3,7 @@
   <Card>
     <template #title>
       <div class="flex items-center gap-2">
-        <Icon name="lucide:user" mode="svg"/> Profil Siswa
+        <Icon name="lucide:user" /> Profil Siswa
       </div>
     </template>
     <template #content>
@@ -22,7 +22,7 @@
               {{ dataSiswa.kelas_siswa.nama }}, {{ dataSiswa.kelas_siswa.tahun_ajaran }}
             </NuxtLink>
             <NuxtLink v-else :to="'/siswa/'+idSiswa+'/edit/kelas'">
-              <Badge severity="info"> <Icon name="lucide:edit" mode="svg" class="me-2"/> Atur Kelas</Badge>
+              <Badge severity="info"> <Icon name="lucide:edit"  class="me-2"/> Atur Kelas</Badge>
             </NuxtLink>
           </span>
           <span v-else-if="item.key == 'status'">

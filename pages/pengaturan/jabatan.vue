@@ -8,16 +8,16 @@
         <div v-for="(jabatan,i) in jabatans" :key="i" class="py-1 flex">
           <InputText class="w-full rounded-e-none!" v-model="jabatans[i]" />
           <Button class="rounded-s-none!" @click="removeList(i)" severity="danger">
-            <Icon name="lucide:x" mode="svg"/>
+            <Icon name="lucide:x" />
           </Button>
         </div>
         <div class="flex justify-end gap-1 mt-4">
           <Button @click="jabatans.push('')" severity="info">
-            <Icon name="lucide:plus" mode="svg"/>
+            <Icon name="lucide:plus" />
             Tambah Jabatan
           </Button>
           <Button type="submit" severity="success" :loading="isLoading">
-            <Icon name="lucide:save" mode="svg"/>
+            <Icon name="lucide:save" />
             Simpan
           </Button>
         </div>

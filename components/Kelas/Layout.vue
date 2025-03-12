@@ -1,10 +1,10 @@
 <template>
   
   <div v-if="error" class="flex flex-col justify-center items-center p-5">
-    <Icon name="lucide:archive-x" mode="svg" size="4em" class="text-yellow-500"/>
+    <Icon name="lucide:archive-x"  size="4em" class="text-yellow-500"/>
     <Message severity="warn" class="my-5">Kelas tidak ditemukan !</Message>
     <Button as="router-link" to="/kelas">
-      <Icon name="lucide:chevron-left" mode="svg" /> Kembali
+      <Icon name="lucide:chevron-left"  /> Kembali
     </Button>
   </div>
 

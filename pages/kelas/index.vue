@@ -3,7 +3,7 @@
   <div class="flex gap-2 flex-col md:flex-row justify-end md:justify-between mb-5">
 
     <Button @click="openDialog('','add')" size="small" class="w-[6rem]">
-      <Icon name="lucide:circle-plus" mode="svg"/>
+      <Icon name="lucide:circle-plus" />
       Tambah
     </Button>
 
@@ -16,7 +16,7 @@
         <InputText type="number" v-model="cariTahunSelesai" class="w-20" />
       </div>
       <Button type="submit" size="small" class="md:ml-2 md:min-w-10">
-        <Icon name="lucide:search" mode="svg"/>
+        <Icon name="lucide:search" />
       </Button>
     </form>
 
@@ -61,7 +61,7 @@
               <div class="flex justify-end relative">
                 <span v-if="popover.visible" class="absolute top-0 right-0 w-full h-full z-10"></span>
                 <Button :disabled="popover.visible" type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
-                    <Icon name="lucide:ellipsis-vertical" mode="svg"/>
+                    <Icon name="lucide:ellipsis-vertical" />
                 </Button>
               </div>
             </template>

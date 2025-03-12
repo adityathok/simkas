@@ -5,7 +5,7 @@
 
         <div class="hidden md:block absolute z-1 end-[50%] md:end-[-1.5em] top-[50%]">
           <span class="bg-white p-2 inline-block">
-            <Icon name="lucide:square-chevron-right" mode="svg" size="2rem" class="opacity-50"/>
+            <Icon name="lucide:square-chevron-right"  size="2rem" class="opacity-50"/>
           </span>
         </div>
 
@@ -25,7 +25,7 @@
           <div class="col-span-2">
             <label class="block text-sm mb-1 opacity-50">
               Kelas
-              <Icon v-if="sKelasFrom=='pending'" name="lucide:loader" mode="svg" class="inline animate-spin"/>
+              <Icon v-if="sKelasFrom=='pending'" name="lucide:loader"  class="inline animate-spin"/>
             </label>
             <Select v-if="optionKelasFrom.length > 0" v-model="kelasFrom" :options="optionKelasFrom" optionLabel="label" optionValue="value" class="w-full"/>
             <div v-else class="bg-slate-100 text-slate-300 p-2 rounded-md">Kelas tidak tersedia</div>
@@ -38,14 +38,14 @@
         </DataTable>
 
         <div v-if="sSiswaFrom=='pending'" class="flex items-center gap-1">
-          <Icon name="lucide:loader" mode="svg" class="animate-spin" /> Memuat data siswa..
+          <Icon name="lucide:loader"  class="animate-spin" /> Memuat data siswa..
         </div>
 
         <div class="text-end mt-2">
           <Button @click="handleMoveSiswa">
             Proses 
-            <Icon v-if="isLoading" name="lucide:loader" mode="svg" class="animate-spin" />
-            <Icon v-else name="lucide:user-round-cog" mode="svg" />
+            <Icon v-if="isLoading" name="lucide:loader"  class="animate-spin" />
+            <Icon v-else name="lucide:user-round-cog"  />
           </Button>
         </div>
 
@@ -68,7 +68,7 @@
           <div class="col-span-2">
             <label class="block text-sm mb-1 opacity-50">
               Kelas
-              <Icon v-if="sKelasTo=='pending'" name="lucide:loader" mode="svg" class="inline animate-spin"/>
+              <Icon v-if="sKelasTo=='pending'" name="lucide:loader"  class="inline animate-spin"/>
             </label>
             <div class="w-full">
               <Select v-if="optionKelasTo.length > 0" v-model="kelasTo" :options="optionKelasTo" optionLabel="label" optionValue="value" class="w-full"/>
@@ -91,7 +91,7 @@
         </DataTable>
 
         <div v-if="ssiswaTo=='pending'" class="flex items-center gap-1">
-          <Icon name="lucide:loader" mode="svg" class="animate-spin" /> Memuat data siswa..
+          <Icon name="lucide:loader"  class="animate-spin" /> Memuat data siswa..
         </div>
 
       </div>

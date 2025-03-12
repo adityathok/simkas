@@ -2,7 +2,7 @@
 
     <div class="flex justify-end mb-5">
         <Button as="router-link" to="/pegawai/add" size="small">
-            <Icon name="lucide:user-plus" mode="svg"/>
+            <Icon name="lucide:user-plus" />
             Tambah
         </Button>
     </div>
@@ -69,7 +69,7 @@
                 <template #body="slotProps">                
                     <div class="flex justify-end">
                         <Button type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
-                            <Icon name="lucide:ellipsis-vertical" mode="svg"/>
+                            <Icon name="lucide:ellipsis-vertical" />
                         </Button>
                     </div>
                 </template>
@@ -111,13 +111,13 @@
 
         <div class="flex justify-end gap-1 mt-4">
             <Button severity="secondary" variant="outlined" @click="pegawaiDialog = false" >
-                <Icon name="lucide:x" mode="svg"/> Tutup
+                <Icon name="lucide:x" /> Tutup
             </Button>
             <Button severity="info" variant="outlined" as="router-link" :to="'/pegawai/edit?id='+idpegawai" >
-                <Icon name="lucide:pencil" mode="svg"/> Edit
+                <Icon name="lucide:pencil" /> Edit
             </Button>
             <Button v-if="useUser.currentUser.id!==idpegawai" @click="confirmDelete(idpegawai)" severity="danger" variant="outlined">
-                <Icon name="lucide:trash" mode="svg"/> Hapus
+                <Icon name="lucide:trash" /> Hapus
             </Button>
         </div>
 
@@ -132,13 +132,13 @@
             </div>       
             
             <Button @click="showPegawai(selectedItem)" severity="secondary" variant="text" size="small" class="w-full justify-start!">
-                <Icon name="lucide:eye" mode="svg"/> Lihat
+                <Icon name="lucide:eye" /> Lihat
             </Button>
             <Button as="router-link" severity="info" variant="text" size="small" :to="'/pegawai/edit?id='+selectedItem.id" class="w-full justify-start!">
-                <Icon name="lucide:pencil" mode="svg"/> Edit
+                <Icon name="lucide:pencil" /> Edit
             </Button>
             <Button v-if="useUser.currentUser.id!==selectedItem.user_id" @click="confirmDelete(selectedItem.id)" severity="danger" variant="text" size="small" class="w-full justify-start!">
-                <Icon name="lucide:trash" mode="svg"/> Hapus
+                <Icon name="lucide:trash" /> Hapus
             </Button>
         </div>
     </Popover>

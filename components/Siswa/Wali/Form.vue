@@ -17,7 +17,7 @@
     </div>
     <div class="text-end mt-4">      
       <Button type="submit" :loading="isLoading" class="flex items-center gap-2">
-        <Icon v-if="isLoading" name="lucide:loader" mode="svg" class="animate-spin" />
+        <Icon v-if="isLoading" name="lucide:loader"  class="animate-spin" />
         Simpan
       </Button>
     </div>

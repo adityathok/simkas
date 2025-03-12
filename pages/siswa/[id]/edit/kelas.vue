@@ -8,7 +8,7 @@
 
     <div class="text-end">
       <Button @click="openDialog('','add')" size="small">
-        <Icon name="lucide:plus" mode="svg"/> Tambah
+        <Icon name="lucide:plus" /> Tambah
       </Button>
     </div>
 
@@ -27,10 +27,10 @@
         <template #body="slotProps">
           <div class="flex justify-end items-center gap-1">
             <Button severity="info" @click="openDialog(slotProps.data,'edit')">
-              <Icon name="lucide:square-pen" mode="svg"/>
+              <Icon name="lucide:square-pen" />
             </Button>
             <Button severity="danger" @click="confirmDelete(slotProps.data)">
-              <Icon name="lucide:trash" mode="svg"/>
+              <Icon name="lucide:trash" />
             </Button>
 
           </div>

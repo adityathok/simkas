@@ -3,11 +3,11 @@
 
     <div class="flex justify-end items-center gap-2">
       <span v-if="status == 'pending'">
-        <Icon name="lucide:loader" mode="svg" class="animate-spin"/>
+        <Icon name="lucide:loader"  class="animate-spin"/>
       </span>
       <Select v-model="filterTahun" :options="optionTahunAjaran" optionLabel="label" optionValue="value"/>
       <Button @click="openDialog('','add')" size="small">
-        <Icon name="lucide:circle-plus" mode="svg"/>
+        <Icon name="lucide:circle-plus" />
         Tambah
       </Button>
     </div>
@@ -33,10 +33,10 @@
         <template #body="slotProps">
           <div class="flex justify-end items-center">
             <Button severity="secondary" variant="text" @click="$router.push('/kelas/'+slotProps.data.id)" class="px-1!" v-tooltip="'Edit'">
-              <Icon name="lucide:square-pen" mode="svg"/>
+              <Icon name="lucide:square-pen" />
             </Button>
             <Button severity="danger" variant="text" @click="confirmDelete(slotProps.data.id)" class="px-1!" v-tooltip="'Hapus'">
-                <Icon name="lucide:trash" mode="svg"/>
+                <Icon name="lucide:trash" />
             </Button>
           </div>
         </template>

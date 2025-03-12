@@ -3,7 +3,7 @@
  <Card>
     <template #title>
       <div class="flex items-center gap-2">
-        <Icon name="lucide:receipt-text" mode="svg"/> Tagihan Siswa
+        <Icon name="lucide:receipt-text" /> Tagihan Siswa
       </div>
     </template>
     <template #content>

@@ -14,10 +14,10 @@
         <template #body="slotProps">             
           <div class="flex justify-end gap-1">
               <Button @click="openDialog(slotProps.data,'edit')" type="button" variant="text" severity="secondary" class="px-1!">
-                  <Icon name="lucide:pen" mode="svg"/>
+                  <Icon name="lucide:pen" />
               </Button>
               <Button @click="confirmDelete(slotProps.data.id)" type="button" variant="text" severity="danger"  class="px-1!">
-                  <Icon name="lucide:trash" mode="svg"/>
+                  <Icon name="lucide:trash" />
               </Button>
           </div>
         </template>

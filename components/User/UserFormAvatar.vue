@@ -4,7 +4,7 @@
         <label for="avatar" class="relative border rounded-sm min-h-20 overflow-hidden cursor-pointer block w-full bg-white hover:bg-slate-200">          
           <Image v-if="previewFoto" :src="previewFoto" alt="Image"/>
           <div class="flex flex-col justify-center items-center p-5 w-full hover:bg-slate-50 opacity-30 hover:opacity-50 z-10 absolute top-0 left-0 right-0 bottom-0">
-            <Icon name="lucide:upload-cloud" mode="svg"/>
+            <Icon name="lucide:upload-cloud" />
             <small>Unggah gambar</small>
           </div>
           <InputText type="file" @change="handleFileUpload" id="avatar" class="hidden"/>
@@ -17,10 +17,10 @@
 
         <div class="flex justify-center gap-1">
           <Button @click="handleUpload"  :loading="isLoading">
-              <Icon name="lucide:upload-cloud" mode="svg"/> Upload
+              <Icon name="lucide:upload-cloud" /> Upload
           </Button>
           <Button @click="removeAvatar" severity="danger" v-if="data.avatar"  :loading="isLoading">
-              <Icon name="lucide:trash" mode="svg"/> Hapus gambar
+              <Icon name="lucide:trash" /> Hapus gambar
           </Button>
         </div>
     </div>

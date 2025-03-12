@@ -6,17 +6,17 @@
                   
                   <div class="xl:hidden ms-1">
                       <Button @click="useGlobal.toggelsidebar()" size="small" severity="secondary" variant="link">
-                          <Icon name="lucide:menu" mode="svg" size="1.5rem"/>
+                          <Icon name="lucide:menu"  size="1.5rem"/>
                       </Button>
                   </div>
                   <span class="hidden md:block">
                       <Button severity="secondary" variant="text" @click="$router.back()">
-                          <Icon name="lucide:move-left" mode="svg" />
+                          <Icon name="lucide:move-left"  />
                       </Button>
                   </span>
                   <span class="hidden md:block">
                       <Button severity="secondary" variant="text" label="Show Search" @click="visibleSearch = true">
-                          <Icon name="lucide:search" mode="svg" />
+                          <Icon name="lucide:search"  />
                       </Button>
 
                       <Dialog v-model:visible="visibleSearch" modal header="Pencarian" :closeOnEscape="true" :dismissableMask="true" :style="{ width: '50rem' }">

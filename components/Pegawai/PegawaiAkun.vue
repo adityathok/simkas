@@ -20,10 +20,10 @@
       </div>
       <div class="flex justify-end mt-4">           
           <Button v-if="!data.user" type="submit" label="Simpan">
-            <Icon name="lucide:user-plus" mode="svg"/> Buat Akun Login
+            <Icon name="lucide:user-plus" /> Buat Akun Login
           </Button>         
           <Button v-else type="submit" label="Simpan">
-            <Icon name="lucide:save" mode="svg"/> Perbarui Akun
+            <Icon name="lucide:save" /> Perbarui Akun
           </Button>
       </div>
     </div>

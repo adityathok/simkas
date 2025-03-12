@@ -2,11 +2,11 @@
   
   <div class="flex justify-end gap-2 mb-3">
     <Button as="router-link" to="/pegawai" variant="outlined" size="small">
-        <Icon name="lucide:list" mode="svg"/>
+        <Icon name="lucide:list" />
         Semua
     </Button>
     <Button as="router-link" to="/pegawai/add" size="small">
-        <Icon name="lucide:user-plus" mode="svg"/>
+        <Icon name="lucide:user-plus" />
         Tambah
     </Button>
   </div>

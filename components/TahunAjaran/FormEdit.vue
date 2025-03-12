@@ -32,7 +32,7 @@
 
       <div class="text-end">
         <Button type="submit" label="Simpan" class="mt-4">
-          <Icon name="lucide:save" mode="svg"/> Simpan
+          <Icon name="lucide:save" /> Simpan
         </Button>
       </div>
 

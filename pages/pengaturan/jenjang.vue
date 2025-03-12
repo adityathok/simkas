@@ -8,16 +8,16 @@
         <div v-for="(jenjang,i) in jenjangs" :key="i" class="py-1 flex">
           <InputText class="w-full rounded-e-none!" v-model="jenjangs[i]" />
           <Button class="rounded-s-none!" @click="removeList(i)" severity="danger">
-            <Icon name="lucide:x" mode="svg"/>
+            <Icon name="lucide:x" />
           </Button>
         </div>
         <div class="flex justify-end gap-1 mt-4">
           <Button @click="jenjangs.push('')" severity="info">
-            <Icon name="lucide:plus" mode="svg"/>
+            <Icon name="lucide:plus" />
             Tambah jenjang
           </Button>
           <Button type="submit" severity="success" :loading="isLoading">
-            <Icon name="lucide:save" mode="svg"/>
+            <Icon name="lucide:save" />
             Simpan
           </Button>
         </div>

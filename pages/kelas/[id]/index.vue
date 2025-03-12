@@ -6,7 +6,7 @@
       <div class="md:basis-1/4">
         <div class="border min-h-10 w-full p-3 rounded-sm">
           <div class="mb-3">
-            <Icon name="lucide:user" mode="svg" class="inline" /> Wali Kelas
+            <Icon name="lucide:user"  class="inline" /> Wali Kelas
           </div>
           <div class="text-xl font-bold">
             {{ datakelas.wali.name }}
@@ -14,7 +14,7 @@
         </div>
         <div class="border min-h-10 w-full p-3 rounded-sm mt-4">
           <div class="mb-3">
-            <Icon name="lucide:info" mode="svg" class="inline" /> Info Kelas
+            <Icon name="lucide:info"  class="inline" /> Info Kelas
           </div>
           <div> 
             <div class="border-t py-1">
@@ -42,10 +42,10 @@
           
           <div class="flex justify-between items-center mb-3">
             <div class="mb-1">
-              <Icon name="lucide:users" mode="svg" class="inline" /> Daftar Siswa
+              <Icon name="lucide:users"  class="inline" /> Daftar Siswa
             </div>
             <Button severity="success" size="small" @click="openDialog()">
-              <Icon name="lucide:user-plus" mode="svg" /> 
+              <Icon name="lucide:user-plus"  /> 
               <div class="hidden md:inline-block">Tambah Siswa</div> 
             </Button>
           </div>
@@ -70,7 +70,7 @@
                 <template #body="slotProps">
                   <div class="flex justify-end">
                     <Button severity="danger" variant="text" @click="confirmDelete(slotProps.data)">
-                      <Icon v-if="loadDelete" name="lucide:loader" mode="svg" class="animate-spin" />
+                      <Icon v-if="loadDelete" name="lucide:loader"  class="animate-spin" />
                       <svg v-else xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                     </Button>
                   </div>
@@ -109,7 +109,7 @@
 
       <div class="text-end">
         <Button type="submit"  class="flex items-center gap-2">
-          <Icon v-if="loadAddSiswa" name="lucide:loader" mode="svg" class="animate-spin" />
+          <Icon v-if="loadAddSiswa" name="lucide:loader"  class="animate-spin" />
           Tambah
         </Button>
       </div>

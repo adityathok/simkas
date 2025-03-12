@@ -2,7 +2,7 @@
   <Card>
     <template #title>
       <div class="flex items-center gap-2">
-        <Icon name="lucide:users" mode="svg"/> Wali Siswa
+        <Icon name="lucide:users" /> Wali Siswa
       </div>
     </template>
     <template #content>

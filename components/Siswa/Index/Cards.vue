@@ -11,7 +11,7 @@
             {{ formatCurrency(item.value) }}
           </div>
           <div class="absolute bottom-0 start-0 opacity-10 p-3">
-            <Icon :name="item.icon" mode="svg" size="3.5em"/>
+            <Icon :name="item.icon"  size="3.5em"/>
           </div>
         </div>
       </div>

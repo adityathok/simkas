@@ -36,10 +36,10 @@
      <div class="flex justify-end mt-4">
       <Button type="submit" :loading="isLoading">           
           <span v-if="isLoading" class="flex gap-2 items-center">
-            <Icon class="animate-spin" name="lucide:loader" mode="svg"/> Memproses..         
+            <Icon class="animate-spin" name="lucide:loader" /> Memproses..         
           </span>
           <span v-else class="flex gap-2 items-center">
-            <Icon name="lucide:save" mode="svg"/> Simpan        
+            <Icon name="lucide:save" /> Simpan        
           </span> 
 
         </Button>

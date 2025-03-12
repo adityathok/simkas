@@ -32,7 +32,7 @@
             </div>
             <div class="text-end">
               <Button as="router-link" :to="'/unitsekolah/'+idUnit+'/edit'" variant="link" size="small" class="text-sm!">
-                <Icon name="lucide:pen" mode="svg" /> Edit Profil
+                <Icon name="lucide:pen"  /> Edit Profil
               </Button>
             </div>
           </div>

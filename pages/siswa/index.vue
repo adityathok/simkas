@@ -2,7 +2,7 @@
     
     <div class="flex justify-end mb-5">
         <Button as="router-link" to="/siswa/create" size="small">
-            <Icon name="lucide:user-plus" mode="svg"/>
+            <Icon name="lucide:user-plus" />
             Tambah
         </Button>
     </div>
@@ -40,7 +40,7 @@
             <template #body="slotProps">                           
               <div class="flex justify-end relative">
                   <Button type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
-                      <Icon name="lucide:ellipsis-vertical" mode="svg"/>
+                      <Icon name="lucide:ellipsis-vertical" />
                   </Button>
                   <div v-if="popover?.visible" class="absolute end-0 top-0 w-full h-full"></div>
               </div>
@@ -76,13 +76,13 @@
     <Popover ref="popover" :dismissable="true">
       <div v-if="selectedItem" class="flex flex-col">  
         <Button @click="openDialog(selectedItem,'view')" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
-          <Icon name="lucide:info" mode="svg"/> Preview
+          <Icon name="lucide:info" /> Preview
         </Button>    
         <Button as="router-link" :to="'/siswa/'+selectedItem.id" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
-          <Icon name="lucide:building" mode="svg"/> Profile
+          <Icon name="lucide:building" /> Profile
         </Button> 
         <Button as="router-link" :to="'/siswa/'+selectedItem.id+'/edit'" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
-          <Icon name="lucide:pencil" mode="svg"/> Edit
+          <Icon name="lucide:pencil" /> Edit
         </Button>
       </div>
     </Popover>
