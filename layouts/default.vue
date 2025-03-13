@@ -31,7 +31,9 @@
                     <slot />
                 </div>
 
-                <AppFooter />
+                <div class="text-end">
+                    <AppCopyright />
+                </div>
 
                 <div v-if="useGlobal.opensidebar" class="fixed md:hidden h-svh z-10 top-0 bottom-0 end-0 start-0 bg-black opacity-50" @click="useGlobal.toggelsidebar"></div>
 
@@ -40,16 +42,8 @@
         </div>
     </div>
 
-  
 </template>
 
 <script setup lang="ts">
 const useGlobal = useGlobalStore()
-const client = useSanctumClient(); 
-const { setInfoApp,infoApp } = useGlobalStore()   
-const { data } = await useAsyncData(
-    'app',
-    () => client('/infoapp')
-)
-setInfoApp(data.value)
 </script>

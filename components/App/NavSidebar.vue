@@ -1,8 +1,8 @@
 <template>
   <div class="h-full left-0 top-0 w-64 fixed bg-slate-50 z-6 border-r border-border px-4">
     
-    <div class="p-6 flex items-center brand-logo overflow-hidden">
-      <AppLogo />
+    <div class="py-6 px-2 flex justify-center brand-logo overflow-hidden">
+       <AppLogo />    
     </div>
 
     <ScrollPanel style="width: 100%; height: calc(100vh - 7rem)">

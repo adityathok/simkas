@@ -86,7 +86,6 @@
         return previewLogo.value ? previewLogo.value : (form.value.logo ? `${urlStorage}${form.value.logo}` : '');
     });
 
-
     function handleFileUpload(event: any) {
         var id = event.target.id
         // form.value.logopreview = URL.createObjectURL(event.target.files[0])

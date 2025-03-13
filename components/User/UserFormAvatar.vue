@@ -37,7 +37,6 @@
   const { user,refreshIdentity } = useSanctumAuth();
   const currentUserId = ref('');
   const client = useSanctumClient();
-  const { urlStorage } = useGlobalStore()
   const isLoading = ref(false)
   const avatar = ref('');
   const previewFoto = ref('');

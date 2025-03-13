@@ -1,8 +1,15 @@
 <template>
     
-    <div v-if="infoApp" class="flex items-center gap-2 max-w-[11rem]">
-        <img src="~/public/logo.png" alt="Logo App" class="max-h-10">
-        <span class="text-sm font-bold">{{ infoApp?.lembaga }}</span>
+    <p v-if="loading">Memuat konfigurasi...</p>
+    <p v-else-if="error" style="color: red;">Error: {{ error }}</p>
+
+    <div v-if="configApp" class="flex items-center gap-2 max-w-[12rem]">
+        <img v-if="configApp?.value?.logo" :src="configApp.value.logo" alt="Logo App" class="max-h-10">
+        <img v-else src="~/public/logo.png" alt="Logo App" class="max-h-10">
+        <div>
+            <div class="text-sm font-bold">SIMKAS</div>
+            <div class="text-xs">{{ configApp?.value?.lembaga }}</div>
+        </div>
     </div>
     
     <div v-else>
@@ -21,5 +28,14 @@
 </template>
 
 <script setup lang="ts">
-    const { infoApp } = useGlobalStore()
+
+// Inisialisasi store
+const configStore = useConfigStore();
+
+// Ambil state dan action dari store
+const { configApp, setConfig,loading, error } = configStore;
+onMounted(() => {
+    setConfig()
+})
+
 </script>
