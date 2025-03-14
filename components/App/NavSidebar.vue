@@ -130,6 +130,11 @@ const items = ref([
                 key: 'siswa_naik',
                 label: 'Naik Kelas',
                 route:'/siswa/naikkelas',
+            },
+            {
+                key: 'siswa_import',
+                label: 'Import Siswa',
+                route:'/siswa/import',
             }
         ]
     },
