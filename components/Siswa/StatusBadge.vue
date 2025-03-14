@@ -1,19 +1,27 @@
 <template>
-  <Tag :severity="setSeverenity()">
+  <Badge size="small" class="capitalize" :severity="setSeverenity()">
     {{ status }}
-  </Tag>
+  </Badge>
 </template>
 
 <script setup lang="ts">
   const props = defineProps(['status'])
-  const status = props.status
+  const status = ref('')
+
+  watch(
+    () => props.status,
+    (newstatus) => {
+      status.value = newstatus
+    },
+    { immediate: true }
+  )
 
   const setSeverenity = () => {
-    if (status == 'Aktif') {
+    if (status.value == 'aktif') {
       return 'success'
-    } else if (status == 'Keluar') {
+    } else if (status.value == 'keluar') {
       return 'danger'
-    } else if (status == 'Pindah') {
+    } else if (status.value == 'pindah') {
       return 'info'
     } else {
       return 'secondary'

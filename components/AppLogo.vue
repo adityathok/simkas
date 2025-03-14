@@ -1,8 +1,5 @@
 <template>
     
-    <p v-if="loading">Memuat konfigurasi...</p>
-    <p v-else-if="error" style="color: red;">Error: {{ error }}</p>
-
     <div v-if="configApp" class="flex items-center gap-2 max-w-[12rem]">
         <img v-if="configApp?.value?.logo" :src="configApp.value.logo" alt="Logo App" class="max-h-10">
         <img v-else src="~/public/logo.png" alt="Logo App" class="max-h-10">
@@ -33,7 +30,7 @@
 const configStore = useConfigStore();
 
 // Ambil state dan action dari store
-const { configApp, setConfig,loading, error } = configStore;
+const { setConfig,configApp } = configStore;
 onMounted(() => {
     setConfig()
 })

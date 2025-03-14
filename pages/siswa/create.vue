@@ -51,7 +51,7 @@ const fields = [
   { label: 'NISN', key: 'nisn', type: 'text' ,required: false},
   { label: 'Nama', key: 'nama', type: 'text',required: true },
   { label: 'Nama Panggilan', key: 'nama_panggilan', type: 'text',required: true },
-  { label: 'Status', key: 'status', type: 'select', options: ['Aktif', 'Lulus','Keluar','Pindah'],required: true },
+  { label: 'Status', key: 'status', type: 'select', options: ['aktif', 'lulus','keluar','pindah'],required: true },
   { label: 'Tempat Lahir', key: 'tempat_lahir', type: 'text',required: true },
   { label: 'Tanggal Lahir', key: 'tanggal_lahir', type: 'date',required: true },
   { label: 'Jenis Kelamin', key: 'jenis_kelamin', type: 'select', options: ['Laki-laki', 'Perempuan'],required: true },

@@ -1,10 +1,15 @@
 <template>
     
-    <div class="flex justify-end mb-5">
-        <Button as="router-link" to="/siswa/create" size="small">
-            <Icon name="lucide:user-plus" />
-            Tambah
-        </Button>
+    <div class="flex justify-end items-center gap-2 mb-5">
+      <div v-if="status == 'pending'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-ccw animate-spin"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+      </div>
+      <Button size="small" @click="visibleFilter = true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filter
+      </Button>
+      <Button as="router-link" to="/siswa/create" size="small">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg> Tambah
+      </Button>
     </div>
 
     <Card>
@@ -85,7 +90,21 @@
           <Icon name="lucide:pencil" /> Edit
         </Button>
       </div>
-    </Popover>
+    </Popover>    
+
+    <Drawer v-model:visible="visibleFilter" header="Filter" position="right">
+        <form @submit.prevent="handleSubmitFilter">
+          <div v-for="field in filterFields" :key="field.key" class="py-2">
+            <label :for="field.key" class="block mb-1">{{ field.label }}</label>
+            <Select v-if="field.type == 'select'" optionLabel="label" optionValue="value" v-model="filters[field.key]" :options="field.options" placeholder="Pilih" class="w-full capitalize"/>
+          </div>
+          <div class="text-end mt-2">
+            <Button type="submit" class="w-full">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filter
+            </Button>
+          </div>
+        </form>
+    </Drawer>
 
 </template>
 
@@ -95,11 +114,22 @@ definePageMeta({
 })
 const route = useRoute();
 const page = ref(route.query.page ? Number(route.query.page) : 1);
+const router = useRouter()
+const visibleFilter = ref(false)
+
+const filters = computed(() => ({
+  page: page.value || 1,
+  status: route.query.status || 'aktif',
+  tahun_ajaran: route.query.tahun_ajaran || '',
+  idunit: route.query.idunit || ''
+} as any))
 
 const client = useSanctumClient();
 const { data, status, error, refresh } = await useAsyncData(
-    'siswa-page-'+page.value,
-    () => client('/api/siswa?page='+page.value)
+    'siswa-page-'+route.query,
+    () => client('/api/siswa',{
+      params:filters.value
+    })
 )
 
 const onPaginate = (event: { page: number }) => {
@@ -112,6 +142,21 @@ const onPaginate = (event: { page: number }) => {
     })
     navigateTo('/siswa?page='+page.value)
 };
+
+
+const handleSubmitFilter = () => {
+  router.push({
+    path: '/siswa',
+    query: {
+      page: page.value,
+      status: filters.value.status || undefined,
+      tahun_ajaran: filters.value.tahun_ajaran || undefined,
+      idunit: filters.value.idunit || undefined,
+    }
+  })
+  refresh()
+  visibleFilter.value = false
+}
 
 const visibleDialog = ref(false);
 const actionDialog = ref('add');
@@ -129,5 +174,21 @@ const displayPop = (event: Event, itemData: any) => {
   selectedItem.value = itemData;
   popover.value.show(event);
 }
+
+const { data: optionFilter,status:soptionFilter,refresh:frefresh } = await useAsyncData(
+    'optionsfiltersiswa',
+    () => client('/api/options',{
+      params:{
+        keys: 'tahun_ajaran,unitsekolah'
+      }
+    })
+)
+
+const filterFields = [
+  { label: 'Status', key: 'status', type: 'select', options: [{label:'Aktif',value:'aktif'},{label:'Lulus',value:'lulus'},{label:'Pindah',value:'pindah'},{label:'Keluar',value:'keluar'}] },
+  { label: 'Tahun Ajaran', key: 'tahun_ajaran', type: 'select', options: optionFilter.value.tahun_ajaran },
+  { label: 'Unit Sekolah', key: 'idunit', type: 'select', options: optionFilter.value.unitsekolah },
+]
+
 
 </script>

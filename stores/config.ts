@@ -31,6 +31,6 @@ export const useConfigStore = defineStore('config', () => {
         opensidebar,
         toggelsidebar,
         setConfig,
-        configApp,loading, error
+        configApp
     }
 })

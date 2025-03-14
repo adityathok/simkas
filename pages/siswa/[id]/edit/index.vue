@@ -115,7 +115,7 @@ const fields = ref([
     label: 'Status',
     key: 'status',
     type: 'select',
-    options: ['Aktif', 'Keluar', 'Pindah', 'Lulus']
+    options: ['aktif', 'keluar', 'pindah', 'lulus']
   },
 ])
 
