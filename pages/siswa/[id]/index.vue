@@ -4,22 +4,27 @@
 
     <SiswaIndexCards class="mb-5 md:mb-8"/>
 
-    <div class="grid grid-cols-6 gap-4">     
+    <Card>
+      <template #content>
+        <div class="grid grid-cols-6 gap-4">     
 
-      <div class="col-start-1 col-end-7 md:col-start-1 md:col-end-4">        
-        <SiswaIndexProfil :id="idUnit" />
-      </div>
-      <div class="col-start-1 col-end-7 md:col-start-4 md:col-end-7">
-        <SiswaIndexAlamat :datasiswa="dataSiswa"/>
-      </div>
-      <div class="col-start-1 col-end-7 md:col-start-1 md:col-end-4">        
-        <SiswaIndexWali :id="idUnit" />
-      </div>
-      <div class="col-start-1 col-end-7 md:col-start-4 md:col-end-7">
-        <SiswaIndexTagihan :id="idUnit" />
-      </div>
-      
-    </div>
+          <div class="col-start-1 col-end-7 md:col-start-1 md:col-end-4">        
+            <SiswaIndexProfil :id="idUnit" />
+          </div>
+          <div class="col-start-1 col-end-7 md:col-start-4 md:col-end-7">
+            <SiswaIndexAlamat :datasiswa="dataSiswa"/> 
+          </div>
+          <div class="col-start-1 col-end-7 md:col-start-1 md:col-end-4"> 
+            <SiswaIndexInformasi :id="idUnit"/>
+          </div>
+          <div class="col-start-1 col-end-7 md:col-start-4 md:col-end-7">
+            <SiswaIndexInfoWali :id="idUnit"/>      
+          </div>
+          
+        </div>
+        </template>
+      </Card>
+
   </SiswaLayout>
 
 </template>

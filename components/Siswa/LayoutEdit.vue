@@ -66,6 +66,11 @@ const items = ref([
         icon: 'lucide:info'
     },
     {
+        label: 'Wali',
+        route: '/siswa/'+idUnit+'/edit/infowali',
+        icon: 'lucide:users-round'
+    },
+    {
         label: 'Foto',
         route: '/siswa/'+idUnit+'/edit/foto',
         icon: 'lucide:square-user'
@@ -74,11 +79,6 @@ const items = ref([
         label: 'Kelas',
         route: '/siswa/'+idUnit+'/edit/kelas',
         icon: 'lucide:notebook'
-    },
-    {
-        label: 'Wali',
-        route: '/siswa/'+idUnit+'/edit/wali',
-        icon: 'lucide:users-round'
     }
 ]);
 const visible = ref(false);
