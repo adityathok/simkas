@@ -17,7 +17,9 @@
       </div>
 
       <div v-if="processedRows > 0" class="my-5 bg-white p-4 rounded-xl border border-dashed border-amber-200">
-        <ProgressBar :value="progressPercentage"></ProgressBar>
+        <ProgressBar :value="progressPercentage">
+          {{ (Math.round(progressPercentage*100)/100) }}%
+        </ProgressBar>
         <span class="text-xs"> {{ processedRows }} dari {{ totalRows }} baris telah diproses. <span class="text-green-700 font-bold">{{ successRows }} baris berhasil diimport.</span></span>
         <Message severity="warn" class="mt-2">
           Mohon jangan menutup halaman ini sampai proses selesai.
