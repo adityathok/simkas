@@ -101,7 +101,7 @@ watch(() => expandedKeys, () => {
 })
 
 //class untuk tombol menu
-const classLink = 'w-full flex items-center justify-start rounded-md px-2.5 py-2.5 mb-0.5 gap-3 text-start leading-[normal] font-normal hover:bg-blue-100 hover:text-blue-800 text-link bg-transparent group/link';
+const classLink = 'w-full flex items-center justify-start rounded-md px-2.5 py-2.5 mb-0.5 gap-3 text-start leading-[normal] font-normal hover:bg-blue-100 hover:text-blue-800 text-link bg-transparent group/link cursor-pointer';
 
 //daftar menu
 const items = ref([
@@ -110,6 +110,23 @@ const items = ref([
         label: 'Dashboard',
         icon: 'lucide:layout-grid',
         route:'/',
+    },
+    {
+        key: 'akuntansi',
+        label: 'Akuntansi',
+        icon: 'lucide:calculator',
+        items: [
+            {
+                key: 'akun_pendapatan',
+                label: 'Akun Pendapatan',
+                route:'/akunpendapatan',
+            },
+            {
+                key: 'jurnlkas',
+                label: 'Jurnal',
+                route:'/jurnalkas',
+            },
+        ]
     },
     {
         key: 'siswa',
@@ -153,11 +170,6 @@ const items = ref([
                 label: 'Kelas',
                 route:'/kelas',
             },
-            {
-                key: 'unit_add_2',
-                label: 'Naik Kelas',
-                route:'/siswa/naikkelas',
-            }
         ]
     },
     {
