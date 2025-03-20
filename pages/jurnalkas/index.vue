@@ -84,7 +84,7 @@ const { data, status, error, refresh } = await useAsyncData(
 const onPaginate = (event: { page: number }) => {
     page.value = event.page + 1; 
     refresh()
-    navigateTo('/kelas?page='+page.value)
+    navigateTo('/jurnalkas?page='+page.value)
 };
 
 const badge = (value: any) => {
