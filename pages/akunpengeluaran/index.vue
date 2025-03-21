@@ -12,7 +12,7 @@
   <Card>
     <template #content>
 
-      <DataTable :value="data.data"  class="text-sm text-nowrap" stripedRows scrollable>
+      <DataTable v-if="data.data" :value="data.data"  class="text-sm text-nowrap" stripedRows scrollable>
         <Column field="nama" header="Nama">      
           <template #body="slotProps">   
             <button type="button" class="cursor-pointer hover:underline" @click="openDialog(slotProps.data,'edit')">
@@ -20,24 +20,14 @@
             </button>   
           </template>
         </Column>
-        <Column field="neraca" header="Neraca">        
+        <Column field="pendapatan" header="Sumber Pendapatan">        
           <template #body="slotProps">            
-            {{ badge(slotProps.data.neraca) }}
-          </template>
-        </Column>
-        <Column field="jurnal_khusus" header="Jurnal khusus">          
-          <template #body="slotProps">            
-            {{ badge(slotProps.data.jurnal_khusus) }}
-          </template>
-        </Column>        
-        <Column field="jurnal" header="Jurnal">        
-          <template #body="slotProps">          
-            <span v-if="slotProps.data.jurnalkas_id">  
-              {{ slotProps.data.jurnalkas.nama }}
+            <span v-if="slotProps.data.akunpendapatan">
+              {{ slotProps.data.akunpendapatan.nama }}
             </span>
           </template>
         </Column>
-        <Column field="id" header="Kode" /> 
+        <Column field="id" header="Kode" />  
         <Column field="act" header="">
           <template #body="slotProps">            
             <div class="flex">
@@ -67,8 +57,8 @@
     </template>
   </Card>
 
-  <Dialog v-model:visible="visibleDialog" :modal="true" :header="actionDialog === 'edit' ? 'Edit Pendapatan' : 'Tambah Pendapatan'" :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <AkunPendapatanForm :action="actionDialog" :data="selectedItem" @update="refresh()" />
+  <Dialog v-model:visible="visibleDialog" :modal="true" :header="actionDialog === 'edit' ? 'Edit Akun Biaya' : 'Tambah Akun Biaya'" :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <AkunPengeluaranForm :action="actionDialog" :data="selectedItem" @update="refresh()" />
   </Dialog>
 
 </template>
@@ -76,7 +66,7 @@
 
 <script setup lang="ts">
 definePageMeta({
-    title: 'Akun Pendapatan',
+    title: 'Akun Biaya',
 })
 const route = useRoute();
 const page = ref(route.query.page ? Number(route.query.page) : 1);
@@ -88,13 +78,13 @@ const selectedItem = ref({} as any);
 const toast = useToast();
 
 const { data, status, error, refresh } = await useAsyncData(
-    'akunpendapatan-page-'+page.value,
-    () => client('/api/akunpendapatan?page='+page.value)
+    'akunpengeluaran-page-'+page.value,
+    () => client('/api/akunpengeluaran?page='+page.value)
 )
 const onPaginate = (event: { page: number }) => {
     page.value = event.page + 1; 
     refresh()
-    navigateTo('/akunpendapatan?page='+page.value)
+    navigateTo('/akunpengeluaran?page='+page.value)
 };
 
 const badge = (value: any) => {
@@ -109,8 +99,8 @@ const openDialog = (itemData: any,action : string) => {
 
 const confirmDelete = (id: any) => {
     confirm.require({
-        message: 'Yakin untuk menghapus akun pendapatan ?',
-        header: 'Hapus Pendapatan',
+        message: 'Yakin untuk menghapus akun biaya ?',
+        header: 'Hapus Biaya',
         rejectLabel: 'Batal',
         rejectProps: {
             label: 'Batal',
@@ -123,7 +113,7 @@ const confirmDelete = (id: any) => {
         },
         accept: async () => {
             try {
-              await client('/api/akunpendapatan/'+id, { method: 'DELETE' }) 
+              await client('/api/akunpengeluaran/'+id, { method: 'DELETE' }) 
               refresh()
               toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
             }  catch(er) {

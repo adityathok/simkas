@@ -122,6 +122,11 @@ const items = ref([
                 route:'/akunpendapatan',
             },
             {
+                key: 'akun_pengeluaran',
+                label: 'Akun Biaya',
+                route:'/akunpengeluaran',
+            },
+            {
                 key: 'jurnlkas',
                 label: 'Jurnal',
                 route:'/jurnalkas',
