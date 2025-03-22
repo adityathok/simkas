@@ -131,6 +131,11 @@ const items = ref([
                 label: 'Jurnal',
                 route:'/jurnalkas',
             },
+            {
+                key: 'akun_rekening',
+                label: 'Akun Rekening',
+                route:'/akunrekening',
+            },
         ]
     },
     {
