@@ -112,6 +112,23 @@ const items = ref([
         route:'/',
     },
     {
+        key: 'transaksi',
+        label: 'Transaksi',
+        icon: 'lucide:receipt-text',
+        items:[
+            {
+                key: 'riwayat_transaksi',
+                label: 'Riwayat Transaksi',
+                route:'/transaksi',
+            },
+            {
+                key: 'create_transaksi',
+                label: 'Tambah Transaksi',
+                route:'/transaksi/create',
+            },
+        ]
+    },
+    {
         key: 'akuntansi',
         label: 'Akuntansi',
         icon: 'lucide:calculator',
