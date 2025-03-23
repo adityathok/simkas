@@ -1,12 +1,18 @@
 <template>
 
-  <div class="flex justify-end items-center mb-3">
-    <span v-if="status==='pending'" class="text-sm opacity-50">
-      Loading...
-    </span>
-    <Button size="small" @click="openDialog('','add')">
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tambah
-    </Button>
+  <div class="flex md:justify-between justify-end items-center gap-1 mb-3">
+    <div class="flex justify-start items-center gap-1">
+      <Select v-model="filters.count" :options="[20,50,100]" size="small" />
+      <DatePicker v-model="filters.dates" placeholder="Tanggal" selectionMode="range" :manualInput="true" size="small" />
+    </div>
+    <div>
+      <span v-if="status==='pending'" class="text-sm opacity-50">
+        Loading...
+      </span>
+      <Button size="small" @click="openDialog('','add')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tambah
+      </Button>
+    </div>
   </div>
 
   <Card>
@@ -97,6 +103,10 @@
 
 
 <script setup lang="ts">
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+
 definePageMeta({
     title: 'Riwayat Transaksi',
 })
@@ -110,9 +120,39 @@ const selectedItem = ref({} as any);
 const toast = useToast();
 const selectedTransaksi = ref();
 
+const filters = ref({
+  count : 20,
+  dates:'' as any,
+  date_start: '',
+  date_end:''
+})
+
+watch(() => [filters.value.dates], () => {
+  if(filters.value.dates[0]){
+    const utcDate = dayjs(filters.value.dates[0]).utc().local().format()
+    filters.value.date_start = utcDate
+  }
+  if(filters.value.dates[1]){
+    const utcDate = dayjs(filters.value.dates[1]).utc().local().format()
+    filters.value.date_end = utcDate
+  }
+})
+
+//watch filters
+watch(() => [filters.value.count,filters.value.dates], () => {
+  refresh()
+})
+
 const { data, status, error, refresh } = await useAsyncData(
     'transaksi-page-'+page.value,
-    () => client('/api/transaksi?page='+page.value)
+    () => client('/api/transaksi',{
+      params:{
+        page: page.value,
+        count: filters.value.count,
+        date_start: filters.value.date_start?filters.value.date_start:'',
+        date_end: filters.value.date_end?filters.value.date_end:''
+      }
+    })
 )
 const onPaginate = (event: { page: number }) => {
     page.value = event.page + 1; 
