@@ -166,7 +166,7 @@ const { data: siswaFrom, status: sSiswaFrom, refresh: fSiswaFrom } = await useAs
     client('/api/siswakelas/'+kelasFrom.value)
 );
 //watch kelasFrom
-watch(() => kelasFrom.value, () =>{
+watch(() => kelasFrom.value, () => {
   fSiswaFrom()
 })
 
