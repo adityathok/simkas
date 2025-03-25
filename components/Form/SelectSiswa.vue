@@ -3,8 +3,27 @@
     <div class="relative">
       
       <div class="rounded w-full py-2 px-3 bg-slate-100 cursor-pointer" @click="openDialog">
-        {{ name }}
+        
+        <div v-if="selectData?.nama" class="flex items-center relative pe-4">
+          <img :src="selectData?.avatar_url" class="aspect-square rounded-full w-15"/>
+          <div class="ps-3">
+            <div class="font-bold">
+              {{ selectData?.nama }}
+            </div>
+            <div class="text-xs text-slate-400">
+              {{ selectData?.nis }} | {{ selectData?.kelas_siswa?.nama }} / {{ selectData?.kelas_siswa?.tahun_ajaran }}
+            </div>
+          </div>
+        </div>
+        <template v-else>
+          {{ name }}
+        </template>
+
       </div>
+      <Button v-if="selectData?.nama" @click="clearOption" class="!absolute end-0 top-0 bottom-0" severity="danger" variant="text">X</Button>
+      <span v-else @click="openDialog" class="!absolute end-0 top-0 bottom-0 p-2">
+        <Icon name="lucide:user-search" />
+      </span>
 
     </div>
 
@@ -61,6 +80,7 @@ const client = useSanctumClient();
 const searchQuery = ref('' as any)
 const isLoading = ref(false)
 const name = ref('Pilih siswa' as any);
+const selectData = ref('' as any);
 
 const result = ref('' as any)
 const errors = ref('' as any)
@@ -73,6 +93,8 @@ const openDialog = () => {
 const onSearch  = async () => {
   result.value = {}
   errors.value = ''
+  name.value = 'Pilih Siswa'
+  selectData.value = {}
 
   if(searchQuery.value.length > 2) {
 
@@ -101,12 +123,22 @@ interface Option {
 
 const emit = defineEmits<{
   (e: 'selected', option: Option): void;
+  (e: 'clear'): void
 }>();
 
 const onSelect = (data : any) => {
   emit('selected',data)
   visibleDialog.value = false;
   name.value = data.nama
+  selectData.value = data
+}
+
+const clearOption = () => {
+  emit('clear')
+  result.value = {}
+  errors.value = ''
+  name.value = 'Pilih Siswa'
+  selectData.value = {}
 }
 
 </script>

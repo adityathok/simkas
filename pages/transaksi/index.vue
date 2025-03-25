@@ -9,7 +9,7 @@
       <span v-if="status==='pending'" class="text-sm opacity-50">
         Loading...
       </span>
-      <Button size="small" as="a" href="/transaksi/create">
+      <Button size="small" @click="openDialog('','add')">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tambah
       </Button>
     </div>
@@ -49,12 +49,12 @@
         </Column>    
         <Column field="akun" header="Akun">        
           <template #body="slotProps">          
-            <span v-if="slotProps.data.pendapatan_id">  
-              {{ slotProps.data.akunpendapatan.nama }}
-            </span>          
-            <span v-if="slotProps.data.pengeluaran_id">  
-              {{ slotProps.data.akunpengeluaran.nama }}
-            </span>
+            <Tag severity="success" v-if="slotProps.data.pendapatan_id" class="!font-normal !text-slate-800">  
+              {{ slotProps.data.akunpendapatan?.nama }}
+            </Tag>          
+            <Tag severity="danger" v-if="slotProps.data.pengeluaran_id" class="!font-normal !text-slate-800">  
+              {{ slotProps.data.akunpengeluaran?.nama }}
+            </Tag>
           </template>
         </Column>        
         <Column field="rekening_id" header="Rek">        
@@ -96,7 +96,8 @@
   </Card>
 
   <Dialog v-model:visible="visibleDialog" :modal="true" header="Transaksi" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <TransaksiPreview :data="selectedItem" />
+    <TransaksiPreview v-if="actionDialog == 'preview'" :data="selectedItem" @edit="openDialog(selectedItem,'edit')"/>
+    <TransaksiForm v-else :action="actionDialog" :data="selectedItem" @update="refresh"/>
   </Dialog>
 
 </template>

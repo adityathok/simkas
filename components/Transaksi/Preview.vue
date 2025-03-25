@@ -34,12 +34,19 @@
       </template>
 
     </div>
+
+  </div>
+
+  <div class="text-end mt-3">
+    <Button @click="emit('edit')">
+      Edit
+    </Button>
   </div>
 
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(['update']);
+const emit = defineEmits(['edit']);
 const props = defineProps(['data'])
 const data = props.data
 
