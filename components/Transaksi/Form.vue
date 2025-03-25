@@ -70,8 +70,6 @@
     </div>
     
   </form>
-
-  {{ errors }}
   
 </template>
 
@@ -111,6 +109,11 @@ const form = ref({
   keterangan:'',
 } as any);
 
+//jika action edit dan ada data
+if(action == 'edit' && data){
+  form.value = data
+}
+
 function onSiswaSelect(selected: { id: any; user_id: any; }) {
   form.value.siswa_id = selected.id
   form.value.user_id = selected.user_id
@@ -126,13 +129,25 @@ const handleFormSubmit = async () => {
   const tgl = form.value.tanggal?dayjs(form.value.tanggal).utc().local().format('YYYY-MM-DD HH:mm:ss'):''
   form.value.tanggal = tgl
 
-  try {
-    await client('/api/transaksi', { method: 'POST', body: form.value });
-    toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil ditambah', life: 3000 });
-  } catch(er) {
-    const err = useSanctumError(er)
-    errors.value = err.bag
-    toast.add({ severity: 'error', summary: 'Gagal', detail: 'Gagal ditambahkan, silahkan coba lagi', life: 3000 });
+  if(action == 'edit') {
+    try {
+      await client('/api/transaksi/'+data.id, { method: 'PUT', body: form.value });
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil diubah', life: 3000 });
+    } catch(er) {
+      const err = useSanctumError(er)
+      errors.value = err.bag
+      toast.add({ severity: 'error', summary: 'Gagal', detail: 'Gagal diubah, silahkan coba lagi', life: 3000 });
+    }
+  } else {
+
+    try {
+      await client('/api/transaksi', { method: 'POST', body: form.value });
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil ditambah', life: 3000 });
+    } catch(er) {
+      const err = useSanctumError(er)
+      errors.value = err.bag
+      toast.add({ severity: 'error', summary: 'Gagal', detail: 'Gagal ditambahkan, silahkan coba lagi', life: 3000 });
+    }
   }
   isLoading.value = false;
 }
