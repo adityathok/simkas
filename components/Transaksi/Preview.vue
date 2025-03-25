@@ -8,9 +8,9 @@
       
       <template v-if="item.key == 'user_id'">
         <div>
-          {{ data.user.siswa.nama }}
+          {{ data.user?.siswa?.nama }}
         </div>
-        <span class="text-sm text-slate-500">
+        <span v-if="data.user?.siswa" class="text-sm text-slate-500">
           {{ data.user.siswa.nis }} | {{ data.user.siswa.kelas_siswa.nama }}
         </span>
       </template>

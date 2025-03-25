@@ -40,9 +40,9 @@
         <Column field="user_id" header="Oleh">          
           <template #body="slotProps">
             <div>
-              {{ slotProps.data.user.name }}
+              {{ slotProps.data.user?.name }}
             </div>
-            <NuxtLink :to="'/siswa/'+slotProps.data.user.siswa.id" target="_blank" v-if="slotProps.data.user.siswa.nis" v-tooltip="'Lihat profil siswa'" class="text-xs text-slate-500">
+            <NuxtLink :to="'/siswa/'+slotProps.data.user.siswa.id" target="_blank" v-if="slotProps.data.user?.siswa.nis" v-tooltip="'Lihat profil siswa'" class="text-xs text-slate-500">
               {{ slotProps.data.user.siswa.nis }} / {{ slotProps.data.user.siswa.kelas_siswa.nama }}
             </NuxtLink>
           </template>

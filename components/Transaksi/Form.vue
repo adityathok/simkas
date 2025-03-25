@@ -16,7 +16,7 @@
     <div class="col-start-3 col-end-5 mb-2">
       <label>Tanggal</label>
       <div class="mt-1">
-        <DatePicker v-model="form.tanggal" showTime hourFormat="24" fluid showButtonBar />
+        <DatePicker v-model="form.tanggal" showTime hourFormat="24" fluid />
       </div>
     </div>
     <div class="col-start-1 col-end-2 mb-2">
@@ -34,7 +34,7 @@
     <div v-else class="col-start-2 col-end-4 mb-2">
       <label>Akun Biaya</label>
       <div class="mt-1">
-        <Select v-model="form.pengeluaran_id" showClear :options="optionsData?.akunpengeluaran" optionLabel="label" optionValue="value" class="w-full"/>
+        <Select v-model="form.pengeluaran_id" showClear :options="optionsData?.akunpengeluaran" optionLabel="label" optionValue="value" class="w-full border !border-red-400"/>
       </div>
     </div>
     <div class="col-start-4 col-end-5 mb-2">
@@ -76,6 +76,9 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 const emit = defineEmits(['update']);
 const props = defineProps(['data','action'])
 const data = props.data
@@ -104,7 +107,8 @@ const form = ref({
   rekening_id:'CASH',
   tagihan_id:'',
   user_id:'',
-  tanggal:''
+  tanggal: dayjs().utc().local().format('YYYY-MM-DD HH:mm'),
+  keterangan:'',
 } as any);
 
 function onSiswaSelect(selected: { id: any; user_id: any; }) {
@@ -118,6 +122,10 @@ function onSiswaSelectClear(){
 
 const handleFormSubmit = async () => {  
   isLoading.value = true;
+
+  const tgl = form.value.tanggal?dayjs(form.value.tanggal).utc().local().format('YYYY-MM-DD HH:mm:ss'):''
+  form.value.tanggal = tgl
+
   try {
     await client('/api/transaksi', { method: 'POST', body: form.value });
     toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil ditambah', life: 3000 });
