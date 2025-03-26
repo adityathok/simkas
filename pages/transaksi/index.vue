@@ -5,10 +5,13 @@
       <Select v-model="filters.count" :options="[20,50,100]" size="small" />
       <DatePicker v-model="filters.dates" placeholder="Tanggal" selectionMode="range" :manualInput="true" size="small" />
     </div>
-    <div>
+    <div class="flex justify-end items-center gap-1">
       <span v-if="status==='pending'" class="text-sm opacity-50">
         Loading...
       </span>
+      <Button size="small" variant="outlined" @click="visibleFilter = true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filter
+      </Button>
       <Button size="small" @click="openDialog('','add')">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tambah
       </Button>
@@ -99,6 +102,10 @@
     <TransaksiPreview v-if="actionDialog == 'preview'" :data="selectedItem" @edit="openDialog(selectedItem,'edit')"/>
     <TransaksiForm v-else :action="actionDialog" :data="selectedItem" @update="refresh"/>
   </Dialog>
+  
+  <Drawer v-model:visible="visibleFilter" header="Filter" position="right">
+    <TransaksiFormFilters @submit="onSubmitFilters" :params="filters"/>
+  </Drawer>
 
 </template>
 
@@ -120,13 +127,22 @@ const actionDialog = ref('add');
 const selectedItem = ref({} as any);
 const toast = useToast();
 const selectedTransaksi = ref();
+const visibleFilter = ref(false)
 
 const filters = ref({
+  page: page.value, 
   count : 20,
   dates:'' as any,
   date_start: '',
   date_end:''
 })
+
+function onSubmitFilters( data: any) {
+  visibleFilter.value = false
+  filters.value = data
+  filters.value.page = page.value
+  refresh()
+}
 
 watch(() => [filters.value.dates], () => {
   if(filters.value.dates[0]){
@@ -147,12 +163,13 @@ watch(() => [filters.value.count,filters.value.dates], () => {
 const { data, status, error, refresh } = await useAsyncData(
     'transaksi-page-'+page.value,
     () => client('/api/transaksi',{
-      params:{
-        page: page.value,
-        count: filters.value.count,
-        date_start: filters.value.date_start?filters.value.date_start:'',
-        date_end: filters.value.date_end?filters.value.date_end:''
-      }
+      // params:{
+      //   page: page.value,
+      //   count: filters.value.count,
+      //   date_start: filters.value.date_start?filters.value.date_start:'',
+      //   date_end: filters.value.date_end?filters.value.date_end:''
+      // }
+      params : filters.value
     })
 )
 const onPaginate = (event: { page: number }) => {

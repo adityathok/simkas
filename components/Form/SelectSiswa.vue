@@ -24,6 +24,10 @@
       <span v-else @click="openDialog" class="!absolute end-0 top-0 bottom-0 p-2">
         <Icon name="lucide:user-search" />
       </span>
+   
+      <div v-if="isLoadSiswa">
+          Memuat data siswa..
+      </div>
 
     </div>
 
@@ -77,8 +81,11 @@
 
 <script setup lang="ts">
 const client = useSanctumClient();
+const props = defineProps(['user_id'])
+const user_id = props.user_id
 const searchQuery = ref('' as any)
 const isLoading = ref(false)
+const isLoadSiswa = ref(false)
 const name = ref('Pilih siswa' as any);
 const selectData = ref('' as any);
 
@@ -88,6 +95,24 @@ const errors = ref('' as any)
 const visibleDialog = ref(false);
 const openDialog = () => {
     visibleDialog.value = true;
+}
+
+if(user_id){
+  isLoadSiswa.value = true
+  //get siswa by user_id
+  try {    
+    const res = await client('api/siswa/searchbyuserid', {
+        method: 'POST',
+        body: {user_id: user_id}
+    })
+    if(res && res[0] ){
+      selectData.value = res[0]
+    }
+  }catch(er){
+    console.log(er)
+  }
+  isLoadSiswa.value = false
+
 }
 
 const onSearch  = async () => {

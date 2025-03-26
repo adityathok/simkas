@@ -4,13 +4,13 @@
     <div class="col-start-1 col-end-5 mb-2">
       <label>Siswa</label>
       <div class="mt-1">
-        <FormSelectSiswa @selected="onSiswaSelect" @clear="onSiswaSelectClear"/>
+        <FormSelectSiswa :user_id="form.user_id" @selected="onSiswaSelect" @clear="onSiswaSelectClear"/>
       </div>
     </div>
     <div class="col-start-1 col-end-3 mb-2">
       <label>Nama Transaksi</label>
       <div class="mt-1">
-        <InputText v-model="form.nama" type="text" class="w-full"/>
+        <InputText v-model="form.nama" type="text" class="w-full" required="true"/>
       </div>
     </div>
     <div class="col-start-3 col-end-5 mb-2">
@@ -22,19 +22,19 @@
     <div class="col-start-1 col-end-2 mb-2">
       <label>Arus</label>
       <div class="mt-1">
-        <Select v-model="form.arus" :options="[{label:'Masuk',value:'masuk'},{label:'Keluar',value:'keluar'}]" optionLabel="label" optionValue="value" class="w-full"/>
+        <Select v-model="form.arus" :options="[{label:'Masuk',value:'masuk'},{label:'Keluar',value:'keluar'}]" optionLabel="label" optionValue="value" class="w-full" required="true"/>
       </div>
     </div>
     <div v-if="form.arus == 'masuk'" class="col-start-2 col-end-4 mb-2">
       <label>Akun Pendapatan</label>
       <div class="mt-1">
-        <Select v-model="form.pendapatan_id" showClear :options="optionsData?.akunpendapatan" optionLabel="label" optionValue="value" class="w-full"/>
+        <Select v-model="form.pendapatan_id" showClear :options="optionsData?.akunpendapatan" optionLabel="label" optionValue="value" class="w-full" required="true"/>
       </div>
     </div>
     <div v-else class="col-start-2 col-end-4 mb-2">
       <label>Akun Biaya</label>
       <div class="mt-1">
-        <Select v-model="form.pengeluaran_id" showClear :options="optionsData?.akunpengeluaran" optionLabel="label" optionValue="value" class="w-full border !border-red-400"/>
+        <Select v-model="form.pengeluaran_id" showClear :options="optionsData?.akunpengeluaran" optionLabel="label" optionValue="value" class="w-full border !border-red-400" required="true"/>
       </div>
     </div>
     <div class="col-start-4 col-end-5 mb-2">
@@ -55,6 +55,12 @@
         <Textarea v-model="form.keterangan" class="w-full"/>
       </div>
     </div>
+    
+    <div v-if="errors" class="col-start-1 col-end-5 text-end">
+      <Message severity="warn" v-for="item in errors" class="mb-1">
+        {{ item[0] }}
+      </Message>
+    </div>
 
     <div class="col-start-1 col-end-5 text-end">
         <Button type="submit" label="Simpan" class="mt-4">
@@ -70,6 +76,7 @@
     </div>
     
   </form>
+
   
 </template>
 
@@ -77,6 +84,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
+
 const emit = defineEmits(['update']);
 const props = defineProps(['data','action'])
 const data = props.data
@@ -88,7 +96,7 @@ const visibleDialog = ref(false);
 const errors = ref('' as any)
 
 const { data:optionsData } = await useAsyncData(
-    'option-rekening',
+    'option-formtransaksi',
     () => client('/api/options',{
       params:{
         keys: 'akunrekening,akunpendapatan,akunpengeluaran'
@@ -125,6 +133,12 @@ function onSiswaSelectClear(){
 
 const handleFormSubmit = async () => {  
   isLoading.value = true;
+  errors.value = '';
+
+  if(form.value.arus=='masuk' && !form.value.pendapatan_id){
+    isLoading.value = false;
+    return false;
+  }
 
   const tgl = form.value.tanggal?dayjs(form.value.tanggal).utc().local().format('YYYY-MM-DD HH:mm:ss'):''
   form.value.tanggal = tgl
