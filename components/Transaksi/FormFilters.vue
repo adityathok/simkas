@@ -1,5 +1,13 @@
 <template>
+
+  <div v-if="optionStatus=='pending'">
+    Memuat form..
+  </div>
+
   <form @submit.prevent="handleSubmitFilter">
+      <div class="mb-4">
+        <FormSelectUser :user_id="form.user_id" @selected="onUserSelect" @clear="onUserSelectClear"/>
+      </div> 
       <div class="mb-4">
         <label class="block mb-1 text-slate-500">Rentang Tanggal</label>
         <DatePicker v-model="form.dates" placeholder="Tanggal" selectionMode="range" :manualInput="true" size="small" class="w-full" />
@@ -29,6 +37,7 @@
         </Button>
       </div>
   </form>
+
 </template>
 
 <script setup lang="ts">
@@ -49,7 +58,7 @@ if(params){
   form.value = params
 }
 
-const { data:optionsData } = await useAsyncData(
+const { data:optionsData, status: optionStatus } = await useAsyncData(
     'option-formtransaksi',
     () => client('/api/options',{
       params:{
@@ -57,6 +66,13 @@ const { data:optionsData } = await useAsyncData(
       }
     })
 )
+
+function onUserSelect(data : any){
+  form.value.user_id = data.user_id
+}
+function onUserSelectClear(){
+  form.value.user_id = ''
+}
 
 const handleSubmitFilter = () => {
   emit('submit',form.value)
