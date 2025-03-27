@@ -130,14 +130,10 @@ const clearOption = () => {
 }
 
 if(user_id){
-  console.log(user_id)
   try {    
-    const res = await client('api/siswa/searchbyuserid', {
-        method: 'POST',
-        body: {user_id: user_id}
-    })
-    if(res && res[0] ){
-      selectData.value = res[0]
+    const res = await client('api/user/searchbyid/'+user_id)
+    if(res){
+      selectData.value = res
     }
   }catch(er){
     console.log(er)
