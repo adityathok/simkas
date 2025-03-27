@@ -7,10 +7,9 @@
 
     <div class="grid grid-cols-12 gap-3 h-screen bg-white dark:bg-dark">
 
-      <div class="xl:col-span-8 lg:col-span-7 col-span-12 bg-sky-100 lg:block hidden relative overflow-hidden">
+      <div class="xl:col-span-8 lg:col-span-7 col-span-12 lg:block hidden relative overflow-hidden bg-left-top bg-[url(public/pexels-lum3n-44775-167699.jpg)]">
         <div class="flex justify-center h-screen items-center z-10 relative">
           <div class="xl:w-5/12 lg:w-10/12 xl:px-0 px-6">
-            <img src="~/public/8454.webp" alt="" class="max-w-[450px]">
           </div>
         
           <div class="absolute bottom-0 start-0 z-10">
