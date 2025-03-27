@@ -23,6 +23,8 @@
       return 'danger'
     } else if (status.value == 'pindah') {
       return 'info'
+    } else if (status.value == 'Aktif') {
+      return 'success'
     } else {
       return 'secondary'
     }

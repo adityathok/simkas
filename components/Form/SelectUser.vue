@@ -11,8 +11,11 @@
               <div class="font-bold">
                 {{ selectData?.nama }}
               </div>
-              <div class="text-xs text-slate-400">
+              <div v-if="selectData?.nis" class="text-xs text-slate-400">
                 {{ selectData?.nis }} | {{ selectData?.kelas_siswa?.nama }} / {{ selectData?.kelas_siswa?.tahun_ajaran }}
+              </div>
+              <div v-if="selectData?.nip" class="text-xs text-slate-400">
+                {{ selectData?.nip }}
               </div>
             </div>
         </div>
@@ -54,7 +57,10 @@
           <div class="w-full text-start">
             {{ item.nama }}
             <div class="w-full text-sm mt-1 flex justify-between">
-              <span class="opacity-50 ">{{ item.nis }}</span>
+
+              <span v-if="item.nis" class="opacity-50 ">{{ item.nis }}</span>
+              <span v-if="item.nip" class="opacity-70 ">{{ item.nip }}</span>
+
               <SiswaStatusBadge :status="item.status" />
             </div>
           </div>
@@ -94,11 +100,16 @@ const onSearch  = async () => {
     errors.value = ''
     isLoading.value = true
     try {
-        const res = await client('api/siswa/search', {
-          method: 'POST',
-          body: {cari: formSearch.value.key}
-        })
-        result.value = res
+        if(formSearch.value.type == 'siswa'){
+          const res = await client('api/siswa/search', {
+            method: 'POST',
+            body: {cari: formSearch.value.key}
+          })
+          result.value = res
+        } else {
+          const res = await client('api/pegawai/search/'+formSearch.value.key)
+          result.value = res
+        }
     } catch (error) {
         console.log(error);
         errors.value = error
