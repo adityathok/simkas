@@ -44,7 +44,7 @@
   async function handleFormSubmit() {
       isLoading.value = true; 
       errors.value = false;
-      form.value.remember = form.value.remember[0]
+      form.value.remember = form.value.remember[0]=='true'?true:form.value.remember[0];
       try {
           await login(form.value)
       } catch (e) {
