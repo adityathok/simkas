@@ -114,7 +114,7 @@ const items = ref([
     {
         key: 'transaksi',
         label: 'Transaksi',
-        icon: 'lucide:receipt-text',
+        icon: 'lucide:coins',
         items:[
             {
                 key: 'riwayat_transaksi',
@@ -125,6 +125,23 @@ const items = ref([
                 key: 'create_transaksi',
                 label: 'Tambah Transaksi',
                 route:'/transaksi/create',
+            },
+        ]
+    },
+    {
+        key: 'tagihan',
+        label: 'Tagihan',
+        icon: 'lucide:receipt-text',
+        items:[
+            {
+                key: 'riwayat_tagihan',
+                label: 'Semua Tagihan',
+                route:'/tagihan',
+            },
+            {
+                key: 'create_tagihan',
+                label: 'Buat Tagihan',
+                route:'/tagihan/create',
             },
         ]
     },
