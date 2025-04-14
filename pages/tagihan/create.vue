@@ -242,12 +242,11 @@ const handleFormSubmit = async () => {
     form.total_nominal = totalSiswa.value * form.nominal
   }
 
-  console.log(form)
-
   try {
     const res = await client('/api/tagihanmaster', { method: 'POST', body: form });
     newTagihanMaster.value = res
     toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil ditambah', life: 3000 });
+    await processBatch(res.id, 0);
   } catch(er) {
     const err = useSanctumError(er)
     errors.value = err.bag
@@ -255,6 +254,25 @@ const handleFormSubmit = async () => {
   }
   
   isLoading.value = false;
+}
+
+const processBatch = async (masterId: number, offset: number) => {
+  const res = await client('/api/generate-tagihan-batch', {
+    method: 'POST',
+    params: {
+      tagihan_master_id: masterId,
+      offset: offset
+    }
+  });
+  
+  if (!res.done) {
+    // Tunggu sebentar sebelum lanjut batch berikutnya
+    setTimeout(() => {
+      processBatch(masterId, res.next_offset);
+    }, 500); // kasih delay biar lebih ringan
+  } else {
+    alert('Semua tagihan berhasil dibuat!');
+  }
 }
 
 </script>
