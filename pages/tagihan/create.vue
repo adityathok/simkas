@@ -75,12 +75,6 @@
               <label class="block mb-1">Keterangan</label>
               <Textarea v-model="form.keterangan" placeholder="Keterangan" class="w-full" />
           </div>
-
-          <div v-if="errors">
-            <Message v-for="item in errors" severity="warn" class="mt-3" closable>
-              {{ item[0] }}
-            </Message>
-          </div>
           
           <div class="text-end">
             <Button type="submit" label="Simpan" class="mt-4">
@@ -101,6 +95,35 @@
   </template>
 </Card>
 
+<Dialog v-model:visible="visibleDialog" :modal="true" header="Buat Tagihan" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  
+  <Message severity="warn" v-if="isLoading" class="my-3">
+    <Icon name="lucide:loader"  class="animate-spin" /> Memproses tagihan, mohon jangan tutup tab ini..
+  </Message>
+
+  {{ isProcessBatch }}
+
+  <div v-if="isProcessBatch" class="my-3">
+
+    <Message v-if="!isProcessBatch.value.done" severity="warn" class="mb-2">
+      <Icon name="lucide:loader"  class="animate-spin" /> Memproses tagihan untuk siswa, mohon jangan tutup tab ini..
+    </Message>
+    <Message v-if="isProcessBatch.value.done" severity="success" class="mb-2">
+      <Icon name="lucide:check" /> {{isProcessBatch.value.total_processed}} Tagihan berhasil diproses
+    </Message>
+
+    <ProgressBar :value="ProcessBatchPercentage" />
+
+    {{ isProcessBatch }}
+  </div>
+
+  <div v-if="errors">
+    <Message v-for="item in errors" severity="warn" class="mt-3" closable>
+      {{ item[0] }}
+    </Message>
+  </div>
+</Dialog> 
+
 </template>
 
 <script setup lang="ts">
@@ -113,6 +136,7 @@ const { configApp } = useConfigStore()
 const client = useSanctumClient();
 const isLoading = ref(false)
 const toast = useToast();
+const visibleDialog = ref(false);
 const errors = ref('' as any)
 const newTagihanMaster = ref('' as any)
 import dayjs from 'dayjs';
@@ -174,7 +198,9 @@ const { data:countSiswa, refresh: reCountSiswa } = await useAsyncData(
       }
     })
 )
-totalSiswa.value = countSiswa.value.total
+if (countSiswa.value && countSiswa.value.total) {
+  totalSiswa.value = countSiswa.value.total
+}
 
 //watch kelas
 watch(() => [form.tahun_ajaran,form.unit_sekolah_id], () => {
@@ -194,7 +220,7 @@ const fieldsUser = [
 ]
 
 //watch periode start
-watch(() => [form.type,form.periode_start,form.periode_end], () => {
+watch(() => [form.nominal,form.type,form.periode_start,form.periode_end], () => {
   // Definisikan dua tanggal
   const tanggalAwal = dayjs(form.periode_start).utc().local(); // Return a Day.js object
   const tanggalAkhir = dayjs(form.periode_end).utc().local(); // Return a Day.js object
@@ -205,7 +231,7 @@ watch(() => [form.type,form.periode_start,form.periode_end], () => {
 })
 
 //watch nominal
-watch(() => form.nominal, () => {
+watch(() => [form.nominal,form.type], () => {
   if(form.type === 'bulanan'){
     form.total_tagihan = totalSiswa.value*form.diff_periode
     form.total_nominal = form.total_tagihan * form.nominal
@@ -213,8 +239,12 @@ watch(() => form.nominal, () => {
     form.total_tagihan = totalSiswa.value
     form.total_nominal = totalSiswa.value * form.nominal
   }
-  console.log(totalSiswa.value+''+form.diff_periode)
 })
+
+const ProcessBatchPercentage = ref(0)
+const isProcessBatch = ref({
+  done: false
+} as any)
 
 const handleFormSubmit = async () => {  
   isLoading.value = true;
@@ -242,11 +272,22 @@ const handleFormSubmit = async () => {
     form.total_nominal = totalSiswa.value * form.nominal
   }
 
+  visibleDialog.value = true;
+  ProcessBatchPercentage.value = 0
+  // isProcessBatch.value = ''
   try {
     const res = await client('/api/tagihanmaster', { method: 'POST', body: form });
     newTagihanMaster.value = res
     toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil ditambah', life: 3000 });
-    await processBatch(res.id, 0);
+
+    // tangani error processBatch secara terpisah
+    try {
+      await processBatch(res.id, 0);
+    } catch (batchError) {
+      console.error('Gagal memproses batch', batchError);
+      toast.add({ severity: 'warn', summary: 'Batch Gagal', detail: 'Tagihan ditambah, tapi batch gagal diproses', life: 3000 });
+    }
+
   } catch(er) {
     const err = useSanctumError(er)
     errors.value = err.bag
@@ -257,23 +298,43 @@ const handleFormSubmit = async () => {
 }
 
 const processBatch = async (masterId: number, offset: number) => {
-  const res = await client('/api/generate-tagihan-batch', {
-    method: 'POST',
-    params: {
-      tagihan_master_id: masterId,
-      offset: offset
+  try {
+    // Tandai batch sedang berjalan
+    isProcessBatch.value = { done: false };
+
+    const res = await client('/api/generate-tagihan-batch', {
+      method: 'POST',
+      params: {
+        tagihan_master_id: masterId,
+        offset: offset,
+      }
+    });
+
+    isProcessBatch.value = res;
+
+    if (!res.done) {
+      // Hitung persentase
+      const percentage = Math.round((res.total_processed / res.total_tagihan) * 100);
+      ProcessBatchPercentage.value = percentage;
+
+      // Delay sebelum batch selanjutnya, pastikan async ditunggu
+      await new Promise(resolve => setTimeout(resolve, 500));
+      await processBatch(masterId, res.next_offset);
+    } else {
+      // Jika sudah selesai
+      ProcessBatchPercentage.value = 100;
     }
-  });
-  
-  if (!res.done) {
-    // Tunggu sebentar sebelum lanjut batch berikutnya
-    setTimeout(() => {
-      processBatch(masterId, res.next_offset);
-    }, 500); // kasih delay biar lebih ringan
-  } else {
-    alert('Semua tagihan berhasil dibuat!');
+  } catch (err) {
+    console.error('Error dalam processBatch:', err);
+    toast.add({
+      severity: 'error',
+      summary: 'Gagal proses batch',
+      detail: 'Terjadi kesalahan saat proses batch tagihan',
+      life: 3000,
+    });
   }
 }
+
 
 </script>
 
