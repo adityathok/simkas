@@ -5,33 +5,18 @@
     <form @submit.prevent="handleFormSubmit" class="flex flex-col md:flex-row gap-5">
 
       <div class="md:basis-1/4">
+
           <div class="grid grid-cols-1 gap-2 border-2 border-sky-100 shadow rounded-xl p-5 mb-5">
-
-            <div class="mb-3">
-              <label class="block mb-1">Tahun Ajaran</label>
-              <Select v-model="form.tahun_ajaran" :options="optionsData?.tahun_ajaran" optionLabel="label" optionValue="value" class="w-full" placeholder="Pilih Tahun Ajaran" required/>
-            </div>
-            <div class="mb-3">
-              <label class="block mb-1">Unit Sekolah</label>
-              <Select v-model="form.unit_sekolah_id" showClear :options="optionsData?.unitsekolah" optionLabel="label" optionValue="value" class="w-full" placeholder="Semua Sekolah"/>
-            </div>
-            <div class="mb-3">
-              <label class="block mb-1">Kelas</label>
-              <Select v-model="form.kelas_id" showClear :options="optionKelas" optionLabel="label" optionValue="value" class="w-full" placeholder="Semua Kelas"/>
-            </div>
-            <div>
-              <label class="block mb-1">Siswa</label>
-              <Select v-model="form.user_id" showClear :options="optionSiswa" optionLabel="label" optionValue="value" class="w-full" placeholder="Semua Siswa"/>
-            </div>
-
+            <TagihanMasterFormTujuan @change="onChangeTujuan" />
           </div>
+
         </div>
         <div class="md:flex-1">
 
           <div class="p-3 border border-emerald-200 bg-emerald-50 rounded-xl flex items-center gap-2 mb-5">
             <Icon name="lucide:users" />
             <span class="text-lg font-bold">
-              {{ countSiswa.total }} siswa
+              {{ form.total_siswa }} siswa
             </span>
           </div>
 
@@ -67,7 +52,7 @@
             </div>
             <div class="mb-3 md:mb-0 md:basis-1/2">
               <label class="block mb-1">Akun Pendapatan</label>
-              <Select v-model="form.pendapatan_id" showClear :options="optionsData?.akunpendapatan" optionLabel="label" optionValue="value" class="w-full" required="true" />
+              <Select v-model="form.pendapatan_id" showClear :options="optionsPendapatan" optionLabel="label" optionValue="value" class="w-full" required="true" />
             </div>
           </div>
 
@@ -98,23 +83,27 @@
 <Dialog v-model:visible="visibleDialog" :modal="true" header="Buat Tagihan" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
   
   <Message severity="warn" v-if="isLoading" class="my-3">
-    <Icon name="lucide:loader"  class="animate-spin" /> Memproses tagihan, mohon jangan tutup tab ini..
+    <Icon name="lucide:loader"  class="animate-spin" /> Menyiapkan pembuatan tagihan, mohon jangan tutup tab ini..
+  </Message>
+  
+  <Message v-if="isProcessBatch" severity="warn" class="mb-2">
+    <Icon name="lucide:loader"  class="animate-spin" /> Memproses tagihan untuk siswa, mohon jangan tutup tab ini..
   </Message>
 
-  {{ isProcessBatch }}
+  <Message v-if="DataProcessBatch.done" severity="warn" class="mb-2">
+    <Icon name="lucide:loader"  class="animate-spin" /> Memproses tagihan untuk siswa, mohon jangan tutup tab ini..
+  </Message>
+  
+  <ProgressBar :value="ProcessBatchPercentage" />
 
-  <div v-if="isProcessBatch" class="my-3">
-
-    <Message v-if="!isProcessBatch.value.done" severity="warn" class="mb-2">
-      <Icon name="lucide:loader"  class="animate-spin" /> Memproses tagihan untuk siswa, mohon jangan tutup tab ini..
-    </Message>
-    <Message v-if="isProcessBatch.value.done" severity="success" class="mb-2">
-      <Icon name="lucide:check" /> {{isProcessBatch.value.total_processed}} Tagihan berhasil diproses
-    </Message>
-
-    <ProgressBar :value="ProcessBatchPercentage" />
-
-    {{ isProcessBatch }}
+  <div v-if="LogProcessBatch && LogProcessBatch.length > 0">
+    <ScrollPanel style="width: 100%; height: 100px">
+      <ol>
+        <li v-for="(item,index) in LogProcessBatch" class="text">
+          {{ index }} . {{ item.invoice }} | {{ item.user }}
+        </li>
+      </ol>
+    </ScrollPanel>
   </div>
 
   <div v-if="errors">
@@ -131,7 +120,7 @@ definePageMeta({
   title: 'Tambah Tagihan',
 })
 
-const { tahunAjaran, tahunMulai, tahunSelesai } = useTahunAjaran();
+const { tahunAjaran } = useTahunAjaran();
 const { configApp } = useConfigStore()
 const client = useSanctumClient();
 const isLoading = ref(false)
@@ -148,6 +137,7 @@ const form = reactive({
   unit_sekolah_id:'',
   kelas_id: '',
   user_id:'',
+  total_siswa: 0,
   nama: '',
   nominal:'',
   type: 'bulanan',
@@ -161,63 +151,14 @@ const form = reactive({
   user_type: 'siswa'
 } as any)
 
-const { data:optionKelas,status: stKelas,refresh:roKelas } = await useAsyncData(
-    'option-kelas',
-    () => client('/api/option/kelas',{
-      params:{        
-        tahun_ajaran: form.tahun_ajaran,
-        unit_sekolah: form.unit_sekolah_id
-      }
-    })
-)
-const { data:optionSiswa,status: stSiswa, refresh:roSiswa } = await useAsyncData(
-    'option-siswa',
-    () => client('/api/option/siswakelas',{
-      params:{
-        kelas_id: form.kelas_id
-      }
-    })
-)
-const { data:optionsData } = await useAsyncData(
-    'option-rekening',
-    () => client('/api/options',{
-      params:{
-        keys: 'tahun_ajaran,unitsekolah,akunpendapatan'
-      }
-    })
-)
-
-const totalSiswa = ref(0 as any)
-const { data:countSiswa, refresh: reCountSiswa } = await useAsyncData(
-    'count-siswa',
-    () => client('/api/countsiswa',{
-      params:{
-        tahun_ajaran: form.tahun_ajaran,
-        unit_sekolah_id: form.unit_sekolah_id,
-        kelas_id: form.kelas_id
-      }
-    })
-)
-if (countSiswa.value && countSiswa.value.total) {
-  totalSiswa.value = countSiswa.value.total
+const optionsPendapatan = ref([] as any)
+const onChangeTujuan = (data: any) => {
+  form.unit_sekolah_id = data.unit_sekolah_id
+  form.kelas_id = data.kelas_id
+  form.user_id = data.user_id
+  form.total_siswa = data.total_siswa
+  optionsPendapatan.value = data.akunpendapatan
 }
-
-//watch kelas
-watch(() => [form.tahun_ajaran,form.unit_sekolah_id], () => {
-  roKelas()
-  form.kelas_id = ''
-})
-//watch count siswa
-watch(() => [form.tahun_ajaran,form.unit_sekolah_id,form.kelas_id], () => {
-  reCountSiswa()
-})
-
-const fieldsUser = [
-  {key:'tahun_ajaran',label:'Tahun Ajaran',options:[''] },
-  {key:'unit_sekolah_id',label:'Sekolah',options:['']},
-  {key:'kelas_id',label:'Kelas',options:optionKelas},
-  {key:'user_id',label:'Siswa',options:optionSiswa},
-]
 
 //watch periode start
 watch(() => [form.nominal,form.type,form.periode_start,form.periode_end], () => {
@@ -233,22 +174,26 @@ watch(() => [form.nominal,form.type,form.periode_start,form.periode_end], () => 
 //watch nominal
 watch(() => [form.nominal,form.type], () => {
   if(form.type === 'bulanan'){
-    form.total_tagihan = totalSiswa.value*form.diff_periode
+    form.total_tagihan = form.total_siswa*form.diff_periode
     form.total_nominal = form.total_tagihan * form.nominal
   } else {
-    form.total_tagihan = totalSiswa.value
-    form.total_nominal = totalSiswa.value * form.nominal
+    form.total_tagihan = form.total_siswa
+    form.total_nominal = form.total_siswa * form.nominal
   }
 })
 
 const ProcessBatchPercentage = ref(0)
-const isProcessBatch = ref({
+const isProcessBatch = ref(false)
+const DataProcessBatch = ref({
   done: false
 } as any)
+let LogProcessBatch: Array<any> = []
 
 const handleFormSubmit = async () => {  
   isLoading.value = true;
   errors.value = '';
+  visibleDialog.value = true;
+  LogProcessBatch = []
   
   //jika ada periode start
   if(form.periode_start){
@@ -265,23 +210,22 @@ const handleFormSubmit = async () => {
 
   //total tagihan
   if(form.type === 'bulanan'){
-    form.total_tagihan = totalSiswa.value*form.diff_periode
+    form.total_tagihan = form.total_siswa*form.diff_periode
     form.total_nominal = form.total_tagihan * form.nominal
   } else {
-    form.total_tagihan = totalSiswa.value
-    form.total_nominal = totalSiswa.value * form.nominal
+    form.total_tagihan = form.total_siswa
+    form.total_nominal = form.total_siswa * form.nominal
   }
 
-  visibleDialog.value = true;
   ProcessBatchPercentage.value = 0
-  // isProcessBatch.value = ''
+  isProcessBatch.value = false
   try {
     const res = await client('/api/tagihanmaster', { method: 'POST', body: form });
     newTagihanMaster.value = res
-    toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil ditambah', life: 3000 });
-
     // tangani error processBatch secara terpisah
     try {
+      isLoading.value = false
+      isProcessBatch.value = true
       await processBatch(res.id, 0);
     } catch (batchError) {
       console.error('Gagal memproses batch', batchError);
@@ -299,9 +243,6 @@ const handleFormSubmit = async () => {
 
 const processBatch = async (masterId: number, offset: number) => {
   try {
-    // Tandai batch sedang berjalan
-    isProcessBatch.value = { done: false };
-
     const res = await client('/api/generate-tagihan-batch', {
       method: 'POST',
       params: {
@@ -310,12 +251,10 @@ const processBatch = async (masterId: number, offset: number) => {
       }
     });
 
-    isProcessBatch.value = res;
+    DataProcessBatch.value = res;
 
-    if (!res.done) {
-      // Hitung persentase
-      const percentage = Math.round((res.total_processed / res.total_tagihan) * 100);
-      ProcessBatchPercentage.value = percentage;
+    if (!res.done) { 
+      isProcessBatch.value = true
 
       // Delay sebelum batch selanjutnya, pastikan async ditunggu
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -323,7 +262,19 @@ const processBatch = async (masterId: number, offset: number) => {
     } else {
       // Jika sudah selesai
       ProcessBatchPercentage.value = 100;
+      isProcessBatch.value = false
     }
+    
+    // Hitung persentase
+    const percentage = Math.round((res.total_processed / res.total_tagihan) * 100);
+    ProcessBatchPercentage.value = percentage;
+    console.log(res.total_processed)
+    console.log(res.total_tagihan)
+
+    //tambahkan hasil array res.log ke LogProcessBatch
+    const log = res.log
+    LogProcessBatch.push(...log); 
+
   } catch (err) {
     console.error('Error dalam processBatch:', err);
     toast.add({
@@ -333,6 +284,7 @@ const processBatch = async (masterId: number, offset: number) => {
       life: 3000,
     });
   }
+  isProcessBatch.value = false
 }
 
 
