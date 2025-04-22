@@ -86,12 +86,12 @@
     <Icon name="lucide:loader"  class="animate-spin" /> Menyiapkan pembuatan tagihan, mohon jangan tutup tab ini..
   </Message>
   
-  <Message v-if="isProcessBatch" severity="warn" class="mb-2">
+  <Message v-if="isProcessBatch" severity="warn" class="my-3">
     <Icon name="lucide:loader"  class="animate-spin" /> Memproses tagihan untuk siswa, mohon jangan tutup tab ini..
   </Message>
 
-  <Message v-if="DataProcessBatch.done" severity="warn" class="mb-2">
-    <Icon name="lucide:loader"  class="animate-spin" /> Memproses tagihan untuk siswa, mohon jangan tutup tab ini..
+  <Message v-if="DataProcessBatch.done" severity="success" class="my-3">
+    <Icon name="lucide:check" /> Pembuatan {{ DataProcessBatch.total_tagihan }} tagihan berhasil dibuat.
   </Message>
   
   <ProgressBar :value="ProcessBatchPercentage" />
@@ -157,7 +157,9 @@ const onChangeTujuan = (data: any) => {
   form.kelas_id = data.kelas_id
   form.user_id = data.user_id
   form.total_siswa = data.total_siswa
-  optionsPendapatan.value = data.akunpendapatan
+  if(data.akunpendapatan){
+    optionsPendapatan.value = data.akunpendapatan    
+  }
 }
 
 //watch periode start
@@ -168,7 +170,12 @@ watch(() => [form.nominal,form.type,form.periode_start,form.periode_end], () => 
 
   // Hitung selisih bulan
   const selisihBulan = tanggalAkhir.diff(tanggalAwal, 'month');
-  form.diff_periode = selisihBulan
+
+  if(selisihBulan <= 0 && form.type === 'bulanan'){
+    form.diff_periode = 1
+  } else {
+    form.diff_periode = selisihBulan
+  }
 })
 
 //watch nominal
@@ -190,6 +197,13 @@ const DataProcessBatch = ref({
 let LogProcessBatch: Array<any> = []
 
 const handleFormSubmit = async () => {  
+
+  if(form.total_siswa <= 0){
+    toast.add({ severity: 'warn', summary: 'Gagal', detail: 'Total siswa tidak boleh kosong', life: 3000 });
+    isLoading.value = false;
+    return;
+  }
+
   isLoading.value = true;
   errors.value = '';
   visibleDialog.value = true;
@@ -252,6 +266,15 @@ const processBatch = async (masterId: number, offset: number) => {
     });
 
     DataProcessBatch.value = res;
+    
+    // Hitung persentase
+    const percentage = Math.round((res.total_processed / res.total_tagihan) * 100);
+    ProcessBatchPercentage.value = percentage;
+    console.log(res.total_processed+' / '+res.total_tagihan+' = '+percentage)
+
+    //tambahkan hasil array res.log ke LogProcessBatch
+    const log = res.log
+    LogProcessBatch.push(...log); 
 
     if (!res.done) { 
       isProcessBatch.value = true
@@ -264,16 +287,6 @@ const processBatch = async (masterId: number, offset: number) => {
       ProcessBatchPercentage.value = 100;
       isProcessBatch.value = false
     }
-    
-    // Hitung persentase
-    const percentage = Math.round((res.total_processed / res.total_tagihan) * 100);
-    ProcessBatchPercentage.value = percentage;
-    console.log(res.total_processed)
-    console.log(res.total_tagihan)
-
-    //tambahkan hasil array res.log ke LogProcessBatch
-    const log = res.log
-    LogProcessBatch.push(...log); 
 
   } catch (err) {
     console.error('Error dalam processBatch:', err);

@@ -69,6 +69,7 @@ onMounted(() => {
   if (optionsData.value.akunpendapatan) {
     form.akunpendapatan = optionsData.value.akunpendapatan
   }
+  hitungSiswa()
 })
 
 //watch kelas
@@ -77,10 +78,8 @@ watch(() => [form.tahun_ajaran,form.unit_sekolah_id], () => {
   form.kelas_id = ''
 })
 
-//watch form
-const isHitungSiswa = ref(false)
-watch(() => [form.tahun_ajaran,form.unit_sekolah_id,form.kelas_id,form.user_id], async () => {
-
+//hitung siswa
+const hitungSiswa = async () => {
   //recount siswa
   isHitungSiswa.value = true
   try {
@@ -98,5 +97,11 @@ watch(() => [form.tahun_ajaran,form.unit_sekolah_id,form.kelas_id,form.user_id],
 
   emit('change',form)
   isHitungSiswa.value = false
+}
+
+//watch form
+const isHitungSiswa = ref(false)
+watch(() => [tahunAjaran,form.tahun_ajaran,form.unit_sekolah_id,form.kelas_id,form.user_id], async () => {
+  hitungSiswa()
 })
 </script>
