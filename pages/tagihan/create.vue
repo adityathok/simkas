@@ -169,7 +169,7 @@ watch(() => [form.nominal,form.type,form.periode_start,form.periode_end], () => 
   const tanggalAkhir = dayjs(form.periode_end).utc().local(); // Return a Day.js object
 
   // Hitung selisih bulan
-  const selisihBulan = tanggalAkhir.diff(tanggalAwal, 'month');
+  const selisihBulan = tanggalAkhir.diff(tanggalAwal, 'month')+1;
 
   if(selisihBulan <= 0 && form.type === 'bulanan'){
     form.diff_periode = 1
@@ -208,6 +208,9 @@ const handleFormSubmit = async () => {
   errors.value = '';
   visibleDialog.value = true;
   LogProcessBatch = []
+  DataProcessBatch.value = {
+    done: false
+  }
   
   //jika ada periode start
   if(form.periode_start){
@@ -240,7 +243,7 @@ const handleFormSubmit = async () => {
     try {
       isLoading.value = false
       isProcessBatch.value = true
-      await processBatch(res.id, 0);
+      await processBatch(res.id, 0,0);
     } catch (batchError) {
       console.error('Gagal memproses batch', batchError);
       toast.add({ severity: 'warn', summary: 'Batch Gagal', detail: 'Tagihan ditambah, tapi batch gagal diproses', life: 3000 });
@@ -255,13 +258,14 @@ const handleFormSubmit = async () => {
   isLoading.value = false;
 }
 
-const processBatch = async (masterId: number, offset: number) => {
+const processBatch = async (masterId: number, offset: number, processed: number ) => {
   try {
     const res = await client('/api/generate-tagihan-batch', {
       method: 'POST',
       params: {
         tagihan_master_id: masterId,
         offset: offset,
+        processed: processed
       }
     });
 
@@ -281,7 +285,7 @@ const processBatch = async (masterId: number, offset: number) => {
 
       // Delay sebelum batch selanjutnya, pastikan async ditunggu
       await new Promise(resolve => setTimeout(resolve, 500));
-      await processBatch(masterId, res.next_offset);
+      await processBatch(masterId, res.next_offset, res.total_processed);
     } else {
       // Jika sudah selesai
       ProcessBatchPercentage.value = 100;
