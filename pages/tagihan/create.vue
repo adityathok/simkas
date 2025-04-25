@@ -42,7 +42,11 @@
             <div v-if="form.type == 'bulanan'" class="mb-3 md:mb-0">
               <label class="block mb-1">Periode Akhir Tagihan</label>
               <DatePicker v-model="form.periode_end" view="month" dateFormat="mm/yy" placeholder="Bulan/Tahun Akhir" />
-            </div>            
+            </div> 
+            <div v-if="form.type == 'bulanan' && form.diff_periode" class="mb-3 md:mb-0">
+              <label class="block mb-1">Total Periode</label>              
+              <div class="py-2 px-4 bg-sky-100 rounded-xl">{{ form.diff_periode }} bulan</div>
+            </div>
           </div>
           
           <div class="flex flex-col md:flex-row gap-4 mb-5">
