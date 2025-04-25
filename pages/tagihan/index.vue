@@ -12,7 +12,7 @@
       <Button size="small" variant="outlined" @click="visibleFilter = true">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filter
       </Button>
-      <Button size="small" @click="openDialog('','add')">
+      <Button size="small" @click="navigateTo('/tagihan/create')">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tambah
       </Button>
     </div>
@@ -26,11 +26,11 @@
         <Column field="nama" header="Nama">      
           <template #body="slotProps">
             <button type="button" @click="openDialog(slotProps.data,'preview')" class="cursor-pointer"> 
-              {{ slotProps.data.nama }}
+              {{ slotProps.data.tagihan_master.nama }}
             </button>
           </template>
         </Column>
-        <Column field="user_id" header="Oleh">          
+        <Column field="user_id" header="Siswa">          
           <template #body="slotProps">
             <div>
               {{ slotProps.data.user?.name }}
@@ -39,7 +39,12 @@
               {{ slotProps.data.user.siswa.nis }} / {{ slotProps.data.user.siswa.kelas_siswa.nama }}
             </NuxtLink>
           </template>
-        </Column>   
+        </Column> 
+        <Column field="nominal" header="Nominal">         
+          <template #body="slotProps">
+            {{ slotProps.data.tagihan_master.nominal_label }}
+          </template>
+        </Column>      
         <Column field="tanggal" header="Tgl" />
         <Column field="status" header="Status">
           <template #body="slotProps">
@@ -48,15 +53,15 @@
         </Column>
         <Column field="act" header="">
           <template #body="slotProps">            
-            <div class="flex">
+            <div class="flex justify-end item-center gap-1">
               <Button severity="secondary" variant="text" class="!px-1" @click="openDialog(slotProps.data,'preview')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                <Icon name="lucide-eye"/>
               </Button>
-              <Button severity="info" variant="text"  class="!px-1" @click="openDialog(slotProps.data,'edit')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
+              <Button variant="text"  class="!px-1" @click="openDialog(slotProps.data,'edit')">
+                <Icon name="lucide-pen"/>
               </Button>
               <Button severity="danger" variant="text" class="!px-1" @click="confirmDelete(slotProps.data.id)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                <Icon name="lucide-trash-2"/>
               </Button>
             </div>
           </template>
@@ -125,7 +130,8 @@ const filters = ref({
   count : 20,
   dates:'' as any,
   date_start: '',
-  date_end:''
+  date_end:'',
+  status: '',
 } as any)
 
 const { data, status, error, refresh } = await useAsyncData(
@@ -135,7 +141,8 @@ const { data, status, error, refresh } = await useAsyncData(
         page: page.value,
         count : filters.value.count,
         date_start : filters.value.date_start,
-        date_end : filters.value.date_end
+        date_end : filters.value.date_end,
+        status: filters.value.status,
       }
     })
 )
@@ -152,11 +159,11 @@ const onPaginate = (event: { page: number }) => {
 
 watch(() => [filters.value.dates], () => {
   if(filters.value.dates[0]){
-    const utcDate = dayjs(filters.value.dates[0]).utc().local().format()
+    const utcDate = dayjs(filters.value.dates[0]).utc().local().format('YYYY-MM-DD')
     filters.value.date_start = utcDate
   }
   if(filters.value.dates[1]){
-    const utcDate = dayjs(filters.value.dates[1]).utc().local().format()
+    const utcDate = dayjs(filters.value.dates[1]).utc().local().format('YYYY-MM-DD')
     filters.value.date_end = utcDate
   }
 })
@@ -178,6 +185,7 @@ function onSubmitFilters( data: any) {
   visibleFilter.value = false
   filters.value = data
   filters.value.page = page.value
+  filters.value.status = data.status
   refresh()
 }
 

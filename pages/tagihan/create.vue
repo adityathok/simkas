@@ -278,7 +278,6 @@ const processBatch = async (masterId: number, offset: number, processed: number 
     // Hitung persentase
     const percentage = Math.round((res.total_processed / res.total_tagihan) * 100);
     ProcessBatchPercentage.value = percentage;
-    console.log(res.total_processed+' / '+res.total_tagihan+' = '+percentage)
 
     //tambahkan hasil array res.log ke LogProcessBatch
     const log = res.log

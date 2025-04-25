@@ -54,10 +54,8 @@ const resetForm = () => {
   form.value = {
     count: 20,    
     dates:'' as any,
-    arus:'',
     pendapatan_id: '',
-    pengeluaran_id:'',
-    rekening_id:''
+    status:''
   }
   emit('submit',form.value)
 }
