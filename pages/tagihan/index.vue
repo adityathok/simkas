@@ -128,7 +128,7 @@ const visibleFilter = ref(false)
 const filters = ref({
   page: route.query.page, 
   count : 20,
-  dates:'' as any,
+  dates: '',
   date_start: '',
   date_end:'',
   status: '',
@@ -158,13 +158,18 @@ const onPaginate = (event: { page: number }) => {
 };
 
 watch(() => [filters.value.dates], () => {
-  if(filters.value.dates[0]){
-    const utcDate = dayjs(filters.value.dates[0]).utc().local().format('YYYY-MM-DD')
-    filters.value.date_start = utcDate
-  }
-  if(filters.value.dates[1]){
-    const utcDate = dayjs(filters.value.dates[1]).utc().local().format('YYYY-MM-DD')
-    filters.value.date_end = utcDate
+  if(filters.value.dates) {
+    if(filters.value.dates && filters.value.dates[0]){
+      const utcDate = dayjs(filters.value.dates[0]).utc().local().format('YYYY-MM-DD')
+      filters.value.date_start = utcDate
+    }
+    if(filters.value.dates && filters.value.dates[1]){
+      const utcDate = dayjs(filters.value.dates[1]).utc().local().format('YYYY-MM-DD')
+      filters.value.date_end = utcDate
+    }
+  } else {
+    filters.value.date_start = ''
+    filters.value.date_end = ''
   }
 })
 watch(
