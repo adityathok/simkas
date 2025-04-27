@@ -56,7 +56,7 @@
             </div>
             <div class="mb-3 md:mb-0 md:basis-1/2">
               <label class="block mb-1">Akun Pendapatan</label>
-              <Select v-model="form.pendapatan_id" showClear :options="optionsPendapatan" optionLabel="label" optionValue="value" class="w-full" required="true" />
+              <Select v-model="form.akun_pendapatan_id" showClear :options="optionsPendapatan" optionLabel="label" optionValue="value" class="w-full" required="true" />
             </div>
           </div>
 

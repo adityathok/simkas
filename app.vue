@@ -6,5 +6,6 @@
     </NuxtLayout>
     <Toast />
     <ConfirmDialog></ConfirmDialog>
+    <ScrollTop />
   </div>
 </template>

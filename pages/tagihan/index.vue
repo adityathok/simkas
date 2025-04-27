@@ -11,6 +11,10 @@
       </span>
       <Button size="small" variant="outlined" @click="visibleFilter = true">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filter
+        <span 
+          v-if="filters.user_id || filters.status" 
+          class="w-1 h-1 rounded-full bg-yellow-400 absolute top-0 end-0 m-2">
+        </span>
       </Button>
       <Button size="small" @click="navigateTo('/tagihan/create')">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tambah
@@ -21,7 +25,7 @@
   <Card>
     <template #content>
 
-      <DataTable :value="data.data" v-model:selection="selectedTransaksi" class="text-sm text-nowrap" stripedRows scrollable>
+      <DataTable v-if="data" :value="data.data" v-model:selection="selectedTransaksi" class="text-sm text-nowrap" stripedRows scrollable>
         <Column selectionMode="multiple"></Column>
         <Column field="nama" header="Nama">      
           <template #body="slotProps">
@@ -68,6 +72,13 @@
         </Column>
       </DataTable>
       
+      <Message severity="warn" v-else>
+        <div class="flex justify-center items-center gap-2">
+          <Icon name="lucide:info" class="text-xl text-yellow-400"/>
+          <span>Tidak ada data</span>
+        </div>
+      </Message>
+
       <div class="flex flex-col md:flex-row md:justify-between items-center">
         <div class="text-sm text-slate-400">
           {{ data.to }} / {{ data.total }}
@@ -132,6 +143,7 @@ const filters = ref({
   date_start: '',
   date_end:'',
   status: '',
+  user_id: ''
 } as any)
 
 const { data, status, error, refresh } = await useAsyncData(
@@ -143,6 +155,7 @@ const { data, status, error, refresh } = await useAsyncData(
         date_start : filters.value.date_start,
         date_end : filters.value.date_end,
         status: filters.value.status,
+        user_id: filters.value.user_id
       }
     })
 )
@@ -191,6 +204,7 @@ function onSubmitFilters( data: any) {
   filters.value = data
   filters.value.page = page.value
   filters.value.status = data.status
+  filters.value.user_id = data.user_id
   refresh()
 }
 
