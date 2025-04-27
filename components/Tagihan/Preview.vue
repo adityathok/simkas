@@ -57,6 +57,7 @@ const props = defineProps(['data'])
 const data = props.data
 
 const fields = [
+  { key: 'nomor', label: 'Nomor Tagihan' },
   { key: 'nama', label: 'Nama Tagihan' },
   { key: 'nominal_label', label: 'Nominal' },
   { key: 'status', label: 'Status' },

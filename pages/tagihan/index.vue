@@ -27,6 +27,13 @@
 
       <DataTable v-if="data" :value="data.data" v-model:selection="selectedTransaksi" class="text-sm text-nowrap" stripedRows scrollable>
         <Column selectionMode="multiple"></Column>
+        <Column field="nomor" header="No">      
+          <template #body="slotProps">
+            <button type="button" @click="openDialog(slotProps.data,'preview')" class="cursor-pointer"> 
+              {{ slotProps.data.nomor }}
+            </button>
+          </template>
+        </Column>
         <Column field="nama" header="Nama">      
           <template #body="slotProps">
             <button type="button" @click="openDialog(slotProps.data,'preview')" class="cursor-pointer"> 
