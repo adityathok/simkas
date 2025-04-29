@@ -134,6 +134,11 @@ const items = ref([
         icon: 'lucide:receipt-text',
         items:[
             {
+                key: 'riwayat_tagihannaster',
+                label: 'Master Tagihan',
+                route:'/tagihanmaster',
+            },
+            {
                 key: 'riwayat_tagihan',
                 label: 'Semua Tagihan',
                 route:'/tagihan',

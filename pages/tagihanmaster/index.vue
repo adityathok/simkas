@@ -1,5 +1,5 @@
 <template>
-  
+
   <div class="flex md:justify-between justify-end items-center gap-1 mb-3">
     <div class="flex justify-start items-center gap-1">
       <Select v-model="filters.count" :options="[20,50,100]" size="small" />
@@ -24,42 +24,31 @@
 
   <Card>
     <template #content>
-
-      <DataTable v-if="data" :value="data.data" v-model:selection="selectedTransaksi" class="text-sm text-nowrap" stripedRows scrollable>
+      <DataTable v-if="data" :value="data.data" v-model:selection="selectedTransaksi" class="text-sm" stripedRows scrollable>
         <Column selectionMode="multiple"></Column>
-        <Column field="nomor" header="No">      
-          <template #body="slotProps">
-            <button type="button" @click="openDialog(slotProps.data,'preview')" class="cursor-pointer"> 
-              {{ slotProps.data.nomor }}
-            </button>
-          </template>
-        </Column>
+        <Column field="id" header="ID" />
         <Column field="nama" header="Nama">      
           <template #body="slotProps">
             <button type="button" @click="openDialog(slotProps.data,'preview')" class="cursor-pointer"> 
-              {{ slotProps.data.tagihan_master.nama }}
+              {{ slotProps.data.nama }}
             </button>
           </template>
         </Column>
-        <Column field="user_id" header="Siswa">          
-          <template #body="slotProps">
-            <div>
-              {{ slotProps.data.user?.name }}
-            </div>
-            <NuxtLink :to="'/siswa/'+slotProps.data.user.siswa.id" target="_blank" v-if="slotProps.data.user?.siswa.nis" v-tooltip="'Lihat profil siswa'" class="text-xs text-slate-500">
-              {{ slotProps.data.user.siswa.nis }} / {{ slotProps.data.user.siswa.kelas_siswa.nama }}
-            </NuxtLink>
+        <Column field="type" header="Tipe" />
+        <Column field="nominal_label" header="Nominal" />
+        <Column field="akunpendapatan" header="Akun">
+          <template #body="slotProps">      
+            {{ slotProps.data.akunpendapatan?.nama }}
           </template>
-        </Column> 
-        <Column field="nominal" header="Nominal">         
-          <template #body="slotProps">
-            {{ slotProps.data.tagihan_master.nominal_label }}
+        </Column>
+        <Column field="admin" header="Admin">
+          <template #body="slotProps">      
+            {{ slotProps.data.admin?.name }}
           </template>
-        </Column>      
-        <Column field="tanggal" header="Tgl" />
-        <Column field="status" header="Status">
+        </Column>
+        <Column field="created_at" header="Tanggal">
           <template #body="slotProps">
-            <TagihanBagdeStatus :status="slotProps.data.status" />
+            {{ formatDate(slotProps.data.created_at) }}
           </template>
         </Column>
         <Column field="act" header="">
@@ -78,13 +67,6 @@
           </template>
         </Column>
       </DataTable>
-      
-      <Message severity="warn" v-else>
-        <div class="flex justify-center items-center gap-2">
-          <Icon name="lucide:info" class="text-xl text-yellow-400"/>
-          <span>Tidak ada data</span>
-        </div>
-      </Message>
 
       <div class="flex flex-col md:flex-row md:justify-between items-center">
         <div class="text-sm text-slate-400">
@@ -105,27 +87,25 @@
           >
         </Paginator>
       </div>
-      
     </template>
-    </Card>
+  </Card>
 
-    <Dialog v-model:visible="visibleDialog" :modal="true" header="Tagihan" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-      <TagihanPreview v-if="actionDialog == 'preview'" :data="selectedItem" @edit="openDialog(selectedItem,'edit')"/>
-      <TagihanForm v-else :action="actionDialog" :data="selectedItem" @update="refresh"/>
-    </Dialog>
-  
-    <Drawer v-model:visible="visibleFilter" header="Filter" position="right">
-      <TagihanFormFilters @submit="onSubmitFilters" :params="filters"/>
-    </Drawer>
-    
+  <Dialog v-model:visible="visibleDialog" :modal="true" header="Master Tagihan" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <TagihanMasterPreview v-if="actionDialog == 'preview'" :data="selectedItem" @edit="openDialog(selectedItem,'edit')"/>
+    <TagihanForm v-else :action="actionDialog" :data="selectedItem" @update="refresh"/>
+  </Dialog>
+
+  <Drawer v-model:visible="visibleFilter" header="Filter" position="right">
+    <TagihanFormFilters @submit="onSubmitFilters" :params="filters"/>
+  </Drawer>
+
 </template>
+
 
 <script setup lang="ts">
 definePageMeta({
-    title: 'Semua Tagihan',
+    title: 'Master Tagihan',
 })
-
-import { TagihanBagdeStatus } from '#components';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -153,8 +133,8 @@ const filters = ref({
 } as any)
 
 const { data, status, error, refresh } = await useAsyncData(
-    'tagihan-page-'+page.value,
-    () => client('/api/tagihan',{
+    'tagihanmaster-page-'+page.value,
+    () => client('/api/tagihanmaster',{
       params : {
         page: page.value,
         count : filters.value.count,
@@ -165,6 +145,7 @@ const { data, status, error, refresh } = await useAsyncData(
       }
     })
 )
+
 const onPaginate = (event: { page: number }) => {
     page.value = event.page + 1; 
     // navigateTo('/tagihan?page='+page.value)
@@ -198,12 +179,12 @@ watch(
     },
     { deep: true } // Untuk memantau perubahan dalam objek
 );
-
 const openDialog = (itemData: any,action : string) => {
   visibleDialog.value = true;
   actionDialog.value = action;
   selectedItem.value = itemData;
 }
+
 
 function onSubmitFilters( data: any) {
   visibleFilter.value = false
@@ -217,7 +198,7 @@ function onSubmitFilters( data: any) {
 
 const confirmDelete = (id: any) => {
     confirm.require({
-        message: 'Yakin untuk menghapus tagihan ?',
+        message: 'Menghapus tagihan master akan menghapus seluruh tagihan terkait!',
         header: 'Hapus Tagihan',
         rejectLabel: 'Batal',
         rejectProps: {
@@ -231,7 +212,7 @@ const confirmDelete = (id: any) => {
         },
         accept: async () => {
             try {
-              await client('/api/tagihan/'+id, { method: 'DELETE' }) 
+              await client('/api/tagihanmaster/'+id, { method: 'DELETE' }) 
               refresh()
               toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
             }  catch(er) {

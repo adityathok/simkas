@@ -11,21 +11,22 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/icon": "^1.10.3",
-    "@pinia/nuxt": "^0.9.0",
-    "@primevue/themes": "^4.2.5",
-    "@tailwindcss/vite": "^4.0.12",
+    "@nuxt/icon": "^1.12.0",
+    "@pinia/nuxt": "^0.11.0",
+    "@primevue/forms": "^4.3.3",
+    "@primevue/themes": "^4.3.3",
+    "@tailwindcss/vite": "^4.1.4",
     "dayjs": "^1.11.13",
-    "nuxt": "^3.15.2",
-    "nuxt-auth-sanctum": "^0.5.4",
+    "nuxt": "^3.17.1",
+    "nuxt-auth-sanctum": "^0.6.6",
     "papaparse": "^5.5.2",
     "primevue": "^4.2.5",
-    "tailwindcss": "^4.0.12",
+    "tailwindcss": "^4.1.4",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@primevue/nuxt-module": "^4.2.5",
+    "@primevue/nuxt-module": "^4.3.3",
     "@types/papaparse": "^5.3.15",
     "autoprefixer": "^10.4.20",
     "clean-modules": "^3.1.1"
