@@ -28,10 +28,10 @@
           <Column field="act" header="">
             <template #body="slotProps">            
               <div v-if="slotProps.data.id !== 'CASH'" class="flex">
-                <Button variant="text" class="!px-2" @click="openDialog(slotProps.data,'edit')">
+                <Button variant="text" class="!px-2" @click="openDialog(slotProps.data,'edit')" v-tooltip="'edit'">
                   <Icon name="lucide-pen" />
                 </Button>
-                <Button severity="danger" variant="text" class="!px-2" @click="confirmDelete(slotProps.data.id)">
+                <Button severity="danger" variant="text" class="!px-2" @click="confirmDelete(slotProps.data.id)" v-tooltip="'hapus'">
                   <Icon name="lucide-trash-2" />
                 </Button>
               </div>
