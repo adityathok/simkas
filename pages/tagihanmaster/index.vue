@@ -17,7 +17,7 @@
         </span>
       </Button>
       <Button size="small" @click="navigateTo('/tagihan/create')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tambah
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tambah
       </Button>
     </div>
   </div>
@@ -92,7 +92,7 @@
 
   <Dialog v-model:visible="visibleDialog" :modal="true" header="Master Tagihan" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <TagihanMasterPreview v-if="actionDialog == 'preview'" :data="selectedItem" @edit="openDialog(selectedItem,'edit')"/>
-    <TagihanForm v-else :action="actionDialog" :data="selectedItem" @update="refresh"/>
+    <TagihanMasterForm v-else :action="actionDialog" :data="selectedItem" @update="refresh"/>
   </Dialog>
 
   <Drawer v-model:visible="visibleFilter" header="Filter" position="right">
