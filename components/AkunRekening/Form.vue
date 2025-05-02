@@ -8,6 +8,7 @@
         <div class="md:flex-1">
 
           <ToggleSwitch v-if="item.type == 'checkbox'" v-model="form[item.key]" />
+          <Textarea v-else-if="item.type == 'textarea'" v-model="form[item.key]" class="w-full" />
           <InputText v-else type="text" v-model="form[item.key]" class="w-full" />
 
           <div v-if="item.desc" class="text-xs text-slate-400 mt-1">
