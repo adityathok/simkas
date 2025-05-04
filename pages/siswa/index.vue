@@ -1,15 +1,15 @@
 <template>
     
-    <div class="flex justify-end items-center gap-2 mb-5">
-      <div v-if="status == 'pending'">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-ccw animate-spin"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+    <div class="flex justify-between items-center gap-2 mb-5">
+      <Select v-model="filters.per_page" :options="[25,50,100]" size="small" placeholder="Per Page"/>
+      <div class="flex justify-end items-center gap-2">
+        <Button size="small" @click="visibleFilter = true">
+          <Icon name="lucide:filter" /> Filter
+        </Button>
+        <Button as="router-link" to="/siswa/create" size="small">
+          <Icon name="lucide:user-plus"/> Tambah
+        </Button>
       </div>
-      <Button size="small" @click="visibleFilter = true">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filter
-      </Button>
-      <Button as="router-link" to="/siswa/create" size="small">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg> Tambah
-      </Button>
     </div>
 
     <Card>
@@ -33,21 +33,35 @@
           </Column>
           <Column field="nis" header="NIS" class="hidden md:table-cell"></Column>
           <Column field="nisn" header="NISN" class="hidden md:table-cell"></Column>
-          <Column field="ttl" header="TTL" class="hidden lg:table-cell"></Column>
-          <Column field="kelas" header="Kelas"></Column>
+          <Column field="kelas" header="Kelas">
+            <template #body="slotProps">
+              {{ slotProps.data.kelas_siswa?.nama }}<span class="text-xs"> , {{ slotProps.data.kelas_siswa?.tahun_ajaran }}</span>
+            </template>
+          </Column>
+          <Column field="unit_sekolah" header="Unit">
+            <template #body="slotProps">
+              {{ slotProps.data.kelas_siswa?.unit_sekolah }}
+            </template>
+          </Column>
           <Column field="status" header="Status">
             <template #body="slotProps">
               <SiswaStatusBadge :status="slotProps.data.status"/>
             </template>
           </Column>
           <Column field="jenis_kelamin" header="JK" class="hidden lg:table-cell"></Column>
+          <Column field="tanggal_lahir" header="Lahir" class="hidden lg:table-cell"></Column>
           <Column field="option">
             <template #body="slotProps">                           
-              <div class="flex justify-end relative">
-                  <Button type="button" @click="displayPop($event, slotProps.data)" variant="text" severity="secondary" rounded>
-                      <Icon name="lucide:ellipsis-vertical" />
+              <div class="flex justify-end items-center">  
+                  <Button @click="openDialog(slotProps.data,'view')" severity="secondary" variant="text" size="small" class="!px-1">
+                    <Icon name="lucide:eye" />
+                  </Button>    
+                  <Button as="router-link" :to="'/siswa/'+slotProps.data.id" severity="secondary" variant="text" size="small" class="!px-1">
+                    <Icon name="lucide:circle-user" />
+                  </Button> 
+                  <Button as="router-link" :to="'/siswa/'+slotProps.data.id+'/edit'" severity="secondary" variant="text" class="!px-1">
+                    <Icon name="lucide:pencil" />
                   </Button>
-                  <div v-if="popover?.visible" class="absolute end-0 top-0 w-full h-full"></div>
               </div>
             </template>
         </Column>
@@ -76,21 +90,7 @@
             </Paginator>
         </div>
       </template>        
-    </Card>
-
-    <Popover ref="popover" :dismissable="true">
-      <div v-if="selectedItem" class="flex flex-col">  
-        <Button @click="openDialog(selectedItem,'view')" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
-          <Icon name="lucide:info" /> Preview
-        </Button>    
-        <Button as="router-link" :to="'/siswa/'+selectedItem.id" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
-          <Icon name="lucide:building" /> Profile
-        </Button> 
-        <Button as="router-link" :to="'/siswa/'+selectedItem.id+'/edit'" severity="secondary" variant="text" size="small" class="w-full! flex! justify-start!">
-          <Icon name="lucide:pencil" /> Edit
-        </Button>
-      </div>
-    </Popover>    
+    </Card>   
 
     <Drawer v-model:visible="visibleFilter" header="Filter" position="right">
         <form @submit.prevent="handleSubmitFilter">
@@ -105,6 +105,12 @@
           </div>
         </form>
     </Drawer>
+    
+    <Dialog v-model:visible="visibleDialog" :modal="true" header="Profil Siswa" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+      <SiswaPreview :data="selectedItem"/>
+    </Dialog>
+
+    <AppLoader :loading="isRefresh"/>
 
 </template>
 
@@ -117,18 +123,26 @@ const page = ref(route.query.page ? Number(route.query.page) : 1);
 const router = useRouter()
 const visibleFilter = ref(false)
 
-const filters = computed(() => ({
-  page: page.value || 1,
+const filters = reactive({
+  per_page: route.query.per_page ? Number(route.query.per_page) : 25,
+  page: computed(() => page.value),
   status: route.query.status || 'aktif',
   tahun_ajaran: route.query.tahun_ajaran || '',
-  idunit: route.query.idunit || ''
-} as any))
+  idunit: route.query.idunit || '' 
+} as any)
+
+// Fungsi untuk mengubah params filters menjadi query URL route
+function updateRouteParams() {
+  router.push({
+    query: { ...filters },
+  });
+}
 
 const client = useSanctumClient();
 const { data, status, error, refresh } = await useAsyncData(
     'siswa-page-'+route.query,
     () => client('/api/siswa',{
-      params:filters.value
+      params:filters
     })
 )
 
@@ -143,17 +157,27 @@ const onPaginate = (event: { page: number }) => {
     navigateTo('/siswa?page='+page.value)
 };
 
+//watch status
+const isRefresh = ref(false);
+watch(status, (newStatus) => {
+  if(newStatus == 'pending') {
+    isRefresh.value = true;
+  } else {
+    isRefresh.value = false; 
+  }
+})
+
+//watch filters
+watch(filters, (newValue) => {
+  //watch filters.per_page
+  if(newValue.per_page) {
+   refresh() 
+  }
+  updateRouteParams()
+})
 
 const handleSubmitFilter = () => {
-  router.push({
-    path: '/siswa',
-    query: {
-      page: page.value,
-      status: filters.value.status || undefined,
-      tahun_ajaran: filters.value.tahun_ajaran || undefined,
-      idunit: filters.value.idunit || undefined,
-    }
-  })
+  updateRouteParams()
   refresh()
   visibleFilter.value = false
 }
@@ -161,18 +185,11 @@ const handleSubmitFilter = () => {
 const visibleDialog = ref(false);
 const actionDialog = ref('add');
 const selectedItem = ref({} as any);
-const popover = ref();
 
 const openDialog = (itemData: any,action : string) => {
-    popover.value.hide();
     visibleDialog.value = true;
     actionDialog.value = action;
     selectedItem.value = itemData;
-}
-const displayPop = (event: Event, itemData: any) => {
-  popover.value.hide();
-  selectedItem.value = itemData;
-  popover.value.show(event);
 }
 
 const { data: optionFilter,status:soptionFilter,refresh:frefresh } = await useAsyncData(

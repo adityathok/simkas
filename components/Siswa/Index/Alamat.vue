@@ -1,11 +1,10 @@
 <template>
   <Card>
-    <template #title>
-      <div class="flex items-center gap-2">
+    <template #content>
+
+      <div class="flex items-center gap-2 mb-3">
         <Icon name="lucide:map" /> Alamat Siswa
       </div>
-    </template>
-    <template #content>
 
       <div v-for="item in fields" :key="item.key" class="border-b py-1 flex flex-col md:flex-row">
         <div class="md:basis-1/3 font-bold pe-1">

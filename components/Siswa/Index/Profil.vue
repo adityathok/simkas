@@ -29,7 +29,7 @@
               <SiswaStatusBadge :status="dataSiswa.status" />
           </span>
           <span v-else>
-            {{ dataSiswa[item.key] }}
+            {{ dataSiswa[item.key]?? '-' }}
           </span>
 
         </div>
@@ -55,7 +55,7 @@ const profilSiswa = [
   {label: 'Nama Panggilan', key: 'nama_panggilan'},
   {label: 'NIS', key: 'nis'},
   {label: 'NISN', key: 'nisn'},
-  {label: 'TTL', key: 'ttl'},
+  {label: 'TT Lahir', key: 'ttl'},
   {label: 'JK', key: 'jenis_kelamin'},
   {label: 'Tanggal Masuk', key: 'tanggal_masuk'},
   {label: 'Status', key: 'status'},
