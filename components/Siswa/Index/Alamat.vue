@@ -1,11 +1,11 @@
 <template>
-  <Card>
-    <template #content>
 
-      <div class="flex items-center gap-2 mb-3">
-        <Icon name="lucide:map" /> Alamat Siswa
-      </div>
-
+  <div class="border rounded-lg p-3 md:p-4 bg-white">
+        
+    <div class="flex items-center gap-2 mb-3">
+      <Icon name="lucide:map" /> Alamat Siswa
+    </div>
+    <div>
       <div v-for="item in fields" :key="item.key" class="border-b py-1 flex flex-col md:flex-row">
         <div class="md:basis-1/3 font-bold pe-1">
             {{ item.label }}
@@ -18,9 +18,10 @@
       <div class="text-end">
         <Button as="router-link" variant="text" :to="`/siswa/${datasiswa.id}/edit/alamat`" size="small" class="mt-2">Edit</Button>
       </div>
+    </div>
 
-    </template>
-  </Card>
+  </div>
+
 </template>
 
 <script setup lang="ts">

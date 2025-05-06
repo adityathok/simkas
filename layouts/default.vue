@@ -19,7 +19,10 @@
                             <h1 class="text-lg md:text-xl font-medium text-slate-900">
                                 {{ $route.meta.title }}
                             </h1>
-                            <div class="mt-2 text-xs md:text-sm flex justify-start items-center">
+                            <div v-if="$route.meta.description">
+                                <span class="mt-2 text-xs md:text-sm text-slate-500">{{ $route.meta.description }}</span>
+                            </div>
+                            <div v-else class="mt-2 text-xs md:text-sm flex justify-start items-center">
                                 <NuxtLink to="/" class="opacity-50">Home</NuxtLink>
                                 <Icon name="lucide:dot" size="1em"  :ssr="true" class="mt-1"/>
                                 <span class="opacity-70">{{ $route.meta.title }}</span>

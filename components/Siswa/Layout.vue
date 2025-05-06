@@ -5,7 +5,7 @@
     <div class="rounded-xl min-h-[5em] md:min-h-[6em] mb-5 shadow-xs overflow-hidden bg-white">        
         <div class="flex justify-start gap-3 items-center p-5">
           <div>
-            <div class="aspect-square bg-slate-100 rounded-sm w-[5rem] md:w-[8rem]">
+            <div @click="navigateTo('/siswa/'+idUnit+'/edit/foto')" class="cursor-pointer aspect-square bg-slate-100 rounded-sm w-[5rem] md:w-[8rem]" v-tooltip="'Ubah Foto'">
               <img v-if="data?.avatar_url" :src="data?.avatar_url" alt="" width="300" class="aspect-square object-cover rounded-sm">
             </div>
           </div>
@@ -58,6 +58,7 @@ const { data: fetchData, status, error, refresh } = await useAsyncData(
 const menus = [
   {label: 'Profil', route: '/siswa/'+idUnit+'/'},
   {label: 'Edit', route: '/siswa/'+idUnit+'/edit'},
+  {label: 'Kelas', route: '/siswa/'+idUnit+'/kelas'},
   // {label: 'Siswa', route: '/kelas/'+idUnit+'/pegawai'}
 ]
 
