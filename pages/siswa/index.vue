@@ -128,7 +128,7 @@ const filters = reactive({
   page: computed(() => page.value),
   status: route.query.status || 'aktif',
   tahun_ajaran: route.query.tahun_ajaran || '',
-  idunit: route.query.idunit || '' 
+  unit_sekolah_id: route.query.unit_sekolah_id || '' 
 } as any)
 
 // Fungsi untuk mengubah params filters menjadi query URL route
@@ -204,7 +204,7 @@ const { data: optionFilter,status:soptionFilter,refresh:frefresh } = await useAs
 const filterFields = [
   { label: 'Status', key: 'status', type: 'select', options: [{label:'Aktif',value:'aktif'},{label:'Lulus',value:'lulus'},{label:'Pindah',value:'pindah'},{label:'Keluar',value:'keluar'}] },
   { label: 'Tahun Ajaran', key: 'tahun_ajaran', type: 'select', options: optionFilter.value.tahun_ajaran },
-  { label: 'Unit Sekolah', key: 'idunit', type: 'select', options: optionFilter.value.unitsekolah },
+  { label: 'Unit Sekolah', key: 'unit_sekolah_id', type: 'select', options: optionFilter.value.unitsekolah },
 ]
 
 
