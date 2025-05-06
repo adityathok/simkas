@@ -59,7 +59,7 @@ const menus = [
   {label: 'Profil', route: '/siswa/'+idUnit+'/'},
   {label: 'Edit', route: '/siswa/'+idUnit+'/edit'},
   {label: 'Kelas', route: '/siswa/'+idUnit+'/kelas'},
-  // {label: 'Siswa', route: '/kelas/'+idUnit+'/pegawai'}
+  {label: 'Tagihan', route: '/siswa/'+idUnit+'/tagihan'}
 ]
 
 </script>
