@@ -53,14 +53,17 @@
           <Column field="option">
             <template #body="slotProps">                           
               <div class="flex justify-end items-center">  
-                  <Button @click="openDialog(slotProps.data,'view')" severity="secondary" variant="text" size="small" class="!px-1">
+                  <Button v-tooltip="'Preview'" @click="openDialog(slotProps.data,'view')" severity="secondary" variant="text" size="small" class="!px-1">
                     <Icon name="lucide:eye" />
                   </Button>    
-                  <Button as="router-link" :to="'/siswa/'+slotProps.data.id" severity="secondary" variant="text" size="small" class="!px-1">
+                  <Button v-tooltip="'Profil'" as="router-link" :to="'/siswa/'+slotProps.data.id" severity="secondary" variant="text" size="small" class="!px-1">
                     <Icon name="lucide:circle-user" />
                   </Button> 
-                  <Button as="router-link" :to="'/siswa/'+slotProps.data.id+'/edit'" severity="secondary" variant="text" class="!px-1">
+                  <Button v-tooltip="'Ubah'" as="router-link" :to="'/siswa/'+slotProps.data.id+'/edit'" severity="secondary" variant="text" class="!px-1">
                     <Icon name="lucide:pencil" />
+                  </Button>
+                  <Button v-tooltip="'Hapus'" @click="confirmDelete(slotProps.data.id)" severity="danger" variant="text" class="!px-1">
+                    <Icon name="lucide:trash-2" />
                   </Button>
               </div>
             </template>
@@ -207,5 +210,32 @@ const filterFields = [
   { label: 'Unit Sekolah', key: 'unit_sekolah_id', type: 'select', options: optionFilter.value.unitsekolah },
 ]
 
-
+const confirm = useConfirm();
+const toast = useToast();
+const confirmDelete = (id: any) => {
+    confirm.require({
+        message: 'Yakin untuk menghapus siswa ?',
+        header: 'Hapus Siswa',
+        rejectLabel: 'Batal',
+        rejectProps: {
+            label: 'Batal',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptProps: {
+            label: 'Hapus',
+            severity: 'danger'
+        },
+        accept: async () => {
+            try {
+              await client('/api/siswa/'+id, { method: 'DELETE' }) 
+              refresh()
+              toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
+            }  catch(er) {
+              console.log(er)
+              toast.add({ severity: 'error', summary: 'Gagal', detail: 'Gagal dihapus', life: 3000 });
+            }
+        },
+    });
+};
 </script>
