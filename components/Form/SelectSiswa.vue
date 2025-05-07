@@ -5,7 +5,7 @@
       <div class="rounded w-full py-2 px-3 bg-slate-100 cursor-pointer" @click="openDialog">
         
         <div v-if="selectData?.nama" class="flex items-center relative pe-4">
-          <img :src="selectData?.avatar_url" class="aspect-square rounded-full w-15"/>
+          <img :src="selectData?.avatar_url" class="aspect-square rounded-full w-15 object-cover"/>
           <div class="ps-3">
             <div class="font-bold">
               {{ selectData?.nama }}

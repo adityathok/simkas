@@ -64,6 +64,15 @@
             </Column>
         </DataTable>
 
+        <div v-if="selectedTransaksi && selectedTransaksi.length > 0" class="text-end mt-5">
+          <span class="me-2 text-green-700 bg-zinc-200 rounded-xl px-5 py-1">
+            Rp{{ formatUang(totalSelectedTransaksi) }}
+          </span>
+          <Button as="router-link" to="/kasir" severity="success" size="small">
+            <Icon name="lucide:credit-card" /> Bayar Tagihan
+          </Button>
+        </div>
+
       </template>
     </Card>
 
@@ -84,6 +93,7 @@ definePageMeta({
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
+const { setTagihans } = useTagihanStore()
 const route = useRoute()
 const idSiswa = route.params.id
 const page = ref(route.query.page ? Number(route.query.page) : 1)
@@ -138,7 +148,15 @@ watch(
       //hitung nominal dari selected tagihan
       totalSelectedTransaksi.value = selectedTransaksi.value.reduce((acc: any, item: any) => acc + parseInt(item.tagihan_master.nominal), 0);
 
-      console.log(selectedTransaksi.value)
+      //buat array tagihan
+      const tagihans = selectedTransaksi.value.map((item: any) => {
+        return {
+          id: item.id,
+          user_id: item.user_id,
+        }
+      })
+
+      setTagihans(tagihans)
     },
     { deep: true } // Untuk memantau perubahan dalam objek
 );

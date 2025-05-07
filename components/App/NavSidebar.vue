@@ -112,6 +112,12 @@ const items = ref([
         route:'/',
     },
     {
+        key: 'kasir',
+        label: 'Kasir',
+        icon: 'lucide:monitor-dot',
+        route:'/kasir',
+    },
+    {
         key: 'transaksi',
         label: 'Transaksi',
         icon: 'lucide:coins',
