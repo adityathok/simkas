@@ -214,7 +214,6 @@ function onSubmitFilters( data: any) {
   refresh()
 }
 
-
 const confirmDelete = (id: any) => {
     confirm.require({
         message: 'Yakin untuk menghapus tagihan ?',

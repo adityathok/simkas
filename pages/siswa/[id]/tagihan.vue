@@ -4,7 +4,7 @@
     <Card>
       <template #content>
 
-        <div class="flex md:justify-between justify-end items-center gap-1 mb-3">
+        <div class="flex flex-col md:flex-row md:justify-between justify-end items-center gap-1 mb-3">
           <div class="flex justify-start items-center gap-1">
             <Select v-model="filters.count" :options="[20,50,100]" size="small" />
             <DatePicker v-model="filters.dates" showButtonBar placeholder="Tanggal" selectionMode="range" :manualInput="true" size="small" />
@@ -70,7 +70,7 @@
   </SiswaLayout>
 
   <Dialog v-model:visible="visibleDialog" :modal="true" header="Tagihan" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-      <!-- <TagihanPreview :data="selectedItem" @edit="openDialog(selectedItem,'edit')"/> -->
+      <TagihanPreview :data="selectedItem"/>
   </Dialog>
   
 
@@ -105,7 +105,7 @@ const filters = ref({
 } as any)
 
 const { data, status, error, refresh } = await useAsyncData(
-    'tagihan-page-'+page.value,
+    'tagihan-page-'+page.value+idSiswa,
     () => client('/api/tagihan',{
       params : {
         page: page.value,
