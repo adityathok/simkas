@@ -27,8 +27,14 @@
         </div>
 
         <div> 
+
+          <div class="border p-3 rounded-xl mb-4">
+            <div class="font-bold mb-1">Tagihan Siswa</div>
+            <KasirTagihanSiswa :siswa_id="form.siswa_id" :user_id="form.user_id" @selected="handleAddTagihan"/>
+          </div> 
+
           <div class="border p-3 rounded-xl mb-4"> 
-            <div class="font-bold mb-1">Tambah Item</div>
+            <div class="font-bold mb-1">Tambah Item transaksi</div>
             <form @submit.prevent="handleAddItemsTransaksi">
               <div class="flex flex-col md:flex-row gap-4 md:items-end">
                 <div class="md:basis-[40%]">
@@ -67,22 +73,13 @@
           </div>
 
           <div class="border p-3 rounded-xl mb-4">
-            <div class="font-bold mb-1">Item Transaksi</div>
-            <DataTable v-if="itemsTransaksi && itemsTransaksi.length > 0" :value="itemsTransaksi">
-              <Column field="nama" header="Item" />
-              <Column field="nominal_item" header="Nominal Item">
-                <template #body="slotProps"> 
-                  {{ formatUang(slotProps.data.nominal_item) }}
-                </template>
-              </Column>
-              <Column field="jumlah" header="Qty" />
-              <Column field="nominal" header="Total">
-                <template #body="slotProps"> 
-                  {{ formatUang(slotProps.data.nominal) }}
-                </template>
-              </Column>
-
-            </DataTable>
+            <div class="font-bold mb-1">Catatan</div>
+            <Textarea
+              label="Keterangan"
+              placeholder="Keterangan"
+              v-model="form.keterangan"
+              class="w-full"
+            />
           </div> 
 
         </div>
@@ -90,23 +87,67 @@
       </template>
     </Card>
     
-    <Card class="md:basis-[30em] lg:basis-[20em]">
+    <Card class="md:basis-[50%] lg:basis-[30em]">
       <template #content>
-        <div class="mb-3">
-          <div>Rekening Tujuan</div>
-          <Select v-model="form.akun_rekening_id" :options="optionsData.akunrekening" optionValue="value" optionLabel="label" class="w-full" />
-        </div>
-        <div class="mb-3">
-          <div>Metode Pembayaran</div>
-          <Select v-model="form.metode_pembayaran" :options="[{value:'cash',label:'CASH'}]" optionValue="value" optionLabel="label" class="w-full" />
-        </div>
-        <div class="mt-7 mb-9 border-y py-5 text-end">
-          <div>Total Pembayaran</div>
-          <div class="text-3xl md:text-4xl font-bold">
-            Rp {{ formatUang(totalBayar) }}
+                
+        <div class="border p-3 rounded-xl mb-4">
+          <div class="font-bold mb-1">Item</div>
+          
+          <ScrollPanel style="width: 100%; height: 50vh">
+            <div v-for="(item,index) in itemsTransaksi">
+              <div>
+                {{ item.nama }}
+                <div v-if="item.nomor" class="text-sm italic">
+                  {{ item.nomor }}
+                </div>
+              </div>
+              <div class="flex justify-between mt-1 mb-2 items-center">
+                <div>
+                  <Button severity="danger" size="small" type="button" @click="hapusItemTransaksi(index)">
+                    <Icon name="lucide:trash-2" />
+                  </Button>
+                  <Chip severity="info" size="small" class="ms-2 text-xs mt-1" rounded="md">{{ item.jumlah }}</Chip>
+                </div>
+                <div>{{ formatUang(item.nominal) }}</div>
+              </div>
+              <hr class="mb-2">
+            </div>
+          </ScrollPanel>
+          <div class="mt-7">
+            <div>Total Pembayaran</div>
+            <div class="text-3xl md:text-4xl font-bold text-end">
+              Rp {{ formatUang(totalBayar) }}
+            </div>
+          </div>
+
+          
+        </div> 
+
+        <div class="text-end mb-2">
+          <div class="flex flex-row justify-between items-center gap-2">
+            <div>Metode Pembayaran</div>
+            <Select 
+              v-model="form.metode_pembayaran" 
+              :options="[{value:'cash',label:'Cash'},{value:'transfer',label:'Transfer'}]" 
+              optionValue="value" 
+              optionLabel="label" 
+            />
           </div>
         </div>
-        <div class="text-end mb-2 text-xs">
+        <div v-if="form.metode_pembayaran !== 'cash'" class="text-end mb-2">
+          <div class="flex flex-row justify-between items-center gap-2">
+            <div>Rekening</div>
+            <Select
+              v-model="form.akun_rekening_id" 
+              :options="optionsData.akunrekening" 
+              optionValue="value" 
+              optionLabel="label" 
+              class="mt-1 md:mt-0"
+            />
+          </div>
+        </div>
+
+        <div class="text-end my-6 text-xs">
           <Checkbox v-model="form.cetak" size="small" binary /> <label for="cetak">Cetak Bukti</label>
         </div>
         <Button @click="prosesTransaksi" type="button" severity="success" class="w-full">Proses Transaksi</Button>
@@ -183,12 +224,48 @@ function onSiswaSelectClear(){
 
 const itemsTransaksi = ref<any[]>([]) // Inisialisasi sebagai array kosong
 
+onMounted(() => {
+  //set default itemsTransaksi
+  itemsTransaksi.value = [
+    {
+      nama: 'Uang Muka',
+      nominal_item: 200000,
+      jumlah: 1,
+      nominal: 200000,
+      tagihan_id: '',
+    },
+    {
+      nama: 'Spp',
+      nominal_item: 200000,
+      jumlah: 2,
+      nominal: 400000,
+      tagihan_id: '',
+    }
+  ]
+})
+
+//handle emit add
+const handleAddTagihan = (data: any) => {
+  //cek jika sudah ada di itemsTransaksi, dengan tagihan_id
+  const index = itemsTransaksi.value.findIndex((item) => item.tagihan_id === data.id)
+  if(index === -1) {
+    itemsTransaksi.value.push({
+      nama: data.tagihan_master.nama,
+      nomor: data.nomor,
+      nominal_item: data.tagihan_master.nominal,
+      jumlah: 1,
+      nominal: data.tagihan_master.nominal,
+      tagihan_id: data.id,
+    })
+  }
+}
+
 const formAddItemsTransaksi = reactive({
   nama: '',
-  deskripsi: '',
   nominal_item: 0,
   jumlah: 1,
   nominal: 0,
+  tagihan_id:''
 } as any)
 
 //watch formAddItemsTransaksi.nominal_item
@@ -198,10 +275,10 @@ watch(() => [formAddItemsTransaksi.nominal_item,formAddItemsTransaksi.jumlah], (
 
 const resetForm = () => {
   formAddItemsTransaksi.nama = ''
-  formAddItemsTransaksi.deskripsi = ''
   formAddItemsTransaksi.nominal = 0
   formAddItemsTransaksi.nominal_item = 0
   formAddItemsTransaksi.jumlah = 1
+  formAddItemsTransaksi.tagihan_id = 0
 }
 
 const handleAddItemsTransaksi = () => {
@@ -225,7 +302,10 @@ const hapusItemTransaksi = (index: number) => {
 }
 
 const totalBayar = computed(() => {
-  return itemsTransaksi.value.reduce((total, item) => total + item.nominal, 0)
+  return itemsTransaksi.value.reduce((total, item) => {
+    const nominal = parseFloat(item.nominal)
+    return total + (isNaN(nominal) ? 0 : nominal)
+  }, 0)
 })
 
 //proses transaksi
