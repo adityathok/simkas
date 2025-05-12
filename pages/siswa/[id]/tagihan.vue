@@ -18,7 +18,7 @@
               <span class="me-2 text-xl text-green-700 bg-zinc-200 rounded-xl px-5 py-1">
                 Rp{{ formatUang(totalSelectedTransaksi) }}
               </span>
-              <Button severity="success">
+              <Button as="router-link" :to="'/kasir/?user_id='+selectUserId+'&siswa_id='+idSiswa+'&tagihan='+selectTagihanId" severity="success" size="small">
                 <Icon name="lucide:credit-card" /> Bayar Tagihan
               </Button>
             </div>
@@ -68,7 +68,7 @@
           <span class="me-2 text-green-700 bg-zinc-200 rounded-xl px-5 py-1">
             Rp{{ formatUang(totalSelectedTransaksi) }}
           </span>
-          <Button as="router-link" to="/kasir" severity="success" size="small">
+          <Button as="router-link" :to="'/kasir/?user_id='+selectUserId+'&siswa_id='+idSiswa+'&tagihan='+selectTagihanId" severity="success" size="small">
             <Icon name="lucide:credit-card" /> Bayar Tagihan
           </Button>
         </div>
@@ -93,7 +93,6 @@ definePageMeta({
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
-const { setTagihans } = useTagihanStore()
 const route = useRoute()
 const idSiswa = route.params.id
 const page = ref(route.query.page ? Number(route.query.page) : 1)
@@ -140,6 +139,8 @@ const openDialog = (itemData: any,action : string) => {
 //selected tagihan
 const selectedTransaksi = ref();
 const totalSelectedTransaksi = ref(0);
+const selectUserId = ref('')
+const selectTagihanId = ref('')
 
 //watch selected tagihan
 watch(
@@ -148,15 +149,12 @@ watch(
       //hitung nominal dari selected tagihan
       totalSelectedTransaksi.value = selectedTransaksi.value.reduce((acc: any, item: any) => acc + parseInt(item.tagihan_master.nominal), 0);
 
-      //buat array tagihan
-      const tagihans = selectedTransaksi.value.map((item: any) => {
-        return {
-          id: item.id,
-          user_id: item.user_id,
-        }
-      })
+      //loop array selectedTransaksi
+      selectedTransaksi.value.forEach((item: any) => {
+        selectUserId.value = item.user_id
+        selectTagihanId.value += item.tagihan_master.id+'i'
+      });
 
-      setTagihans(tagihans)
     },
     { deep: true } // Untuk memantau perubahan dalam objek
 );

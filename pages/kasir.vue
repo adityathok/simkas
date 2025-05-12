@@ -20,7 +20,7 @@
               />
             </div>
             <div class="col-span-4 md:col-span-3">
-              <label class="text-sm mb-1">Tagihan</label>
+              <label class="text-sm mb-1">Siswa</label>
               <FormSelectSiswa :user_id="form.user_id" @selected="onSiswaSelect" @clear="onSiswaSelectClear"/>
             </div>
           </div>
@@ -28,9 +28,14 @@
 
         <div> 
 
-          <div class="border p-3 rounded-xl mb-4">
+          <div v-if="form.user_id" class="border p-3 rounded-xl mb-4">
             <div class="font-bold mb-1">Tagihan Siswa</div>
-            <KasirTagihanSiswa :siswa_id="form.siswa_id" :user_id="form.user_id" @selected="handleAddTagihan"/>
+            <KasirTagihanSiswa 
+              :siswa_id="form.siswa_id" 
+              :user_id="form.user_id" 
+              :tagihans="defaultTagihans"
+              @selected="handleAddTagihan"
+            />
           </div> 
 
           <div class="border p-3 rounded-xl mb-4"> 
@@ -66,7 +71,9 @@
                   />
                 </div>
                 <div class="md:flex-1">
-                  <Button type="submit" class="w-full">Tambah</Button>
+                  <Button type="submit" class="w-full">
+                    <Icon name="lucide:circle-plus" />
+                  </Button>
                 </div>
               </div>
             </form>
@@ -93,26 +100,25 @@
         <div class="border p-3 rounded-xl mb-4">
           <div class="font-bold mb-1">Item</div>
           
-          <ScrollPanel style="width: 100%; height: 50vh">
-            <div v-for="(item,index) in itemsTransaksi">
-              <div>
-                {{ item.nama }}
-                <div v-if="item.nomor" class="text-sm italic">
-                  {{ item.nomor }}
-                </div>
+          <div v-for="(item,index) in itemsTransaksi">
+            <div>
+              {{ item.nama }}
+              <div v-if="item.nomor" class="text-xs italic">
+                {{ item.nomor }}
               </div>
-              <div class="flex justify-between mt-1 mb-2 items-center">
-                <div>
-                  <Button severity="danger" size="small" type="button" @click="hapusItemTransaksi(index)">
-                    <Icon name="lucide:trash-2" />
-                  </Button>
-                  <Chip severity="info" size="small" class="ms-2 text-xs mt-1" rounded="md">{{ item.jumlah }}</Chip>
-                </div>
-                <div>{{ formatUang(item.nominal) }}</div>
-              </div>
-              <hr class="mb-2">
             </div>
-          </ScrollPanel>
+            <div class="flex justify-between mt-1 mb-2 items-center">
+              <div>
+                <Button severity="danger" size="small" type="button" @click="hapusItemTransaksi(index)">
+                  <Icon name="lucide:trash-2" />
+                </Button>
+                <Chip severity="info" size="small" class="ms-2 text-xs mt-1" rounded="md">{{ item.jumlah }}</Chip>
+              </div>
+              <div>{{ formatUang(item.nominal) }}</div>
+            </div>
+            <hr class="mb-2">
+          </div>
+
           <div class="mt-7">
             <div>Total Pembayaran</div>
             <div class="text-3xl md:text-4xl font-bold text-end">
@@ -150,7 +156,12 @@
         <div class="text-end my-6 text-xs">
           <Checkbox v-model="form.cetak" size="small" binary /> <label for="cetak">Cetak Bukti</label>
         </div>
-        <Button @click="prosesTransaksi" type="button" severity="success" class="w-full">Proses Transaksi</Button>
+        <Button @click="prosesTransaksi" type="button" severity="success" class="w-full" size="large">
+          Proses Transaksi
+        </Button>
+        <Button @click="resetTransaksi" type="button" severity="contrast" class="w-full mt-3">
+          Batal
+        </Button>
       </template>
     </Card>
 
@@ -162,7 +173,6 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
-const { tagihans } = useTagihanStore()
 const client = useSanctumClient();
 
 const { data:optionsData } = await useAsyncData(
@@ -173,28 +183,6 @@ const { data:optionsData } = await useAsyncData(
       }
     })
 )
-
-const selectedTagihan = ref();
-const dataTagihans = ref({} as any)
-const loadingTagihans = ref(false)
-const errorTagihans = ref({} as any)
-async function getTagihans() {
-  loadingTagihans.value = true
-  try {
-    const res = await client('/api/tagihan', {
-      method: 'GET',
-      params: {
-        user_id: form.value.user_id,
-        siswa_id: form.value.siswa_id,
-      }
-    })
-    dataTagihans.value = res.data
-  }
-  catch (error) {
-    const er = useSanctumError(error)
-    errorTagihans.value = er.bag
-  }
-}
 
 const form = ref({
   user_id: '',
@@ -211,7 +199,6 @@ function onSiswaSelect(selected: { id: any; user_id: any; }) {
   if(selected.user_id) {
     form.value.siswa_id = selected.id
     form.value.user_id = selected.user_id
-    getTagihans()
   } else {
     form.value.siswa_id = ''
     form.value.user_id = ''
@@ -222,9 +209,23 @@ function onSiswaSelectClear(){
   form.value.user_id = ''
 }
 
+const route = useRoute();
+const defaultTagihans = ref({} as any)
 const itemsTransaksi = ref<any[]>([]) // Inisialisasi sebagai array kosong
 
 onMounted(() => {
+  if(route.query.tagihan) {
+    const tagihan = route.query.tagihan as string
+    const tagihanArray = tagihan.split('i')
+    defaultTagihans.value = tagihanArray
+  }
+  if(route.query.user_id) {
+    form.value.user_id = route.query.user_id as string
+  }
+  if(route.query.siswa_id) {
+    form.value.siswa_id = route.query.user_id as string
+  }
+
   //set default itemsTransaksi
   itemsTransaksi.value = [
     {
@@ -327,5 +328,21 @@ async function prosesTransaksi() {
     errorProsesTransaksi.value = er.bag
   }
   loadingProsesTransaksi.value = false
+}
+
+//reset transaksi
+const resetTransaksi = () => {
+  form.value = {
+    user_id: '',
+    siswa_id: '',
+    akun_rekening_id: 'CASH',
+    metode_pembayaran: 'cash',
+    keterangan: '',
+    tanggal: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    cetak: true,
+    items: [],
+  }
+  //reset itemsTransaksi
+  itemsTransaksi.value = []
 }
 </script>
