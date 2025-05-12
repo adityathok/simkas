@@ -217,23 +217,6 @@ onMounted(() => {
     form.value.siswa_id = route.query.user_id as string
   }
 
-  //set default itemsTransaksi
-  itemsTransaksi.value = [
-    {
-      nama: 'Uang Muka',
-      nominal_item: 200000,
-      jumlah: 1,
-      nominal: 200000,
-      tagihan_id: '',
-    },
-    {
-      nama: 'Spp',
-      nominal_item: 200000,
-      jumlah: 2,
-      nominal: 400000,
-      tagihan_id: '',
-    }
-  ]
 })
 
 const form = ref({
@@ -264,12 +247,16 @@ function onSiswaSelectClear(){
   form.value.user_id = ''
 }
 
-//watch itemsTransaksi untuk hitung total nominal
-watch(() => itemsTransaksi.value, () => {
+function hitungTotalNominal() {
   form.value.nominal = itemsTransaksi.value.reduce((total, item) => {
     const nominal = parseFloat(item.nominal)
     return total + (isNaN(nominal)? 0 : nominal)
   }, 0)
+}
+
+//watch itemsTransaksi untuk hitung total nominal
+watch(() => itemsTransaksi.value, () => {
+  hitungTotalNominal()
 })
 
 //handle emit add
@@ -324,12 +311,14 @@ const handleAddItemsTransaksi = () => {
 
   // Reset form setelah menambahkan
   resetForm()
+  hitungTotalNominal()
 }
 const hapusItemTransaksi = (index: number) => {
   itemsTransaksi.value.splice(index, 1)
 }
 
 //proses transaksi
+const toast = useToast();
 const loadingProsesTransaksi = ref(false)
 const errorProsesTransaksi = ref({} as any)
 async function prosesTransaksi() {
@@ -344,9 +333,11 @@ async function prosesTransaksi() {
        items: itemsTransaksi.value,
       }
     })
+    toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Transaksi berhasil disimpan', life: 3000 });
   } catch (error) {
     const er = useSanctumError(error)
     errorProsesTransaksi.value = er?.bag ?? {}
+    toast.add({ severity: 'error', summary: 'Gagal', detail: 'Transaksi gagal diproses, silahkan coba lagi', life: 3000 });
   }
   loadingProsesTransaksi.value = false
 }
