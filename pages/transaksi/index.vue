@@ -2,7 +2,7 @@
 
   <div class="flex md:justify-between justify-end items-center gap-1 mb-3">
     <div class="flex justify-start items-center gap-1">
-      <Select v-model="filters.count" :options="[20,50,100]" size="small" />
+      <Select v-model="filters.per_page" :options="[20,50,100]" size="small" />
       <DatePicker v-model="filters.dates" placeholder="Tanggal" selectionMode="range" :manualInput="true" size="small" />
     </div>
     <div class="flex justify-end items-center gap-1">
@@ -23,21 +23,31 @@
 
       <DataTable :value="data.data" v-model:selection="selectedTransaksi" class="text-sm text-nowrap" stripedRows scrollable>
         <Column selectionMode="multiple"></Column>
-        <Column field="nama" header="Nama">      
+        <Column field="nomor" header="Nomor">      
           <template #body="slotProps">
-            <button type="button" @click="openDialog(slotProps.data,'preview')" class="cursor-pointer"> 
-              {{ slotProps.data.nama }}
+            <!-- <TransaksiBadgeArus :arus="slotProps.data.arus" /> -->
+            <button type="button" @click="openDialog(slotProps.data,'preview')" class="cursor-pointer block"> 
+              {{ slotProps.data.nomor }}
             </button>
           </template>
         </Column>
-        <Column field="arus" header="Arus">
+        <!-- <Column field="arus" header="Arus">
           <template #body="slotProps">
             <TransaksiBadgeArus :arus="slotProps.data.arus" />
           </template>
+        </Column> -->
+        <Column field="masuk" header="Masuk" class="text-blue-700">        
+          <template #body="slotProps"> 
+            <span v-if="slotProps.data.arus == 'masuk'">
+              {{ slotProps.data.nominal_label }}
+            </span>           
+          </template>
         </Column>
-        <Column field="nominal" header="Nominal">        
-          <template #body="slotProps">            
-            {{ slotProps.data.nominal_label }}
+        <Column field="keluar" header="Keluar" class="text-red-500">        
+          <template #body="slotProps">           
+            <span v-if="slotProps.data.arus == 'keluar'">
+              {{ slotProps.data.nominal_label }}
+            </span>   
           </template>
         </Column>
         <Column field="user_id" header="Oleh">          
@@ -45,37 +55,46 @@
             <div>
               {{ slotProps.data.user?.name }}
             </div>
-            <NuxtLink :to="'/siswa/'+slotProps.data.user.siswa.id" target="_blank" v-if="slotProps.data.user?.siswa.nis" v-tooltip="'Lihat profil siswa'" class="text-xs text-slate-500">
-              {{ slotProps.data.user.siswa.nis }} / {{ slotProps.data.user.siswa.kelas_siswa.nama }}
+            <NuxtLink v-if="slotProps.data.user.siswa" :to="'/siswa/'+slotProps.data.user.siswa?.id" target="_blank" v-tooltip="'Lihat profil siswa'" class="text-xs text-slate-500">
+              {{ slotProps.data.user.siswa?.nis }} / {{ slotProps.data.user.siswa?.kelas_siswa.nama }}
             </NuxtLink>
           </template>
         </Column>    
         <Column field="akun" header="Akun">        
-          <template #body="slotProps">          
-            <Tag severity="success" v-if="slotProps.data.pendapatan_id" class="!font-normal !text-slate-800">  
-              {{ slotProps.data.akunpendapatan?.nama }}
-            </Tag>          
-            <Tag severity="danger" v-if="slotProps.data.pengeluaran_id" class="!font-normal !text-slate-800">  
-              {{ slotProps.data.akunpengeluaran?.nama }}
-            </Tag>
+          <template #body="slotProps">
+            <template v-if="slotProps.data.items">              
+              <template v-for="item in slotProps.data.items">
+                        
+                <Tag severity="success" v-if="item.akun_pendapatan_id" size="small" class="!font-normal !text-xs !text-slate-800">  
+                  {{ item.akun_pendapatan?.nama }}
+                </Tag> 
+                <Tag severity="warn" v-if="item.akun_pengeluaran_id" size="small" class="!font-normal !text-xs !text-slate-800">  
+                  {{ item.akun_pengeluaran?.nama }}
+                </Tag>
+
+              </template> 
+            </template>  
           </template>
         </Column>        
         <Column field="rekening_id" header="Rek">        
           <template #body="slotProps">          
-            <span v-if="slotProps.data.rekening_id">  
-              {{ slotProps.data.akunrekening.nama }}
+            <span v-if="slotProps.data.akun_rekening_id">  
+              {{ slotProps.data.akun_rekening.nama }}
             </span>
           </template>
         </Column>
         <Column field="tanggal" header="Tgl" /> 
         <Column field="act" header="">
           <template #body="slotProps">            
-            <div class="flex">
-              <Button severity="secondary" variant="text" class="!px-2" @click="openDialog(slotProps.data,'preview')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <div class="flex items-center gap-1">
+              <Button severity="secondary" class="!px-2" @click="openDialog(slotProps.data,'preview')">
+                <Icon name="lucide:eye" />
               </Button>
-              <Button severity="info" variant="text"  class="!px-2" @click="openDialog(slotProps.data,'edit')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
+              <Button severity="info"  class="!px-2" @click="openDialog(slotProps.data,'edit')">
+                <Icon name="lucide:pen" />
+              </Button>
+              <Button severity="danger"  class="!px-2" @click="confirmDelete(slotProps.data.id)">
+                <Icon name="lucide:trash-2" />
               </Button>
             </div>
           </template>
@@ -131,7 +150,7 @@ const visibleFilter = ref(false)
 
 const filters = ref({
   page: page.value, 
-  count : 20,
+  per_page : 20,
   dates:'' as any,
   date_start: '',
   date_end:''
@@ -156,7 +175,7 @@ watch(() => [filters.value.dates], () => {
 })
 
 //watch filters
-watch(() => [filters.value.count,filters.value.dates], () => {
+watch(() => [filters.value.per_page,filters.value.dates], () => {
   refresh()
 })
 
@@ -165,7 +184,7 @@ const { data, status, error, refresh } = await useAsyncData(
     () => client('/api/transaksi',{
       params : {
         page: page.value,
-        count : filters.value.count,
+        per_page : filters.value.per_page,
         date_start : filters.value.date_start,
         date_end : filters.value.date_end
       }
@@ -185,8 +204,8 @@ const openDialog = (itemData: any,action : string) => {
 
 const confirmDelete = (id: any) => {
     confirm.require({
-        message: 'Yakin untuk menghapus transaksi ?',
-        header: 'Hapus Transaksi',
+        message: 'Menghapus transaksi juga akan mengembalikan status tagihan. Apakah anda yakin?',
+        header: 'Hapus Transaksi ?',
         rejectLabel: 'Batal',
         rejectProps: {
             label: 'Batal',
@@ -199,12 +218,13 @@ const confirmDelete = (id: any) => {
         },
         accept: async () => {
             try {
-              await client('/api/akunpendapatan/'+id, { method: 'DELETE' }) 
+              await client('/api/transaksi/'+id, { method: 'DELETE' }) 
               refresh()
-              toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil dihapus', life: 3000 });
+              toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Transaksi berhasil dihapus', life: 3000 });
             }  catch(er) {
-              console.log(er)
-              toast.add({ severity: 'error', summary: 'Gagal', detail: 'Gagal dihapus', life: 3000 });
+              const eror = useSanctumError(er)
+              console.log(eror)
+              toast.add({ severity: 'error', summary: 'Gagal', detail: 'Transaksi gagal dihapus, '+eror.bag, life: 3000 });
             }
         },
     });
