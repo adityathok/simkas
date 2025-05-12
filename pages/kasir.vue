@@ -18,6 +18,14 @@
                 showTime hourFormat="24"
                 disabled
               />
+              <label class="text-sm block mt-4 mb-1">Arus</label>
+              <SelectButton
+                v-model="form.arus"
+                :options="[{value:'masuk',label:'Masuk'},{value:'keluar',label:'Keluar'}]"
+                optionValue="value"
+                optionLabel="label"
+                class="mt-1 md:mt-0"
+              />
             </div>
             <div class="col-span-4 md:col-span-3">
               <label class="text-sm mb-1">Siswa</label>
@@ -122,12 +130,18 @@
           <div class="mt-7">
             <div>Total Pembayaran</div>
             <div class="text-3xl md:text-4xl font-bold text-end">
-              Rp {{ formatUang(totalBayar) }}
+              Rp {{ formatUang(form.nominal) }}
             </div>
           </div>
 
           
         </div> 
+
+        <div v-if="errorProsesTransaksi">
+          <Message v-for="(eror,i) in errorProsesTransaksi" severity="error" class="my-1" closable>
+            {{ eror[0] }}
+          </Message>
+        </div>
 
         <div class="text-end mb-2">
           <div class="flex flex-row justify-between items-center gap-2">
@@ -156,7 +170,8 @@
         <div class="text-end my-6 text-xs">
           <Checkbox v-model="form.cetak" size="small" binary /> <label for="cetak">Cetak Bukti</label>
         </div>
-        <Button @click="prosesTransaksi" type="button" severity="success" class="w-full" size="large">
+        <Button @click="prosesTransaksi" type="button" severity="success" class="w-full" size="large" :loading="loadingProsesTransaksi">
+          <Icon v-if="loadingProsesTransaksi" name="lucide:loader" class="animate-spin" />
           Proses Transaksi
         </Button>
         <Button @click="resetTransaksi" type="button" severity="contrast" class="w-full mt-3">
@@ -184,30 +199,6 @@ const { data:optionsData } = await useAsyncData(
     })
 )
 
-const form = ref({
-  user_id: '',
-  siswa_id: '',
-  akun_rekening_id: 'CASH',
-  metode_pembayaran: 'cash',
-  keterangan: '',
-  tanggal: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-  cetak: true,
-  items: [],
-} as any)
-
-function onSiswaSelect(selected: { id: any; user_id: any; }) {
-  if(selected.user_id) {
-    form.value.siswa_id = selected.id
-    form.value.user_id = selected.user_id
-  } else {
-    form.value.siswa_id = ''
-    form.value.user_id = ''
-  }
-}
-function onSiswaSelectClear(){
-  form.value.siswa_id = ''
-  form.value.user_id = ''
-}
 
 const route = useRoute();
 const defaultTagihans = ref({} as any)
@@ -243,6 +234,42 @@ onMounted(() => {
       tagihan_id: '',
     }
   ]
+})
+
+const form = ref({
+  user_id: '',
+  siswa_id: '',
+  arus: 'masuk',
+  akun_rekening_id: 'CASH',
+  metode_pembayaran: 'cash',
+  keterangan: '',
+  tanggal: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+  cetak: true,
+  nominal: 0,
+  status: 'sukses',
+  items: [],
+} as any)
+
+function onSiswaSelect(selected: { id: any; user_id: any; }) {
+  if(selected.user_id) {
+    form.value.siswa_id = selected.id
+    form.value.user_id = selected.user_id
+  } else {
+    form.value.siswa_id = ''
+    form.value.user_id = ''
+  }
+}
+function onSiswaSelectClear(){
+  form.value.siswa_id = ''
+  form.value.user_id = ''
+}
+
+//watch itemsTransaksi untuk hitung total nominal
+watch(() => itemsTransaksi.value, () => {
+  form.value.nominal = itemsTransaksi.value.reduce((total, item) => {
+    const nominal = parseFloat(item.nominal)
+    return total + (isNaN(nominal)? 0 : nominal)
+  }, 0)
 })
 
 //handle emit add
@@ -302,30 +329,24 @@ const hapusItemTransaksi = (index: number) => {
   itemsTransaksi.value.splice(index, 1)
 }
 
-const totalBayar = computed(() => {
-  return itemsTransaksi.value.reduce((total, item) => {
-    const nominal = parseFloat(item.nominal)
-    return total + (isNaN(nominal) ? 0 : nominal)
-  }, 0)
-})
-
 //proses transaksi
 const loadingProsesTransaksi = ref(false)
 const errorProsesTransaksi = ref({} as any)
 async function prosesTransaksi() {
   loadingProsesTransaksi.value = true
   errorProsesTransaksi.value = {}
+
   try {
     const res = await client('/api/transaksi', {
       method: 'POST',
-      params: {
+      body: {
         ...form.value,
        items: itemsTransaksi.value,
       }
     })
   } catch (error) {
     const er = useSanctumError(error)
-    errorProsesTransaksi.value = er.bag
+    errorProsesTransaksi.value = er?.bag ?? {}
   }
   loadingProsesTransaksi.value = false
 }
@@ -340,6 +361,7 @@ const resetTransaksi = () => {
     keterangan: '',
     tanggal: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     cetak: true,
+    nominal: 0,
     items: [],
   }
   //reset itemsTransaksi
