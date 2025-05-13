@@ -22,8 +22,8 @@
       <template v-else-if="item.key == 'akun_rekening_id'">
         {{ data.akun_rekening?.nama }}
       </template>
-      <template v-else-if="item.key == 'arus'">
-        <TransaksiBadgeArus :arus="data.arus" />
+      <template v-else-if="item.key == 'jenis'">
+        <TransaksiBadgeJenis :jenis="data.jenis" />
       </template>
       <template v-else-if="item.key == 'admin_id'">
         {{ data.admin?.pegawai?.nama }}
@@ -36,7 +36,7 @@
 
   </div>
 
-  <div class="mt-5">
+  <div v-if="data.items" class="mt-5">
     <div class="font-semibold mb-3">
       Item Transaksi
     </div>
@@ -89,7 +89,7 @@ const data = props.data
 const fields = [
   { key: 'nomor', label: 'Nomor' },
   { key: 'nominal_label', label: 'Nominal' },
-  { key: 'arus', label: 'Arus' },
+  { key: 'jenis', label: 'Jenis' },
   { key: 'user_id', label: 'Oleh' },
   { key: 'akun_rekening_id', label: 'Rekening' },
   { key: 'tanggal', label: 'Tanggal' },

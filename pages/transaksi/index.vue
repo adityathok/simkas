@@ -38,14 +38,14 @@
         </Column> -->
         <Column field="masuk" header="Masuk" class="text-blue-700">        
           <template #body="slotProps"> 
-            <span v-if="slotProps.data.arus == 'masuk'">
+            <span v-if="slotProps.data.jenis == 'pendapatan'">
               {{ slotProps.data.nominal_label }}
             </span>           
           </template>
         </Column>
         <Column field="keluar" header="Keluar" class="text-red-500">        
           <template #body="slotProps">           
-            <span v-if="slotProps.data.arus == 'keluar'">
+            <span v-if="slotProps.data.jenis == 'pengeluaran'">
               {{ slotProps.data.nominal_label }}
             </span>   
           </template>
@@ -60,7 +60,7 @@
             </NuxtLink>
           </template>
         </Column>    
-        <Column field="akun" header="Akun">        
+        <!-- <Column field="akun" header="Akun">        
           <template #body="slotProps">
             <template v-if="slotProps.data.items">              
               <template v-for="item in slotProps.data.items">
@@ -75,7 +75,7 @@
               </template> 
             </template>  
           </template>
-        </Column>        
+        </Column>         -->
         <Column field="rekening_id" header="Rek">        
           <template #body="slotProps">          
             <span v-if="slotProps.data.akun_rekening_id">  
@@ -100,19 +100,24 @@
           </template>
         </Column>
       </DataTable>
-      <Paginator
-            :rows="data.per_page"
-            :totalRecords="data.total"
-            @page="onPaginate"
-            :pt="{
-                root: (event: any) => {
-                    const itemForPage =  data.per_page;
-                    const currentPage =  page - 1;
-                    event.state.d_first = itemForPage * currentPage;
-                },
-            }"
-        >
-      </Paginator>
+      <div class="flex flex-col md:flex-row md:justify-between items-center">
+        <div class="text-sm text-slate-400">
+          {{ data.to }} / {{ data.total }}
+        </div>
+        <Paginator
+              :rows="data.per_page"
+              :totalRecords="data.total"
+              @page="onPaginate"
+              :pt="{
+                  root: (event: any) => {
+                      const itemForPage =  data.per_page;
+                      const currentPage =  page - 1;
+                      event.state.d_first = itemForPage * currentPage;
+                  },
+              }"
+          >
+        </Paginator>
+      </div>
 
     </template>
   </Card>
@@ -153,13 +158,18 @@ const filters = ref({
   per_page : 20,
   dates:'' as any,
   date_start: '',
-  date_end:''
+  date_end:'',
+  jenis: '',
+  pendapatan_id:'',
+  pengeluaran_id:'',
+  rekening_id:''
 })
 
 function onSubmitFilters( data: any) {
   visibleFilter.value = false
   filters.value = data
   filters.value.page = page.value
+  filters.value.jenis = data.jenis
   refresh()
 }
 
@@ -182,16 +192,12 @@ watch(() => [filters.value.per_page,filters.value.dates], () => {
 const { data, status, error, refresh } = await useAsyncData(
     'transaksi-page-'+page.value,
     () => client('/api/transaksi',{
-      params : {
-        page: page.value,
-        per_page : filters.value.per_page,
-        date_start : filters.value.date_start,
-        date_end : filters.value.date_end
-      }
+      params : filters.value
     })
 )
 const onPaginate = (event: { page: number }) => {
-    page.value = event.page + 1; 
+    page.value = event.page + 1;
+    filters.value.page = event.page + 1;
     refresh()
     navigateTo('/transaksi?page='+page.value)
 };

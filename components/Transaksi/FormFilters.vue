@@ -13,8 +13,8 @@
         <DatePicker v-model="form.dates" placeholder="Tanggal" selectionMode="range" :manualInput="true" size="small" class="w-full" />
       </div>      
       <div class="mb-4">
-        <label class="block mb-1 text-slate-500">Arus</label>
-        <Select v-model="form.arus" showClear :options="[{label:'Masuk',value:'masuk'},{label:'Keluar',value:'keluar'}]" optionLabel="label" optionValue="value" class="w-full" required="true"/>
+        <label class="block mb-1 text-slate-500">Jenis</label>
+        <Select v-model="form.jenis" showClear :options="[{label:'Masuk',value:'pendapatan'},{label:'Keluar',value:'pengeluaran'},{label:'Transfer',value:'transfer'}]" optionLabel="label" optionValue="value" class="w-full" required="true"/>
       </div>     
       <div class="mb-4">
         <label class="block mb-1 text-slate-500">Akun Pendapatan</label>
@@ -48,7 +48,7 @@ const emit = defineEmits(['submit'])
 
 const form = ref({
   dates:'' as any,
-  arus:'',
+  jenis:'',
   pendapatan_id: '',
   pengeluaran_id:'',
   rekening_id:''
@@ -82,7 +82,7 @@ const resetForm = () => {
   form.value = {
     count: 20,    
     dates:'' as any,
-    arus:'',
+    jenis:'',
     pendapatan_id: '',
     pengeluaran_id:'',
     rekening_id:''
