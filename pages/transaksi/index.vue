@@ -122,7 +122,7 @@
     </template>
   </Card>
 
-  <Dialog v-model:visible="visibleDialog" :modal="true" header="Transaksi" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <Dialog v-model:visible="visibleDialog" :modal="true" :header="actionDialog=='edit'?'Edit Transaksi':'Transaksi'" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <TransaksiPreview v-if="actionDialog == 'preview'" :data="selectedItem" @edit="openDialog(selectedItem,'edit')"/>
     <TransaksiForm v-else :action="actionDialog" :data="selectedItem" @update="refresh"/>
   </Dialog>

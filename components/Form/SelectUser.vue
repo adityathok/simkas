@@ -1,7 +1,7 @@
 <template>
 
   <div class="relative">
-    <Button severity="secondary" class="w-full !justify-start" @click="openDialog">
+    <Button severity="secondary" class="w-full !justify-start" @click="openDialog" :disabled="props.disabled">
 
         <div v-if="selectData" class="flex justify-start item-center w-full">
           <div class="w-10">
@@ -28,7 +28,7 @@
         </div>
 
     </Button>
-    <Button v-if="selectData?.nama" @click="clearOption" class="!absolute end-0 top-0 bottom-0" severity="danger" variant="text">X</Button>
+    <Button v-if="selectData?.nama" @click="clearOption" class="!absolute end-0 top-0 bottom-0" severity="danger" variant="text" :disabled="props.disabled">X</Button>
   </div>
 
   <Dialog v-model:visible="visibleDialog" :modal="true" header="Cari Siswa/Pegawai" :style="{ width: '30rem' }">
@@ -76,7 +76,7 @@
 <script setup lang="ts">
 const client = useSanctumClient();
 const emit = defineEmits(['selected','clear'])
-const props = defineProps(['user_id'])
+const props = defineProps(['user_id','disabled'])
 const user_id = props.user_id
 const selectData = ref('' as any);
 const isLoading = ref(false)

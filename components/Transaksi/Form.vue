@@ -4,25 +4,29 @@
     <div class="col-start-1 col-end-5 mb-2">
       <label>User</label>
       <div class="mt-1">
-        <FormSelectUser :user_id="form.user_id" @selected="onSiswaSelect" @clear="onSiswaSelectClear"/>
+        <FormSelectUser :user_id="form.user_id" @selected="onSiswaSelect" @clear="onSiswaSelectClear" :disabled="isEdit"/>
       </div>
     </div>
     <div class="col-start-1 col-end-3 mb-2">      
       <label>Nominal</label>
       <div class="mt-1">
-        <InputNumber v-model="form.nominal" mode="currency" currency="IDR" class="w-full" required/>
+        <InputNumber v-model="form.nominal" mode="currency" currency="IDR" class="w-full" 
+        :disabled="isEdit" required/>
       </div>
     </div>
     <div class="col-start-3 col-end-5 mb-2">
       <label>Tanggal</label>
       <div class="mt-1">
-        <DatePicker v-model="form.tanggal" showTime hourFormat="24" fluid />
+        <DatePicker v-model="form.tanggal" showTime hourFormat="24" fluid :disabled="isEdit"/>
       </div>
     </div>
     <div class="col-start-1 col-end-2 mb-2">
       <label>Rekening</label>
       <div class="mt-1">
-        <Select v-model="form.akun_rekening_id" :options="optionsData?.akunrekening" optionLabel="label" optionValue="value" class="w-full"/>
+        <Select v-model="form.akun_rekening_id" 
+        :options="optionsData?.akunrekening"
+        optionLabel="label" optionValue="value" class="w-full"
+        :disabled="isEdit"/>
       </div>
     </div>
     <div class="col-start-2 col-end-2 mb-2">
@@ -30,31 +34,44 @@
       <div class="mt-1">
         <Select v-model="form.jenis" 
         :options="[{label:'Masuk',value:'pendapatan'},{label:'Keluar',value:'pengeluaran'},{label:'Transfer',value:'transfer'}]"
-        optionLabel="label" optionValue="value" class="w-full" required="true"/>
+        optionLabel="label" optionValue="value" class="w-full" required="true"
+        :disabled="isEdit"/>
       </div>
     </div>
     <div v-if="form.jenis == 'pendapatan'" class="col-start-3 col-end-5 mb-2">
       <label>Akun Pendapatan</label>
       <div class="mt-1">
-        <Select v-model="form.akun_pendapatan_id" showClear :options="optionsData?.akunpendapatan" optionLabel="label" optionValue="value" class="w-full" required="true"/>
+        <Select v-model="form.akun_pendapatan_id" showClear 
+        :options="optionsData?.akunpendapatan" 
+        optionLabel="label" optionValue="value" 
+        class="w-full" required="true"
+        :disabled="isEdit"/>
       </div>
     </div>
     <div v-else-if="form.jenis == 'pengeluaran'" class="col-start-3 col-end-5 mb-2">
       <label>Akun Biaya</label>
       <div class="mt-1">
-        <Select v-model="form.akun_pengeluaran_id" showClear :options="optionsData?.akunpengeluaran" optionLabel="label" optionValue="value" class="w-full border !border-red-400" required="true"/>
+        <Select v-model="form.akun_pengeluaran_id" showClear 
+        :options="optionsData?.akunpengeluaran" 
+        optionLabel="label" optionValue="value" 
+        class="w-full border !border-red-400" required="true"
+        :disabled="isEdit"/>
       </div>
     </div>
     <div v-else class="col-start-3 col-end-5 mb-2">
       <label>Rekening Tujuan</label>
       <div class="mt-1">
-        <Select v-model="form.akun_rekening_tujuan_id" :options="optionsData?.akunrekening" optionLabel="label" optionValue="value" class="w-full"/>
+        <Select 
+        v-model="form.akun_rekening_tujuan_id" 
+        :options="optionsData?.akunrekening" 
+        optionLabel="label" optionValue="value" class="w-full"
+        :disabled="isEdit"/>
       </div>
     </div>
     <div class="col-start-1 col-end-5 mb-2">
       <label>Nama item Transaksi</label>
       <div class="mt-1">
-        <InputText v-model="form.nama" class="w-full"/>
+        <InputText v-model="form.nama" class="w-full" :disabled="isEdit"/>
       </div>
     </div>
     <div class="col-start-1 col-end-5 mb-2">
@@ -67,9 +84,9 @@
       </div>
     </div>
     <div class="col-start-1 col-end-5 mb-2">
-      <label>Keterangan</label>
+      <label>Catatan</label>
       <div class="mt-1">
-        <Textarea v-model="form.keterangan" class="w-full"/>
+        <Textarea v-model="form.catatan" class="w-full"/>
       </div>
     </div>
     
@@ -111,6 +128,7 @@ const isLoading = ref(false)
 const client = useSanctumClient();
 const visibleDialog = ref(false);
 const errors = ref('' as any)
+const isEdit = ref(false)
 
 const { data:optionsData } = await useAsyncData(
     'option-formtransaksi',
@@ -139,6 +157,12 @@ const form = ref({
 //jika action edit dan ada data
 if(action == 'edit' && data){
   form.value = data
+  if(data.items[0]){
+    form.value.nama = data.items[0].nama
+    form.value.akun_pendapatan_id = data.items[0].akun_pendapatan_id
+    form.value.akun_pengeluaran_id = data.items[0].akun_pengeluaran_id
+  }
+  isEdit.value = true
 }
 
 function onSiswaSelect(selected: { id: any; user_id: any; }) {
