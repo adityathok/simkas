@@ -92,6 +92,13 @@
             <div class="text-end my-6 text-xs">
               <Checkbox v-model="form.cetak" size="small" binary /> <label for="cetak">Cetak Bukti</label>
             </div>
+
+            <div v-if="errorProsesTransaksi">
+              <Message v-for="(eror,i) in errorProsesTransaksi" severity="error" class="my-1" closable>
+                {{ eror[0] }}
+              </Message>
+            </div>
+
             <Button @click="prosesTransaksi" type="button" severity="success" class="w-full" size="large" :loading="loadingProsesTransaksi">
               <Icon v-if="loadingProsesTransaksi" name="lucide:loader" class="animate-spin" />
               Proses Transaksi
@@ -105,6 +112,11 @@
     </Card>
 
   </div>
+
+ 
+    <PrintTransaksi :data="printTransaksi" :visible="visiblePrintTransaksi" />
+
+
 </template>
 
 <script setup lang="ts">
@@ -189,6 +201,8 @@ watch(itemsTransaksi, () => {
 });
 
 //proses transaksi
+const visiblePrintTransaksi = ref(false)
+const printTransaksi = ref({} as any)
 const toast = useToast();
 const loadingProsesTransaksi = ref(false)
   const errorProsesTransaksi = ref({} as any)
@@ -205,6 +219,10 @@ const loadingProsesTransaksi = ref(false)
         }
       })
       toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Transaksi berhasil disimpan', life: 3000 });
+      if(form.value.cetak){
+        printTransaksi.value = res
+        visiblePrintTransaksi.value = true
+      }
     } catch (error) {
       const er = useSanctumError(error)
       errorProsesTransaksi.value = er?.bag ?? {}
