@@ -97,7 +97,7 @@
               Proses Transaksi
             </Button>
             <Button @click="resetTransaksi" type="button" severity="contrast" class="w-full mt-3">
-              Batal
+              Reset
             </Button>
         </div>
 
@@ -216,13 +216,17 @@ const loadingProsesTransaksi = ref(false)
   //reset transaksi
   const resetTransaksi = () => {
     form.value = {
-      user_id: '',
-      siswa_id: '',
-      akun_rekening_id: 'CASH',
-      metode_pembayaran: 'cash',
-      keterangan: '',
-      cetak: true,
-      nominal: 0,
+      nominal: '',
+      jenis: 'pendapatan',
+      akun_rekening_id:1,
+      akun_rekening_tujuan_id:'',
+      tagihan_id:'',
+      user_id:'',
+      catatan:'',
+      nama: '',
+      status:'sukses',
+      metode_pembayaran: 'tunai',
+      ref_nomor: '',
       items: [],
     }
     //reset itemsTransaksi
