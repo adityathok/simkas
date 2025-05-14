@@ -1,4 +1,9 @@
 <template>
+  
+  <div v-if="form.nomor" class="mb-5">
+    <InputText :value="'No : '+form.nomor" class="w-full" disabled/>
+  </div>
+
   <form @submit.prevent="handleFormSubmit" class="grid grid-cols-1 md:grid-cols-4 gap-2">
 
     <div class="col-start-1 col-end-5 mb-2">
@@ -68,19 +73,35 @@
         :disabled="isEdit"/>
       </div>
     </div>
-    <div class="col-start-1 col-end-5 mb-2">
-      <label>Nama item Transaksi</label>
-      <div class="mt-1">
-        <InputText v-model="form.nama" class="w-full" :disabled="isEdit"/>
-      </div>
-    </div>
-    <div class="col-start-1 col-end-5 mb-2">
+    <div class="col-start-1 col-end-2 mb-2">
       <label>Status</label>
       <div class="mt-1">
         <Select v-model="form.status" 
         :options="[{label:'Sukses',value:'sukses'},{label:'Batal',value:'batal'},{label:'Pending',value:'pending'}]"
         optionLabel="label" optionValue="value" 
         class="w-full"/>
+      </div>
+    </div>
+    <div class="col-start-2 col-end-2 mb-2">
+      <label>Metode Pembayaran</label>
+      <div class="mt-1">
+        <Select v-model="form.metode_pembayaran" 
+        :options="[{label:'Tunai',value:'tunai'},{label:'Transfer',value:'transfer'}]"
+        optionLabel="label" optionValue="value" 
+        class="w-full" :disabled="isEdit"/>
+      </div>
+    </div>
+    <div class="col-start-3 col-end-5 mb-2">
+      <label>Ref No</label>
+      <div class="mt-1">
+        <InputText v-model="form.ref_nomor"
+        class="w-full"/>
+      </div>
+    </div>
+    <div class="col-start-1 col-end-5 mb-2">
+      <label>Nama item Transaksi</label>
+      <div class="mt-1">
+        <InputText v-model="form.nama" class="w-full" :disabled="isEdit"/>
       </div>
     </div>
     <div class="col-start-1 col-end-5 mb-2">
@@ -152,6 +173,8 @@ const form = ref({
   catatan:'',
   nama: '',
   status:'sukses',
+  metode_pembayaran: 'tunai',
+  ref_nomor: '',
 } as any);
 
 //jika action edit dan ada data
@@ -178,7 +201,7 @@ const handleFormSubmit = async () => {
   isLoading.value = true;
   errors.value = '';
 
-  if(form.value.arus=='masuk' && !form.value.akun_pendapatan_id){
+  if(!form.value.user_id){
     isLoading.value = false;
     return false;
   }

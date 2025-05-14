@@ -95,6 +95,7 @@ const fields = [
   { key: 'tanggal', label: 'Tanggal' },
   { key: 'catatan', label: 'Catatan' },
   { key: 'admin_id', label: 'Admin' },
+  { key: 'ref_nomor', label: 'Ref Nomor' },
 ]
 
 </script>
