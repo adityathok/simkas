@@ -1,7 +1,7 @@
 <template>
 
   <div class="relative">
-    <Button severity="secondary" class="w-full !justify-start" @click="openDialog" :disabled="props.disabled">
+    <Button class="w-full !justify-start" @click="openDialog" :disabled="props.disabled">
 
         <div v-if="selectData" class="flex justify-start item-center w-full">
           <div class="w-10">
@@ -11,10 +11,10 @@
               <div class="font-bold">
                 {{ selectData?.nama }}
               </div>
-              <div v-if="selectData?.nis" class="text-xs text-slate-400">
+              <div v-if="selectData?.nis" class="text-xs opacity-65">
                 {{ selectData?.nis }} | {{ selectData?.kelas_siswa?.nama }} / {{ selectData?.kelas_siswa?.tahun_ajaran }}
               </div>
-              <div v-if="selectData?.nip" class="text-xs text-slate-400">
+              <div v-if="selectData?.nip" class="text-xs opacity-65">
                 {{ selectData?.nip }}
               </div>
             </div>
@@ -28,7 +28,7 @@
         </div>
 
     </Button>
-    <Button v-if="selectData?.nama" @click="clearOption" class="!absolute end-0 top-0 bottom-0" severity="danger" variant="text" :disabled="props.disabled">X</Button>
+    <Button v-if="selectData?.nama" @click="clearOption" class="!absolute end-0 top-0 bottom-0" severity="danger" :disabled="props.disabled">X</Button>
   </div>
 
   <Dialog v-model:visible="visibleDialog" :modal="true" header="Cari Siswa/Pegawai" :style="{ width: '30rem' }">

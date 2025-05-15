@@ -1,12 +1,9 @@
 <template>
   <div class="flex flex-col md:flex-row gap-5">
 
-    <Card class="md:flex-1">
-      <template #content>
+    <DashCard class="md:flex-1 bg-blue-100">
 
-        <KasirTagihan @selected="onSelectTagihan" @update="onUpdateTagihan" />
-
-        <div class="border p-4 rounded-lg mb-5">
+        <div class="mb-5">
           <div class="flex gap-3">
             <div class="flex-1">
               <label class="font-bold mb-1">Rekening</label>
@@ -26,24 +23,24 @@
             </div>
           </div>
         </div>
+
+        <KasirTagihan @selected="onSelectTagihan" @update="onUpdateTagihan" />
         
-        <div class="border p-4 rounded-lg mb-5">
+        <div class="border p-4 bg-blue-50 dark:bg-slate-800 dark:border-slate-700 my-5">
           <div class="mb-2 font-bold">Tambah Item Transaksi</div>
           <KasirFormItem @update="submitItem" :jenis="form.jenis"/>
         </div>
 
-        <div class="border p-4 rounded-lg">
+        <div>
           <div class="mb-2 font-bold">Catatan</div>
           <Textarea v-model="form.catatan" class="w-full"/>
         </div>
 
-      </template>
-    </Card>
+    </DashCard>
 
-    <Card class="md:basis-[50%] lg:basis-[40em]">
-      <template #content>
+    <DashCard class="md:basis-[50%] lg:basis-[40em] border-zinc-400 dark:border-zinc-400">
         
-        <div class="border p-4 rounded-lg mb-5">
+        <div class="mb-5">
           <div class="mb-2 font-bold">Items</div>
           <ScrollPanel style="width: 100%; height: 50vh">
             <div v-for="(item,index) in itemsTransaksi">
@@ -89,7 +86,7 @@
               />
             </div>
 
-            <div class="text-end my-6 text-xs">
+            <div class="text-end my-6 text-xs hidden">
               <Checkbox v-model="form.cetak" size="small" binary /> <label for="cetak">Cetak Bukti</label>
             </div>
 
@@ -104,22 +101,23 @@
               Proses Transaksi
             </Button>
             <Button @click="resetTransaksi" type="button" severity="contrast" class="w-full mt-3">
-              Reset
+              Batal
             </Button>
         </div>
 
-      </template>
-    </Card>
+    </DashCard>
 
   </div>
 
  
-    <PrintTransaksi :data="printTransaksi" :visible="visiblePrintTransaksi" />
+    <!-- <PrintTransaksi :data="printTransaksi" :visible="visiblePrintTransaksi" /> -->
 
 
 </template>
 
 <script setup lang="ts">
+import { formatUang } from '~/utils/formatUang';
+
 const client = useSanctumClient();
 
 const { data:optionsData } = await useAsyncData(

@@ -1,13 +1,20 @@
 <template>
   <div>
-    <div class="border p-4 rounded-lg mb-5">
+    <div>
       <div class="mb-2 font-bold">User</div>
       <FormSelectUser :user_id="form.user_id" @selected="onUserSelect" @clear="onUserSelectClear"/>
     </div>
 
-    <div v-if="dataTagihan.data && dataTagihan.data.length > 0" class="border p-4 rounded-lg mb-5">
-      <div class="mb-2 font-bold">
-        Daftar Tagihan
+    <div v-if="dataTagihan.data && dataTagihan.data.length > 0" class="mt-3">
+      <div class="flex justify-between mb-2">
+        <div class="font-bold">
+          Daftar Tagihan
+        </div>
+        <Button @click="getTagihan" severity="warn" size="small" :loading="loadingTagihan">
+          <Icon v-if="loadingTagihan" name="lucide:loader" class="animate-spin" />
+          <Icon v-else name="lucide:refresh-cw" />
+          Reload
+        </Button>
       </div>
       <DataTable v-if="dataTagihan?.data" :value="dataTagihan?.data" class="text-sm text-nowrap" stripedRows scrollable scrollHeight="400px">
         <!-- <Column selectionMode="multiple"></Column> -->  
@@ -41,7 +48,7 @@
         </Column>
       </DataTable>
       <div class="flex flex-col md:flex-row md:justify-between items-center">
-        <div class="text-sm text-slate-400">
+        <div class="text-xs opacity-50">
           {{ dataTagihan.to }} / {{ dataTagihan.total }}
         </div>
         <Paginator
