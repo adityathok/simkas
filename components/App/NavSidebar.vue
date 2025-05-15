@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full left-0 top-0 w-64 fixed bg-slate-50 z-6 border-r border-border px-4">
+  <div class="h-full left-0 top-0 w-64 fixed bg-slate-100 dark:bg-zinc-900 z-6 border-r border-zinc-100 dark:border-zinc-700 shadow px-4">
     
     <div class="py-6 px-2 flex justify-center brand-logo overflow-hidden">
        <AppLogo />    
