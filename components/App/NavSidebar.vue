@@ -36,7 +36,7 @@
                         <Icon v-else name="lucide:chevron-up"  :ssr="true"/>
                     </div>
                 </button>
-                <NuxtLink v-else :to="item.route" :class="[classLink,{'bg-blue-500! text-white!':isActive(item.route)}]" @click="useGlobal.toggelsidebar">
+                <NuxtLink v-else :to="item.route" :class="[classLink,{'bg-blue-500! dark:bg-blue-700! text-white!':isActive(item.route)}]" @click="useGlobal.toggelsidebar">
                     <span class="flex justify-start items-center w-full">
                         <Icon v-if="item.icon" :name="item.icon"  :ssr="true" class="mr-2"/>
                         <Icon v-else name="lucide:circle" size="8"  :ssr="true" class="mr-2"/>
@@ -101,7 +101,7 @@ watch(() => expandedKeys, () => {
 })
 
 //class untuk tombol menu
-const classLink = 'w-full flex items-center justify-start rounded-md px-2.5 py-2.5 mb-0.5 gap-3 text-start leading-[normal] font-normal hover:bg-blue-100 hover:text-blue-800 text-link bg-transparent group/link cursor-pointer';
+const classLink = 'w-full flex items-center justify-start px-2.5 py-2.5 mb-0.5 gap-3 text-start leading-[normal] font-normal hover:bg-blue-100 hover:text-blue-800 text-link bg-transparent group/link cursor-pointer';
 
 //daftar menu
 const items = ref([

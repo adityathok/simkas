@@ -2,12 +2,12 @@
 
   <div v-if="fetchData">
     
-    <div class="rounded-xl min-h-[5em] md:min-h-[6em] mb-5 shadow-xs overflow-hidden bg-white">        
+    <div class="rounded min-h-[5em] md:min-h-[6em] mb-5 shadow-xs overflow-hidden bg-blue-100 dark:bg-zinc-800">        
         <div class="flex justify-start gap-3 items-center p-5">
           <div>
-            <div @click="navigateTo('/siswa/'+idUnit+'/edit/foto')" class="cursor-pointer aspect-square bg-slate-100 rounded-sm w-[5rem] md:w-[8rem]" v-tooltip="'Ubah Foto'">
-              <img v-if="data?.avatar_url" :src="data?.avatar_url" alt="" width="300" class="aspect-square object-cover rounded-sm">
-            </div>
+            <Button as="router-link" :to="'/siswa/'+idUnit+'/edit/foto'" variant="text" class="!p-0 w-[5rem] md:w-[8rem]" v-tooltip="'Ubah Foto'">
+              <img v-if="data?.avatar_url" :src="data?.avatar_url" alt="" width="200" class="aspect-square object-cover rounded-sm">
+            </Button>
           </div>
           <div class="ps-2">
             <h3 class="md:text-xl font-bold">
@@ -22,7 +22,7 @@
 
           </div>
         </div>
-        <div class="bg-slate-100 px-2">
+        <div class="bg-blue-200 dark:bg-zinc-700">
           <AppMenuTabs :items="menus" :active="route.path" class="mt-2" />
         </div>
       </div>

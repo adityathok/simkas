@@ -1,9 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import Aura from '@primevue/themes/aura';
+import Nora from '@primevue/themes/nora';
 import { definePreset } from '@primevue/themes';
 import tailwindcss from "@tailwindcss/vite";
 
-const MyPreset = definePreset(Aura, {
+const MyPreset = definePreset(Nora, {
   semantic: {
       primary: {
           50: '{blue.50}',

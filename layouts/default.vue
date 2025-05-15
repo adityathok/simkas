@@ -14,9 +14,9 @@
 
                 <div class="container mx-auto min-h-[85vh] p-6">
 
-                    <div v-if="$route.meta.title" class="relative overflow-hidden bg-blue-100 rounded-md min-h-20 flex justify-start items-center px-5 py-3 md:py-5 xl:py-6 mb-6">
+                    <div v-if="$route.meta.title" class="relative overflow-hidden bg-blue-100 dark:bg-slate-700 min-h-20 flex justify-start items-center px-5 py-3 md:py-5 xl:py-6 mb-6">
                         <div>
-                            <h1 class="text-lg md:text-xl font-medium text-slate-900">
+                            <h1 class="text-lg md:text-xl font-medium text-slate-900 dark:text-blue-200">
                                 {{ $route.meta.title }}
                             </h1>
                             <div v-if="$route.meta.description">
@@ -28,7 +28,6 @@
                                 <span class="opacity-70">{{ $route.meta.title }}</span>
                             </div>
                         </div>
-                        <img src="~/public/logo.png" alt="Logo App" class="h-25 md:h-30 opacity-20 rotate-12 absolute right-0 top-0 z-1">
                     </div>
 
                     <slot />
@@ -49,6 +48,7 @@
 
 <script setup lang="ts">
 const useGlobal = useGlobalStore()
+const $route = useRoute()
 
 // Ambil state dan action dari store
 const { setConfig } = useConfigStore();

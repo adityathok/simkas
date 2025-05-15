@@ -1,5 +1,5 @@
 <template>
-  <Button @click="setColorTheme" variant="text">
+  <Button @click="setColorTheme" class="!px-2" variant="text">
     <Icon v-if="colorTheme === 'dark'" name="lucide:sun" :ssr="true"/>
     <Icon v-else name="lucide:moon" :ssr="true"/>
   </Button>

@@ -6,14 +6,14 @@
 
       <div class="md:basis-1/4">
 
-          <div class="grid grid-cols-1 gap-2 border-2 border-sky-100 shadow rounded-xl p-5 mb-5">
+          <div class="grid grid-cols-1 gap-2 border-2 border-sky-100 dark:border-zinc-800 shadow rounded-xl p-5 mb-5">
             <TagihanMasterFormTujuan @change="onChangeTujuan" />
           </div>
 
         </div>
         <div class="md:flex-1">
 
-          <div class="p-3 border border-emerald-200 bg-emerald-50 rounded-xl flex items-center gap-2 mb-5">
+          <div class="p-3 border border-blue-200 bg-blue-50 dark:bg-slate-900 dark:border-blue-900 rounded-xl flex items-center gap-2 mb-5">
             <Icon name="lucide:users" />
             <span class="text-lg font-bold">
               {{ form.total_siswa }} siswa

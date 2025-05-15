@@ -29,14 +29,14 @@
 
               </div>
 
-              <div class="flex items-center justify-end gap-2">
+              <div class="flex items-center justify-end gap-1">
                 <AppDarkMode />
-                <Button variant="text">
+                <Button class="!px-2" variant="text">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
                 </Button>
 
-                <img v-if="avatar" :src="avatar" alt="" class="rounded-full aspect-square object-cover" width="32" height="32" @click="toggleAvatar">
-                <Avatar v-else :label="firstName(user.name)" shape="circle" class="cursor-pointer" @click="toggleAvatar" />
+                <img v-if="avatar" :src="avatar" alt="" class="aspect-square object-cover" width="32" height="32" @click="toggleAvatar">
+                <Avatar v-else :label="firstName(user.name)" shape="square" class="cursor-pointer" @click="toggleAvatar" />
 
                 <Menu ref="menu" id="avatar_menu" :model="menuAvatar" :popup="true" />
 

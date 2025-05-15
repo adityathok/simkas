@@ -1,13 +1,13 @@
 <template>
 
-  <div class="border rounded-lg p-3 md:p-4 bg-white">
+  <DashCard>
         
-    <div class="flex items-center gap-2 mb-3">
+    <template #header>
       <Icon name="lucide:map" /> Alamat Siswa
-    </div>
+    </template>
     <div>
-      <div v-for="item in fields" :key="item.key" class="border-b py-1 flex flex-col md:flex-row">
-        <div class="md:basis-1/3 font-bold pe-1">
+      <div v-for="item in fields" :key="item.key" class="p-2 flex flex-col md:flex-row odd:bg-zinc-100 dark:odd:bg-zinc-700">
+        <div class="md:basis-1/3 opacity-70">
             {{ item.label }}
         </div>
         <div class="md:flex-1">
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-  </div>
+  </DashCard>
 
 </template>
 
