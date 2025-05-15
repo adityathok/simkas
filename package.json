@@ -23,7 +23,7 @@
     "primevue": "^4.3.4",
     "print-js": "^1.6.0",
     "tailwindcss": "^4.1.6",
-    "vue": "^3.5.13",
+    "vue": "^3.5.14",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
