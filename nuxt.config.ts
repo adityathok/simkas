@@ -43,12 +43,13 @@ export default defineNuxtConfig({
       redirectIfUnauthenticated: true,
       redirect: {
         keepRequestedRoute: true,
-        onLogin: '/',
-        onLogout: '/',
-        onGuestOnly:'/dashboard'
+        onAuthOnly: '/login',
+        onGuestOnly: '/',
+        onLogout: '/login'
       },
       globalMiddleware: {
           enabled: true,
+          allow404WithoutAuth: true,
       },
   },
   primevue: {
@@ -57,7 +58,7 @@ export default defineNuxtConfig({
               preset: MyPreset,
               options: {
                   prefix: 'p',
-                  darkModeSelector: '.color-scheme-dark',
+                  darkModeSelector: '.dark',
                   cssLayer: false
               }
           }

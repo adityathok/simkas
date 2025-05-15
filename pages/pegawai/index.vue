@@ -116,7 +116,7 @@
             <Button severity="info" variant="outlined" as="router-link" :to="'/pegawai/edit?id='+idpegawai" >
                 <Icon name="lucide:pencil" /> Edit
             </Button>
-            <Button v-if="useUser.currentUser.id!==idpegawai" @click="confirmDelete(idpegawai)" severity="danger" variant="outlined">
+            <Button v-if="config.user.id!==idpegawai" @click="confirmDelete(idpegawai)" severity="danger" variant="outlined">
                 <Icon name="lucide:trash" /> Hapus
             </Button>
         </div>
@@ -137,7 +137,7 @@
             <Button as="router-link" severity="info" variant="text" size="small" :to="'/pegawai/edit?id='+selectedItem.id" class="w-full justify-start!">
                 <Icon name="lucide:pencil" /> Edit
             </Button>
-            <Button v-if="useUser.currentUser.id!==selectedItem.user_id" @click="confirmDelete(selectedItem.id)" severity="danger" variant="text" size="small" class="w-full justify-start!">
+            <Button v-if="config.user.id!==selectedItem.user_id" @click="confirmDelete(selectedItem.id)" severity="danger" variant="text" size="small" class="w-full justify-start!">
                 <Icon name="lucide:trash" /> Hapus
             </Button>
         </div>
@@ -149,7 +149,7 @@
     definePageMeta({
         title: 'Semua Pegawai',
     })
-    const useUser = useUserStore()
+    const { config } = useConfigStore();
     const pegawaiDialog = ref(false);
     const confirm = useConfirm();
     const toast = useToast();

@@ -49,4 +49,11 @@
 
 <script setup lang="ts">
 const useGlobal = useGlobalStore()
+
+// Ambil state dan action dari store
+const { setConfig } = useConfigStore();
+
+onMounted( async () => {
+    await setConfig()
+});
 </script>

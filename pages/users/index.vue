@@ -72,7 +72,7 @@
         title: 'Semua Akun',
     })
     const { urlStorage } = useGlobalStore()
-    const useUser = useUserStore()
+    const { config } = useConfigStore()
     const confirm = useConfirm();
     const toast = useToast();
     const route = useRoute();
@@ -134,7 +134,7 @@
 
     const useDelete = (data: any) => {
         
-        if(data.id===useUser.currentUser.id){
+        if(data.id===config.user.id){
             return false;
         } 
 

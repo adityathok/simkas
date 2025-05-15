@@ -48,9 +48,9 @@
 
 <script setup>
 const useGlobal = useGlobalStore()
-const useUser = useUserStore()
 const user = useSanctumUser();
 const visibleSearch = ref(false);
+const { config } = useConfigStore();
 
 const { toLogout } = useAuth()
 const avatar = user.value.avatar ? user.value.avatar : '';
@@ -67,12 +67,12 @@ const firstName = (name) => {
 const menuAvatar = computed(() => {
   return [
       {
-          label: useUser.currentUser.name,
+          label: config.user.name,
           items: [
               {
                   label: 'Profile',
                   icon: 'pi pi-user',
-                  command: () => navigateTo('/users/edit?id='+useUser.currentUser.id) 
+                  command: () => navigateTo('/users/edit?id='+config.user.id) 
               },
               { 
                   label: 'Logout',

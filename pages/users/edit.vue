@@ -46,7 +46,7 @@
         title: 'Edit Akun',
     })
     const { isAuthenticated, user, refreshIdentity } = useSanctumAuth()
-    const useUser = useUserStore()
+    const { config } = useConfigStore()
     const route = useRoute();
     const toast = useToast();
     const idUser = route.query.id || '';
@@ -79,7 +79,7 @@
             toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil diperbarui', life: 3000 });
             eror.value = ({});
             //jika id sama dengan id user yang sedang login
-            if(idUser == useUser.currentUser.id){
+            if(idUser == config.user.id){
                 await refreshIdentity()
             }
         } catch (er) {
