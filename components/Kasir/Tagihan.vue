@@ -93,8 +93,9 @@ async function getTagihan(){
     const res = await client('/api/tagihan',{
       params:{
         page: page.value,
-        // user_id: userId.value,
-        // siswa_id: siswaId.value
+        user_id: form.value.user_id,
+        siswa_id: form.value.siswa_id,
+        pegawai_id: form.value.pegawai_id,
       }
     })
     dataTagihan.value = res

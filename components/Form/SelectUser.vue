@@ -69,6 +69,10 @@
       </div>
     </div>
 
+    <Message v-if="errors" severity="warn" class="my-3">
+      {{ errors }}
+    </Message>
+
   </Dialog>
 
 </template>
@@ -110,9 +114,8 @@ const onSearch  = async () => {
           const res = await client('api/pegawai/search/'+formSearch.value.key)
           result.value = res
         }
-    } catch (error) {
-        console.log(error);
-        errors.value = error
+    } catch (error: any) {
+        errors.value = error.data.message
     }    
     isLoading.value = false
   }
