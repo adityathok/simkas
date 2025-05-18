@@ -5,13 +5,13 @@
               <div class="flex items-center justify-start">
                   
                   <div class="xl:hidden ms-1">
-                      <Button @click="useGlobal.toggelsidebar()" size="small" severity="secondary" variant="link">
-                          <Icon name="lucide:menu"  size="1.5rem"/>
+                      <Button @click="useConfig.toggelSidebar()" size="small" severity="secondary" variant="link">
+                          <Icon name="lucide:panel-left-close"  size="1.5rem"/>
                       </Button>
                   </div>
                   <span class="hidden md:block">
-                      <Button severity="secondary" variant="text" @click="$router.back()">
-                          <Icon name="lucide:move-left"  />
+                      <Button severity="secondary" variant="text" @click="useConfig.toggleMiniSidebar()">
+                          <Icon name="lucide:panel-left-close"/>
                       </Button>
                   </span>
                   <span class="hidden md:block">
@@ -48,10 +48,9 @@
 </template>
 
 <script setup>
-const useGlobal = useGlobalStore()
+const useConfig = useConfigStore()
 const user = useSanctumUser();
 const visibleSearch = ref(false);
-const { config } = useConfigStore();
 
 const { toLogout } = useAuth()
 const avatar = user.value.avatar ? user.value.avatar : '';
@@ -68,12 +67,12 @@ const firstName = (name) => {
 const menuAvatar = computed(() => {
   return [
       {
-          label: config.user.name,
+          label: useConfig.config.user.name,
           items: [
               {
                   label: 'Profile',
                   icon: 'pi pi-user',
-                  command: () => navigateTo('/users/edit?id='+config.user.id) 
+                  command: () => navigateTo('/users/edit?id='+useConfig.config.user.id) 
               },
               { 
                   label: 'Logout',

@@ -1,9 +1,9 @@
 <template>
 
     <div class="flex w-full min-h-screen">
-        <div class="xl:ms-64 flex w-full">
+        <div class="flex w-full" :class="useConfig.miniSidebar?'xl:ms-25':'xl:ms-64'">
 
-            <div class="xl:block hidden" :class="{'block! relative z-20':useGlobal.opensidebar}">
+            <div class="xl:block hidden" :class="{'block! relative z-20':useConfig.openSidebar}">
                 <div class="flex">
                     <AppNavSidebar/>
                 </div>
@@ -37,7 +37,7 @@
                     <AppCopyright />
                 </div>
 
-                <div v-if="useGlobal.opensidebar" class="fixed md:hidden h-svh z-10 top-0 bottom-0 end-0 start-0 bg-black opacity-50" @click="useGlobal.toggelsidebar"></div>
+                <div v-if="useConfig.openSidebar" class="fixed md:hidden h-svh z-10 top-0 bottom-0 end-0 start-0 bg-black opacity-50" @click="useConfig.toggelSidebar"></div>
 
             </div>
 
@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-const useGlobal = useGlobalStore()
+const useConfig = useConfigStore()
 const $route = useRoute()
 
 // Ambil state dan action dari store

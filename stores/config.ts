@@ -2,9 +2,14 @@ import { defineStore } from 'pinia'
 
 export const useConfigStore = defineStore('config', () => {
 
-    const opensidebar = ref(false)
-    function toggelsidebar() {
-        opensidebar.value = !opensidebar.value
+    const openSidebar = ref(false)
+    function toggelSidebar() {
+        openSidebar.value = !openSidebar.value
+    }
+
+    const miniSidebar = ref(false)
+    function toggleMiniSidebar() {
+        miniSidebar.value = !miniSidebar.value
     }
 
     const client = useSanctumClient(); 
@@ -14,6 +19,8 @@ export const useConfigStore = defineStore('config', () => {
     
     const config = ref({
         year: new Date().getFullYear(),
+        tahun_ajaran: '',
+        lembaga: '',
         app_name: '',
         app_description: '',
         app_logo: '',
@@ -49,6 +56,9 @@ export const useConfigStore = defineStore('config', () => {
             config.value.permissions = res.permissions
             config.value.app_menus = res.app_menus
 
+            config.value.tahun_ajaran = res.tahun_ajaran
+            config.value.lembaga = res.lembaga
+
         } catch(er){
             error.value = er
         } finally {
@@ -57,8 +67,10 @@ export const useConfigStore = defineStore('config', () => {
     }
 
     return {
-        opensidebar,
-        toggelsidebar,
+        openSidebar,
+        toggelSidebar,
+        miniSidebar,
+        toggleMiniSidebar,
         configApp,
         setConfig,
         config
