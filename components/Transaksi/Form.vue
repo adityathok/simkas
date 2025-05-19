@@ -212,7 +212,8 @@ const handleFormSubmit = async () => {
   if(action == 'edit') {
     try {
       await client('/api/transaksi/'+data.id, { method: 'PUT', body: form.value });
-      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil diubah', life: 3000 });
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Transaksi berhasil diubah', life: 3000 });
+      emit('update')
     } catch(er) {
       const err = useSanctumError(er)
       errors.value = err.bag
@@ -222,7 +223,8 @@ const handleFormSubmit = async () => {
 
     try {
       await client('/api/transaksi', { method: 'POST', body: form.value });
-      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Berhasil ditambah', life: 3000 });
+      toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Transaksi berhasil disimpan', life: 3000 });
+      emit('update')
     } catch(er) {
       const err = useSanctumError(er)
       errors.value = err.bag
