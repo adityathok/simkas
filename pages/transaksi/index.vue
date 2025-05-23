@@ -59,23 +59,7 @@
               {{ slotProps.data.user.siswa?.nis }} / {{ slotProps.data.user.siswa?.kelas_siswa.nama }}
             </NuxtLink>
           </template>
-        </Column>    
-        <!-- <Column field="akun" header="Akun">        
-          <template #body="slotProps">
-            <template v-if="slotProps.data.items">              
-              <template v-for="item in slotProps.data.items">
-                        
-                <Tag severity="success" v-if="item.akun_pendapatan_id" size="small" class="!font-normal !text-xs !text-slate-800">  
-                  {{ item.akun_pendapatan?.nama }}
-                </Tag> 
-                <Tag severity="warn" v-if="item.akun_pengeluaran_id" size="small" class="!font-normal !text-xs !text-slate-800">  
-                  {{ item.akun_pengeluaran?.nama }}
-                </Tag>
-
-              </template> 
-            </template>  
-          </template>
-        </Column>         -->
+        </Column> 
         <Column field="rekening_id" header="Rek">        
           <template #body="slotProps">          
             <span v-if="slotProps.data.akun_rekening_id">  
