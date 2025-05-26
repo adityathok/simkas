@@ -8,6 +8,8 @@
         <div class="md:flex-1">
 
           <ToggleSwitch v-if="item.type == 'checkbox'" v-model="form[item.key]" />
+          <Textarea v-else-if="item.type == 'textarea'" v-model="form[item.key]" class="w-full" />
+          <Select v-else-if="item.type == 'select'" v-model="form[item.key]" :options="[{value:'tunai',label:'Tunai'},{value:'bank',label:'Bank'}]" optionValue="value" optionLabel="label" class="w-full" />
           <InputText v-else type="text" v-model="form[item.key]" class="w-full" />
 
           <div v-if="item.desc" class="text-xs text-slate-400 mt-1">
@@ -47,6 +49,7 @@ const visibleDialog = ref(false);
 const fields = [
   // { key: 'id', label: 'ID', type: 'text' },
   { key: 'nama', label: 'Nama', type: 'text', desc: 'Nama Akun Rekening' },
+  { key: 'tipe', label: 'Tipe', type: 'select', desc: 'Tipe Rekening' },
   { key: 'keterangan', label: 'Keterangan', type: 'textarea', desc: 'Keterangan' },
 ]
 
@@ -54,6 +57,7 @@ const form = reactive({
   id: '',
   nama: '',
   keterangan: '',
+  tipe: 'bank'
 } as any)
 
 //jika action = edit & ada data
@@ -61,6 +65,7 @@ if(data){
   form.id = data.id
   form.nama = data.nama
   form.keterangan = data.keterangan
+  form.tipe = data.tipe
 }
 
 const handleFormSubmit = async () => {  

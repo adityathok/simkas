@@ -1,49 +1,52 @@
 <template>
   <UnitSekolahLayout>
 
-    <div class="flex justify-end items-center gap-2">
-      <span v-if="status == 'pending'">
-        <Icon name="lucide:loader"  class="animate-spin"/>
-      </span>
-      <Select v-model="filterTahun" :options="optionTahunAjaran" optionLabel="label" optionValue="value"/>
-      <Button @click="openDialog('','add')" size="small">
-        <Icon name="lucide:circle-plus" />
-        Tambah
-      </Button>
-    </div>
-    
-    <DataTable v-if="data.data.length > 0" :value="data.data"  class="text-sm" stripedRows scrollable>
-      <Column field="nama" header="Kelas">        
-        <template #body="slotProps">
-          <NuxtLink :to="'/kelas/'+slotProps.data.id" target="_blank" class="cursor-pointer hover:underline">
-            {{ slotProps.data.nama }}
-          </NuxtLink>
-        </template>
-      </Column>
-      <Column field="tahun_ajaran" header="Tahun" />
-      <Column field="tingkat" header="Tingkat" />
-      <Column field="wali_id" header="Wali">
-        <template #body="slotProps">
-          <NuxtLink :to="'/pegawai/'+slotProps.data.wali.pegawai.id" target="_blank" class="cursor-pointer hover:underline">
-            {{ slotProps.data.wali?.pegawai.nama }}
-          </NuxtLink>
-        </template>
-      </Column>
-      <Column field="act" header="">
-        <template #body="slotProps">
-          <div class="flex justify-end items-center">
-            <Button severity="secondary" variant="text" @click="$router.push('/kelas/'+slotProps.data.id)" class="px-1!" v-tooltip="'Edit'">
-              <Icon name="lucide:square-pen" />
-            </Button>
-            <Button severity="danger" variant="text" @click="confirmDelete(slotProps.data.id)" class="px-1!" v-tooltip="'Hapus'">
-                <Icon name="lucide:trash" />
-            </Button>
-          </div>
-        </template>
-      </Column>
-    </DataTable>
+    <div class="md:max-w-150">
+      <div class="flex justify-end items-center gap-2">
+        <span v-if="status == 'pending'">
+          <Icon name="lucide:loader"  class="animate-spin"/>
+        </span>
+        <Select v-model="filterTahun" :options="optionTahunAjaran" optionLabel="label" optionValue="value"/>
+        <Button @click="openDialog('','add')" size="small">
+          <Icon name="lucide:circle-plus" />
+          Tambah
+        </Button>
+      </div>
+      
+      <DataTable v-if="data.data.length > 0" :value="data.data"  class="text-sm" stripedRows scrollable>
+        <Column field="nama" header="Kelas">        
+          <template #body="slotProps">
+            <NuxtLink :to="'/kelas/'+slotProps.data.id" target="_blank" class="cursor-pointer hover:underline">
+              {{ slotProps.data.nama }}
+            </NuxtLink>
+          </template>
+        </Column>
+        <Column field="tahun_ajaran" header="Tahun" />
+        <Column field="tingkat" header="Tingkat" />
+        <Column field="wali_id" header="Wali">
+          <template #body="slotProps">
+            <NuxtLink :to="'/pegawai/'+slotProps.data.wali.pegawai.id" target="_blank" class="cursor-pointer hover:underline">
+              {{ slotProps.data.wali?.pegawai.nama }}
+            </NuxtLink>
+          </template>
+        </Column>
+        <Column field="act" header="">
+          <template #body="slotProps">
+            <div class="flex justify-end items-center">
+              <Button severity="secondary" variant="text" @click="$router.push('/kelas/'+slotProps.data.id)" class="px-1!" v-tooltip="'Edit'">
+                <Icon name="lucide:pen" />
+              </Button>
+              <Button severity="danger" variant="text" @click="confirmDelete(slotProps.data.id)" class="px-1!" v-tooltip="'Hapus'">
+                  <Icon name="lucide:trash-2" />
+              </Button>
+            </div>
+          </template>
+        </Column>
+      </DataTable>
 
-    <Message v-else severity="warn">Tidak ada data..</Message>
+      <Message v-else severity="warn">Tidak ada data..</Message>
+
+    </div>
 
   </UnitSekolahLayout>
 
@@ -64,7 +67,6 @@ const toast = useToast();
 const confirm = useConfirm();
 const isLoading = ref(false)
 const errors = ref({} as any)
-
 
 const filterTahun = ref('')
   const { data:optionTahunAjaran } = await useAsyncData(

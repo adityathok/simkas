@@ -3,15 +3,15 @@
     <div class="flex flex-row gap-4 my-1 text-nowrap">
       
       <div v-for="item in dataCards" :key="item.title" class="md:basis-1/3 min-w-[250px]">
-        <div class="bg-white py-4 shadow-sm rounded-xl relative ps-20 pe-4 text-right overflow-hidden">
+        <div class="bg-sky-500 dark:bg-slate-800 text-white py-3 px-4 relative overflow-hidden">
+          <div>
+            <Icon :name="item.icon"  size="1em"/>
+          </div>
           <div class="text-sm">
             {{ item.title }}
           </div>
-          <div class="font-bold text-xl md:text-2xl text-sky-600 mt-2">
+          <div class="font-bold text-xl md:text-2xl mt-2">
             {{ formatCurrency(item.value) }}
-          </div>
-          <div class="absolute bottom-0 start-0 opacity-10 p-3">
-            <Icon :name="item.icon"  size="3.5em"/>
           </div>
         </div>
       </div>

@@ -31,4 +31,9 @@
 </template>
 
 <script setup lang="ts">
+// Ambil state dan action dari store
+const { setConfig, configApp } = useConfigStore();
+onMounted( async () => {
+    setConfig()
+});
 </script>

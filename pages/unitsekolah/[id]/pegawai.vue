@@ -1,28 +1,30 @@
 <template>  
   <UnitSekolahLayout>
     
-    <div class="flex justify-end">
-        <Button @click="openDialog('','add')" size="small">
-          Tambah Pegawai
-        </Button>
-    </div>
+    <div class="md:max-w-200">
+      <div class="flex justify-end">
+          <Button @click="openDialog('','add')" size="small">
+            Tambah Pegawai
+          </Button>
+      </div>
 
-    <DataTable v-if="data.data" :value="data.data"  class="text-sm" stripedRows scrollable>
-      <Column field="nama" header="Nama"></Column>
-      <Column field="jabatan" header="Jabatan"></Column>
-      <Column field="action" header="">        
-        <template #body="slotProps">             
-          <div class="flex justify-end gap-1">
-              <Button @click="openDialog(slotProps.data,'edit')" type="button" variant="text" severity="secondary" class="px-1!">
-                  <Icon name="lucide:pen" />
-              </Button>
-              <Button @click="confirmDelete(slotProps.data.id)" type="button" variant="text" severity="danger"  class="px-1!">
-                  <Icon name="lucide:trash" />
-              </Button>
-          </div>
-        </template>
-      </Column>
-    </DataTable>
+      <DataTable v-if="data.data" :value="data.data"  class="text-sm" stripedRows scrollable>
+        <Column field="nama" header="Nama"></Column>
+        <Column field="jabatan" header="Jabatan"></Column>
+        <Column field="action" header="">        
+          <template #body="slotProps">             
+            <div class="flex justify-end gap-1">
+                <Button @click="openDialog(slotProps.data,'edit')" type="button" variant="text" severity="secondary" class="px-1!" v-tooltip="'Edit'">
+                    <Icon name="lucide:pen" />
+                </Button>
+                <Button @click="confirmDelete(slotProps.data.id)" type="button" variant="text" severity="danger"  class="px-1!" v-tooltip="'Hapus'">
+                    <Icon name="lucide:trash-2" />
+                </Button>
+            </div>
+          </template>
+        </Column>
+      </DataTable>
+    </div>
 
   </UnitSekolahLayout>
 

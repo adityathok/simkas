@@ -1,11 +1,11 @@
 <template>
 
     <div class="relative">
-      
+
       <div class="rounded w-full py-2 px-3 bg-slate-100 cursor-pointer" @click="openDialog">
         
         <div v-if="selectData?.nama" class="flex items-center relative pe-4">
-          <img :src="selectData?.avatar_url" class="aspect-square rounded-full w-15"/>
+          <img :src="selectData?.avatar_url" class="aspect-square rounded-full w-15 object-cover"/>
           <div class="ps-3">
             <div class="font-bold">
               {{ selectData?.nama }}
@@ -82,7 +82,7 @@
 <script setup lang="ts">
 const client = useSanctumClient();
 const props = defineProps(['user_id'])
-const user_id = props.user_id
+const user_id = computed(() => props.user_id)
 const searchQuery = ref('' as any)
 const isLoading = ref(false)
 const isLoadSiswa = ref(false)
@@ -97,23 +97,23 @@ const openDialog = () => {
     visibleDialog.value = true;
 }
 
-if(user_id){
-  isLoadSiswa.value = true
-  //get siswa by user_id
-  try {    
-    const res = await client('api/siswa/searchbyuserid', {
-        method: 'POST',
-        body: {user_id: user_id}
-    })
-    if(res && res[0] ){
-      selectData.value = res[0]
+watch(user_id, async (newValue, oldValue) => {
+  if(newValue) {
+    isLoadSiswa.value = true
+    //get siswa by user_id
+    try {    
+      const res = await client('api/siswa/searchbyuserid/'+user_id.value)
+      if(res){
+        selectData.value = res
+        emit('selected',res)
+      }
+    }catch(er){
+      const eror = useSanctumError(er)
+      console.log(eror)
     }
-  }catch(er){
-    console.log(er)
+    isLoadSiswa.value = false
   }
-  isLoadSiswa.value = false
-
-}
+})
 
 const onSearch  = async () => {
   result.value = {}
@@ -143,7 +143,7 @@ const onSearch  = async () => {
 // Interface untuk opsi siswa
 interface Option {
   id: string;
-  user_id: string;
+  user_id: any;
 }
 
 const emit = defineEmits<{

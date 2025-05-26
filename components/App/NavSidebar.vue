@@ -1,59 +1,78 @@
 <template>
-  <div class="h-full left-0 top-0 w-64 fixed bg-slate-50 z-6 border-r border-border px-4">
+  <div class="h-full left-0 top-0 w-64 fixed bg-slate-100 dark:bg-zinc-900 z-6 border-r border-zinc-100 dark:border-zinc-700 shadow px-4" :class="{ 'md:w-25': useConfig.miniSidebar }">
     
     <div class="py-6 px-2 flex justify-center brand-logo overflow-hidden">
-       <AppLogo />    
+       <div class="flex items-center gap-2">
+        <img v-if="useConfig.config.logo" :src="useConfig.config.logo" alt="Logo App" class="max-h-10">
+        <img v-else src="~/public/logo.png" alt="Logo App" class="max-h-10">
+        <div :class="{ 'md:hidden': useConfig.miniSidebar }">
+            <div class="text-sm font-bold">SIMKAS</div>
+            <div class="text-xs">{{ useConfig.config.lembaga }}</div>
+        </div>
+       </div>
     </div>
-
     <ScrollPanel style="width: 100%; height: calc(100vh - 7rem)">
+        
         <PanelMenu
-        :model="items"
-        class="w-full border-none rounded-none gap-0!"
-        :pt="{
-            panel: (options) => ({
-                class: [
-                    'border-none!',
-                    'bg-transparent!'
-                ]
-            }),
-            rootList: (options) => ({
-                class: [
-                    'ps-0!',
-                ]
-            })
-        }"
-        v-model:expandedKeys="expandedKeys"
+            v-if="items"
+            :model="items"
+            class="w-full border-none rounded-none gap-0!"
+            :pt="{
+                panel: (options) => ({
+                    class: [
+                        'border-none!',
+                        'bg-transparent!'
+                    ]
+                }),
+                rootList: (options) => ({
+                    class: [
+                        'ps-0!',
+                    ]
+                })
+            }"
+            v-model:expandedKeys="expandedKeys"
         >
         <template #item="{ item }">
 
-                <button v-if="item.items" :class="classLink">
+                <button v-if="item.items" :class="classLink" v-tooltip="useConfig.miniSidebar?item.label:null">
                     <div class="flex justify-between items-center w-full">
-                        <span class="flex justify-start items-center w-full">
-                            <Icon v-if="item.icon" :name="item.icon"  :ssr="true" class="mr-2"/>
-                            <span>{{ item.label }}</span>
-                        </span>                    
-                        <Icon v-if="expandedKeys[item.key!]" name="lucide:chevron-down"  :ssr="true"/>
-                        <Icon v-else name="lucide:chevron-up"  :ssr="true"/>
+                        <span class="flex justify-start items-center w-full" :class="{ 'md:justify-center': useConfig.miniSidebar }">
+                            <Icon v-if="item.icon" :name="item.icon" size="1.5em" :ssr="true"/>
+                            <span class="ms-2" :class="{ 'md:hidden': useConfig.miniSidebar }">{{ item.label }}</span>
+                        </span>
+                        <span :class="{ 'md:hidden': useConfig.miniSidebar }">
+                            <Icon v-if="expandedKeys[item.key!]" name="lucide:chevron-down" :ssr="true"/>
+                            <Icon v-else name="lucide:chevron-up" :ssr="true"/>
+                        </span>
                     </div>
                 </button>
-                <NuxtLink v-else :to="item.route" :class="[classLink,{'bg-blue-500! text-white!':isActive(item.route)}]" @click="useGlobal.toggelsidebar">
-                    <span class="flex justify-start items-center w-full">
-                        <Icon v-if="item.icon" :name="item.icon"  :ssr="true" class="mr-2"/>
-                        <Icon v-else name="lucide:circle" size="8"  :ssr="true" class="mr-2"/>
-                        <span>{{ item.label }}</span>
+                <NuxtLink v-else :to="item.route" v-tooltip="useConfig.miniSidebar?item.label:null" :class="[classLink,{'bg-blue-500! dark:bg-blue-700! text-white!':isActive(item.route)}]" @click="useConfig.toggelSidebar">
+                    <span class="flex justify-start items-center w-full" :class="{ 'md:justify-center': useConfig.miniSidebar }">
+                        <Icon v-if="item.icon" :name="item.icon" size="1.5em"  :ssr="true"/>
+                        <Icon v-else name="lucide:circle" size="8"  :ssr="true"/>
+                        <span class="ms-2" :class="{ 'md:hidden': useConfig.miniSidebar }">{{ item.label }}</span>
                     </span>
                 </NuxtLink>
                                     
             </template>
         </PanelMenu>
+
+        <div v-else>
+            <template v-for="i in 8">
+                <div class="flex mb-2 px-2">
+                    <Skeleton width="2.5rem" height="2rem" class="mr-3"/>
+                    <Skeleton height="2rem"/>
+                </div>
+            </template>
+        </div>
+
     </ScrollPanel>
     
   </div>
 </template>
 
 <script setup lang="ts">
-
-const useGlobal = useGlobalStore()
+const useConfig = useConfigStore()
 
 //route, cek halaman aktif
 const route = useRoute()
@@ -101,182 +120,11 @@ watch(() => expandedKeys, () => {
 })
 
 //class untuk tombol menu
-const classLink = 'w-full flex items-center justify-start rounded-md px-2.5 py-2.5 mb-0.5 gap-3 text-start leading-[normal] font-normal hover:bg-blue-100 hover:text-blue-800 text-link bg-transparent group/link cursor-pointer';
+const classLink = 'w-full flex items-center justify-start px-2.5 py-2.5 mb-0.5 gap-3 text-start leading-[normal] text-sm font-normal hover:bg-blue-100 hover:text-blue-800 text-link bg-transparent group/link cursor-pointer';
 
 //daftar menu
-const items = ref([
-    {
-        key: 'dashboard',
-        label: 'Dashboard',
-        icon: 'lucide:layout-grid',
-        route:'/',
-    },
-    {
-        key: 'transaksi',
-        label: 'Transaksi',
-        icon: 'lucide:coins',
-        items:[
-            {
-                key: 'riwayat_transaksi',
-                label: 'Riwayat Transaksi',
-                route:'/transaksi',
-            },
-            {
-                key: 'create_transaksi',
-                label: 'Tambah Transaksi',
-                route:'/transaksi/create',
-            },
-        ]
-    },
-    {
-        key: 'tagihan',
-        label: 'Tagihan',
-        icon: 'lucide:receipt-text',
-        items:[
-            {
-                key: 'riwayat_tagihan',
-                label: 'Semua Tagihan',
-                route:'/tagihan',
-            },
-            {
-                key: 'create_tagihan',
-                label: 'Buat Tagihan',
-                route:'/tagihan/create',
-            },
-        ]
-    },
-    {
-        key: 'akuntansi',
-        label: 'Akuntansi',
-        icon: 'lucide:calculator',
-        items: [
-            {
-                key: 'akun_pendapatan',
-                label: 'Akun Pendapatan',
-                route:'/akunpendapatan',
-            },
-            {
-                key: 'akun_pengeluaran',
-                label: 'Akun Biaya',
-                route:'/akunpengeluaran',
-            },
-            {
-                key: 'jurnlkas',
-                label: 'Jurnal',
-                route:'/jurnalkas',
-            },
-            {
-                key: 'akun_rekening',
-                label: 'Akun Rekening',
-                route:'/akunrekening',
-            },
-        ]
-    },
-    {
-        key: 'siswa',
-        label: 'Siswa',
-        icon: 'lucide:users',
-        items: [
-            {
-                key: 'siswa_data',
-                label: 'Data Siswa',
-                route:'/siswa',
-            },
-            {
-                key: 'siswa_tambah',
-                label: 'Tambah Siswa',
-                route:'/siswa/create',
-            },
-            {
-                key: 'siswa_naik',
-                label: 'Naik Kelas',
-                route:'/siswa/naikkelas',
-            },
-            {
-                key: 'siswa_import',
-                label: 'Import Siswa',
-                route:'/siswa/import',
-            }
-        ]
-    },
-    {
-        key: 'unit',
-        label: 'Unit Sekolah',
-        icon: 'lucide:school',
-        items: [
-            {
-                key: 'unit_create',
-                label: 'Semua Unit',
-                route:'/unitsekolah',
-            },
-            {
-                key: 'unit_kelas',
-                label: 'Kelas',
-                route:'/kelas',
-            },
-        ]
-    },
-    {
-        key: 'pegawai',
-        label: 'Pegawai',
-        icon: 'lucide:circle-user',
-        items: [
-            {
-                key: 'pegawai_all',
-                label: 'Semua Pegawai',
-                route:'/pegawai',
-            },
-            {
-                key: 'pegawai_add',
-                label: 'Tambah Pegawai',
-                route:'/pegawai/add',
-            },
-        ]
-    },
-    {
-        key: 'pengaturan',
-        label: 'Pengaturan',
-        icon: 'lucide:settings',
-        // route:'/pengaturan',
-        items: [
-            {
-                key: 'pengaturan_lembaga',
-                label: 'Lembaga',
-                route:'/pengaturan',
-            },
-            {
-                key: 'pengaturan_tahunajaran',
-                label: 'Tahun Ajaran',
-                route:'/pengaturan/tahunajaran',
-            },
-            {
-                key: 'pengaturan_jenjang',
-                label: 'Jenjang',
-                route:'/pengaturan/jenjang',
-            },
-            {
-                key: 'pengaturan_jabatan',
-                label: 'Jabatan',
-                route:'/pengaturan/jabatan',
-            },
-        ]
-    },
-    {
-        key: 'users',
-        label: 'Users',
-        icon: 'lucide:square-user',
-        items: [
-            {
-                key: 'users_all',
-                label: 'Semua User',
-                route:'/users',
-            },
-            {
-                key: '3_1',
-                label: 'Tambah User',
-                route:'/users/create',
-            }
-        ]
-    },
-]);
+const items = computed(() => {
+    return useConfig.config.app_menus
+})
+
 </script>

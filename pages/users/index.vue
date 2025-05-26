@@ -6,7 +6,7 @@
         <DataTable :value="data.data" class="text-sm" stripedRows scrollable>
             <Column field="avatar" header="">
                 <template #body="slotProps">
-                    <Avatar v-if="slotProps.data.avatar" :image="urlStorage+slotProps.data.avatar" shape="circle" />
+                    <Avatar v-if="slotProps.data.avatar" :image="slotProps.data.avatar_url" shape="circle" />
                     <Avatar v-else :label="firstName(slotProps.data.name)" shape="circle" />
                 </template>
             </Column>
@@ -71,8 +71,7 @@
     definePageMeta({
         title: 'Semua Akun',
     })
-    const { urlStorage } = useGlobalStore()
-    const useUser = useUserStore()
+    const useConfig = useConfigStore()
     const confirm = useConfirm();
     const toast = useToast();
     const route = useRoute();
@@ -134,7 +133,7 @@
 
     const useDelete = (data: any) => {
         
-        if(data.id===useUser.currentUser.id){
+        if(data.id === useConfig.config.user.id){
             return false;
         } 
 

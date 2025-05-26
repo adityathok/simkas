@@ -1,9 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import Aura from '@primevue/themes/aura';
+import Nora from '@primevue/themes/nora';
 import { definePreset } from '@primevue/themes';
 import tailwindcss from "@tailwindcss/vite";
 
-const MyPreset = definePreset(Aura, {
+const MyPreset = definePreset(Nora, {
   semantic: {
       primary: {
           50: '{blue.50}',
@@ -24,7 +24,7 @@ const MyPreset = definePreset(Aura, {
 export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   vite: {
     plugins: [
       tailwindcss(),
@@ -43,12 +43,13 @@ export default defineNuxtConfig({
       redirectIfUnauthenticated: true,
       redirect: {
         keepRequestedRoute: true,
-        onLogin: '/',
-        onLogout: '/',
-        onGuestOnly:'/dashboard'
+        onAuthOnly: '/login',
+        onGuestOnly: '/',
+        onLogout: '/login'
       },
       globalMiddleware: {
           enabled: true,
+          allow404WithoutAuth: true,
       },
   },
   primevue: {
@@ -57,7 +58,7 @@ export default defineNuxtConfig({
               preset: MyPreset,
               options: {
                   prefix: 'p',
-                  darkModeSelector: '.color-scheme-dark',
+                  darkModeSelector: '.dark',
                   cssLayer: false
               }
           }

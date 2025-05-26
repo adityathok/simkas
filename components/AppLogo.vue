@@ -25,14 +25,6 @@
 </template>
 
 <script setup lang="ts">
-
-// Inisialisasi store
-const configStore = useConfigStore();
-
 // Ambil state dan action dari store
-const { setConfig,configApp } = configStore;
-onMounted(() => {
-    setConfig()
-})
-
+const { configApp } = useConfigStore();
 </script>

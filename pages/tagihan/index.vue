@@ -114,7 +114,6 @@
       <TagihanForm v-else :action="actionDialog" :data="selectedItem" @update="refresh"/>
     </Dialog>
   
-
     <Drawer v-model:visible="visibleFilter" header="Filter" position="right">
       <TagihanFormFilters @submit="onSubmitFilters" :params="filters"/>
     </Drawer>
@@ -214,7 +213,6 @@ function onSubmitFilters( data: any) {
   filters.value.user_id = data.user_id
   refresh()
 }
-
 
 const confirmDelete = (id: any) => {
     confirm.require({

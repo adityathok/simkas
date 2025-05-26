@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    Page: unitsekolah/profile
+    Page: laporan/perubahan-modal
   </div>
 </template>
 

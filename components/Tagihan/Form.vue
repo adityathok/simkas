@@ -49,7 +49,12 @@
     <div class="col-start-1 col-end-5 mb-2">
       <label>Status</label>
       <div class="mt-1">
-        <SelectButton v-model="form.status" :options="[{label:'Belum',value:'belum'},{label:'Lunas',value:'lunas'},{label:'Batal',value:'batal'}]" optionLabel="label" optionValue="value" class="w-full"/>
+        <SelectButton 
+          v-model="form.status" 
+          :options="[{label:'Belum',value:'belum'},{label:'Lunas',value:'lunas'},{label:'Batal',value:'batal'}]" 
+          optionLabel="label" 
+          optionValue="value" 
+        />
       </div>
     </div>
     <div class="col-start-1 col-end-5 mb-2">
