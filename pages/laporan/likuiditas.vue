@@ -5,10 +5,13 @@
       <Select v-model="filters.per_page" :options="[10,20,50,100]" size="small" />
       <DatePicker v-model="filters.bulan" placeholder="Bulan" view="month" dateFormat="mm/yy" selectionMode="range" :manualInput="true" size="small" />
       <Select v-model="filters.rekening_id" :options="optionsData?.akunrekening" optionLabel="label" optionValue="value" size="small" placeholder="Rekening" />
+      <Button @click="openSaldoAwal" size="small">
+        Saldo Awal : Rp{{ formatUang(data.data_saldoawal) }}
+      </Button>
     </div>
     
     <div v-if="data.rekening" class="max-w-[300px] md:w-[300px] my-5 md:my-0 ms-auto">
-      <DashCard class="bg-blue-500 text-white">
+      <DashCard class="border-l-10 border-blue-500 shadow">
         <div class="flex justify-between gap-2 mb-3 items-center">        
           <div>
           {{ data.rekening.nama }}
@@ -83,7 +86,17 @@
       </div>
 
   </DashCard>
-<AppLoader :loading="isRefresh"/>
+  <AppLoader :loading="isRefresh"/>
+
+  <Dialog v-model:visible="saldoAwalDialog" header="Saldo Awal" :style="{ width: '30rem', minHeight: '50vh' }" :breakpoints="{ '1000px': '40rem', '768px': '90vw' }" :modal="true">
+     <AkunRekeningSaldoAwalForm 
+      :rekening_id="filters.rekening_id"
+      :bulan="filters.bulan"
+      :nominal="data.data_saldoawal"
+      @update="refresh"
+     />
+  </Dialog>
+  
 </template>
 
 <script setup lang="ts">
@@ -160,4 +173,8 @@ watch(status, (newStatus) => {
   }
 })
 
+const saldoAwalDialog = ref(false);
+const openSaldoAwal = () => {
+  saldoAwalDialog.value = true;
+}
 </script>

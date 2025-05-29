@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-const emit =defineEmits(['update']);
+const emit = defineEmits(['update']);
 const props = defineProps(['data','action'])
 const data = props.data
 const action = props.action
