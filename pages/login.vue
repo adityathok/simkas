@@ -1,14 +1,6 @@
 <template>
     
-    <div v-if="!isLogin" class="max-w-lg">
-      <div class="mb-3 pb-3 w-full border-b">
-        <h1 class="text-2xl font-semibold tracking-tight">
-          Selamat Datang,
-        </h1>
-        <h3 class="text-sm text-slate-500">
-          Silahkan login untuk masuk
-        </h3>
-      </div>
+    <div v-if="!isLogin" class="max-w-lg pt-10">      
       <AuthLogin/>
     </div>
     
