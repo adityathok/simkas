@@ -24,8 +24,8 @@
           </Column>
           <Column field="pendapatan" header="Sumber Pendapatan">        
             <template #body="slotProps">            
-              <span v-if="slotProps.data.akunpendapatan">
-                {{ slotProps.data.akunpendapatan.nama }}
+              <span v-if="slotProps.data.akun_pendapatan">
+                {{ slotProps.data.akun_pendapatan.nama }}
               </span>
             </template>
           </Column>

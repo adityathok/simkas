@@ -11,7 +11,7 @@
         <template #content>
 
         <div class="overflow-hidden text-nowrap shadow-xs">
-            <DataTable :value="data.data" size="small" class="text-sm" stripedRows scrollable>
+            <DataTable v-if="data?.data" :value="data.data" size="small" class="text-sm" stripedRows scrollable>
 
             <Column field="foto" header="">            
                 <template #body="slotProps">
@@ -52,7 +52,7 @@
             </Column>
             <Column field="status" header="Status" class="hidden lg:table-cell">
                 <template #body="slotProps">
-                    <Badge :severity="slotProps.data.status == 'Aktif' ? 'success' : 'danger'">
+                    <Badge :severity="slotProps.data.status == 'Aktif' || slotProps.data.status == 'aktif' ? 'success' : 'danger'">
                         {{ slotProps.data.status }}
                     </Badge>
                 </template>
@@ -82,10 +82,13 @@
                         Loading....
                     </span>
                     <span v-else>
+                        <template v-if="data?.data">
                         Tampil {{ data.from }} sampai {{ data.to }} dari {{ data.total }}
+                        </template>
                     </span>
                 </div>
                 <Paginator
+                    v-if="data?.data"
                     :rows="data.per_page"
                     :totalRecords="data.total"
                     @page="onPaginate"
@@ -104,20 +107,20 @@
         
     </Card>
 
-  <Dialog v-model:visible="pegawaiDialog" :style="{ width: '30rem', minHeight: '50vh' }" :breakpoints="{ '1000px': '40rem', '768px': '90vw' }" :modal="true">
+  <Dialog v-model:visible="pegawaiDialog" header="Profil" :style="{ width: '50rem', minHeight: '50vh' }" :breakpoints="{ '1000px': '40rem', '768px': '90vw' }" :modal="true">
       <template v-if='pegawaiDialog'>
           
         <PegawaiProfil :idpegawai="idpegawai" :data="itemPegawai" />
 
         <div class="flex justify-end gap-1 mt-4">
-            <Button severity="secondary" variant="outlined" @click="pegawaiDialog = false" >
+            <Button severity="secondary" size="small" @click="pegawaiDialog = false" >
                 <Icon name="lucide:x" /> Tutup
             </Button>
-            <Button severity="info" variant="outlined" as="router-link" :to="'/pegawai/edit?id='+idpegawai" >
+            <Button severity="info" size="small" as="router-link" :to="'/pegawai/edit?id='+idpegawai" >
                 <Icon name="lucide:pencil" /> Edit
             </Button>
-            <Button v-if="config.user.id!==idpegawai" @click="confirmDelete(idpegawai)" severity="danger" variant="outlined">
-                <Icon name="lucide:trash" /> Hapus
+            <Button v-if="config.user.id!==itemPegawai.user_id" @click="confirmDelete(idpegawai)" severity="danger" size="small">
+                <Icon name="lucide:trash" /> Hapus {{ itemPegawai.user_id }} / {{ config.user.id }}
             </Button>
         </div>
 

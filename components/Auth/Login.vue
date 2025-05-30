@@ -11,7 +11,7 @@
       </div>
 
       <div class="flex mb-5">
-          <Checkbox v-model="form.remember" inputId="remember" name="remember" value="true" />
+          <Checkbox v-model="form.isremember" inputId="remember" name="remember" value="true" />
           <label for="remember" class="ml-2"> Remember </label>
       </div>        
 
@@ -39,12 +39,13 @@
       email: '',
       password: '',
       remember: '',
+      isremember: '',
   })
 
   async function handleFormSubmit() {
       isLoading.value = true; 
       errors.value = false;
-      form.value.remember = form.value.remember[0]=='true'?true:form.value.remember[0];
+      form.value.remember = form.value.isremember[0]=='true'?true:form.value.isremember[0];
       try {
           await login(form.value)
       } catch (e) {
