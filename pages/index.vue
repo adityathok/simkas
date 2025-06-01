@@ -1,7 +1,7 @@
 <template>
 
-  <div class="flex justify-end items-center hidden mb-2">
-    <DatePicker v-model="tanggal" view="month" dateFormat="mm/yy" :manualInput="true" size="small" />
+  <div class="hidden mb-2">
+    <DatePicker v-model="bulan" view="month" dateFormat="mm/yy" :manualInput="true" size="small" />
   </div>
 
   <div class="mb-10">
@@ -16,11 +16,17 @@
 
     <div class="basis-1 md:basis-[80%]">
       <DashCard>
+      <template #header>
+        <Icon name="lucide:chart-no-axes-column-increasing" /> Grafik {{ dayjs().utc().local().format('YYYY') }}
+      </template>
         <DashWelcomeChartLine :data="Data.chart"/>
       </DashCard>
     </div>
     <div class="basis-1 md:basis-[20%]">
       <DashCard>
+        <template #header>
+          <Icon name="lucide:chart-pie" /> Pendapatan {{ bulan }}
+        </template>
         <DashWelcomeChartDoughnut :data="Data.chart_pendapatan"/>
       </DashCard>
     </div>
@@ -35,7 +41,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-const tanggal = ref(
+const bulan = ref(
   dayjs().utc().local().format('MM/YYYY') as any
 )
 const client = useSanctumClient();
@@ -55,9 +61,9 @@ const Data = ref({
 } as any);
 
 async function getData() {
-  const tanggal_e = dayjs(tanggal.value).utc().local().format('MM-YYYY')
+  const bulane = dayjs(bulan.value).utc().local().format('MM-YYYY')
   try {
-    const res = await client('/api/dashboard?bulan='+tanggal_e)
+    const res = await client('/api/dashboard?bulan='+bulane)
     Data.value = res;
   } catch (error) {
     console.log(error);
@@ -67,15 +73,8 @@ async function getData() {
 onMounted(() => {
   getData(); 
 })
-watch(tanggal, () => {
+watch(bulan, () => {
   getData();
 })
 
-// const { data, refresh } = await useAsyncData(
-//     'dashboard',
-//     () => client('/api/dashboard?bulan='+tanggal.value)
-// )
-// watch(tanggal, () => {
-//   refresh();
-// })
 </script>

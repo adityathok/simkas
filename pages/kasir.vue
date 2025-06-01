@@ -159,7 +159,7 @@ const onSelectTagihan = (data:any) => {
     qty: 1,
     nominal_item: data.tagihan_master.nominal,
     nominal: data.tagihan_master.nominal,
-    akun_pendapatan_id: '',
+    akun_pendapatan_id: data.tagihan_master.akun_pendapatan_id,
     nomor: data.nomor
   })
   countTotalItems()
@@ -182,6 +182,7 @@ const submitItem = (data: any) => {
 
 const hapusItemTransaksi = (index:number) => {
   itemsTransaksi.value.splice(index, 1);
+  countTotalItems()
 }
 
 function countTotalItems() {
@@ -221,6 +222,7 @@ const loadingProsesTransaksi = ref(false)
         printTransaksi.value = res
         visiblePrintTransaksi.value = true
       }
+      resetTransaksi()
     } catch (error) {
       const er = useSanctumError(error)
       errorProsesTransaksi.value = er?.bag ?? {}
@@ -236,9 +238,9 @@ const loadingProsesTransaksi = ref(false)
       jenis: 'pendapatan',
       akun_rekening_id:1,
       akun_rekening_tujuan_id:'',
-      tagihan_id:'',
-      user_id:'',
-      catatan:'',
+      // tagihan_id:'',
+      // user_id:'',
+      // catatan:'',
       nama: '',
       status:'sukses',
       metode_pembayaran: 'tunai',
