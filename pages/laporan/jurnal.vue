@@ -128,16 +128,18 @@ async function getData() {
   }
   loadingData.value = false;
 }
+
 //
 onMounted(() => {
   getData()
 })
-// const { data, status, error, refresh } = await useAsyncData(
-//     'laporan-jurnal-page-'+filter,
-//     () => client('/api/laporan_jurnal',{
-//       params : filter
-//     })
-// )
+
+//watch route.query.id
+watch(() => route.query.id, () => {
+  filter.jurnal_id = route.query.id || '';
+  getData()
+})
+
 const onPaginate = (event: { page: number }) => {
     filter.page = event.page + 1;
     // refresh()
