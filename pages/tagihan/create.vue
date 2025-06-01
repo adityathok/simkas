@@ -104,7 +104,7 @@
     <ScrollPanel style="width: 100%; height: 100px">
       <ol>
         <li v-for="(item,index) in LogProcessBatch" class="text">
-          {{ index }} . {{ item.invoice }} | {{ item.user }}
+          {{ index+1 }} . {{ item.invoice }} | {{ item.user }}
         </li>
       </ol>
     </ScrollPanel>

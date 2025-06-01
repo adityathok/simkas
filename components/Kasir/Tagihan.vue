@@ -24,7 +24,7 @@
               {{ slotProps.data.nomor }}
             </div>
             <div class="truncate max-w-60" v-tooltip="slotProps.data.tagihan_master.nama">
-              {{ slotProps.data.tagihan_master.nama }}
+              {{ slotProps.data.nama??slotProps.data.tagihan_master.nama }}
             </div>
           </template>
         </Column> 
@@ -41,9 +41,14 @@
         </Column>
         <Column field="act" header="">
           <template #body="slotProps">
-            <Button @click="addSelected(slotProps.data)" v-tooltip="'Tambahkan'">
+
+            <Button v-if="!props.tagihans.includes(slotProps.data.nomor)" @click="addSelected(slotProps.data)" v-tooltip="'Tambahkan'">
               <Icon name="lucide:circle-plus" />
             </Button>
+            <Button v-else severity="secondary" disabled>
+              <Icon name="lucide:check" />
+            </Button>
+
           </template>
         </Column>
       </DataTable>
@@ -86,6 +91,7 @@ const page = ref(1)
 const dataTagihan = ref({
   data: []
 } as any)
+
 const loadingTagihan = ref(false)
 async function getTagihan(){
   loadingTagihan.value = true
@@ -96,6 +102,7 @@ async function getTagihan(){
         user_id: form.value.user_id,
         siswa_id: form.value.siswa_id,
         pegawai_id: form.value.pegawai_id,
+        status: 'belum',
       }
     })
     dataTagihan.value = res

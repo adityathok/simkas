@@ -24,7 +24,7 @@
           </div>
         </div>
 
-        <KasirTagihan @selected="onSelectTagihan" @update="onUpdateTagihan" />
+        <KasirTagihan @selected="onSelectTagihan" @update="onUpdateTagihan" :tagihans="nomorTagihaner" />
         
         <div class="border p-4 bg-blue-50 dark:bg-slate-800 dark:border-slate-700 my-5">
           <div class="mb-2 font-bold">Tambah Item Transaksi</div>
@@ -152,10 +152,18 @@ const onUpdateTagihan = (data:any) => {
 const itemsTransaksi = ref<any[]>([])
 
 const onSelectTagihan = (data:any) => {
+  //check apakah nomor sudah ada di itemsTransaksi
+  const nomor = data.nomor
+  const checkNomor = itemsTransaksi.value.find(item => item.nomor === nomor)
+  if (checkNomor) {
+    countTotalItems()    
+    return
+  }
+
   //tambahkan data ke itemsTransaksi
   itemsTransaksi.value.push({
     tagihan_id: data.id,
-    nama: data.tagihan_master.nama,
+    nama: data.nama??data.tagihan_master.nama,
     qty: 1,
     nominal_item: data.tagihan_master.nominal,
     nominal: data.tagihan_master.nominal,
@@ -185,13 +193,19 @@ const hapusItemTransaksi = (index:number) => {
   countTotalItems()
 }
 
+const nomorTagihaner = ref([] as any)
 function countTotalItems() {
+  const nomor: any[] = [];
   let total = 0;
   itemsTransaksi.value.forEach((item) => {
     const nominal = parseFloat(item.nominal)
     total += (isNaN(nominal)? 0 : nominal);
+    if(item.nomor){
+      nomor.push(item.nomor) 
+    }
   });
   form.value.nominal = total;
+  nomorTagihaner.value = nomor;
 }
 
 //watch itemsTransaksi
