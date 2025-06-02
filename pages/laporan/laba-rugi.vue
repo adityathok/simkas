@@ -1,16 +1,16 @@
 <template>
   
   <div>
-    <DatePicker v-model="tanggal" dateFormat="mm/yy/dd" :manualInput="true" size="small" />
+    <DatePicker v-model="tanggal" dateFormat="dd/mm/yy" :manualInput="true" size="small" />
     <Button @click="refresh()" size="small">
-      <Icon name="lucide-search" class="mr-1" /> Reload
+      <Icon name="lucide:refresh-ccw" class="mr-1" /> Reload
     </Button>
   </div>
 
     <DashCard class="mt-3 mx-1 shadow hover:shadow-xl md:max-w-[60rem]">
       <div class="text-center mb-5">
         <h3 class="text-lg">Laporan Keuangan</h3>
-        <h3 class="text-xl md:text-4xl font-bold mb-2"> Realisasi</h3>
+        <h3 class="text-xl md:text-4xl font-bold mb-2">Realisasi</h3>
         <p class="text-gray-500">
           {{ dayjs(tanggal).utc().local().format('DD-MM-YYYY') }}
         </p>
@@ -19,7 +19,7 @@
       <div class="overflow-x-auto">
         <table class="w-full table-auto border-collapse">
           <thead>
-            <tr class="bg-slate-800 text-white">
+            <tr class="bg-emerald-600 text-white">
               <th class="py-3 px-3 border border-gray-300 text-left" colspan="2">Pendapatan</th>
               <th class="py-3 px-3 border border-gray-300 text-left" colspan="2">Biaya</th>
             </tr>
@@ -79,17 +79,17 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import { formatUang } from '~/utils/formatUang';
 definePageMeta({
-    title: 'Laporan Neraca',
+    title: 'Laporan Labarugi',
 })
 const client = useSanctumClient();
 
 const route = useRoute();
-const tanggal = reactive(
+const tanggal = ref(
   route.query.tanggal || dayjs().utc().local().format('YYYY-MM-DD') as any
 )
 
 const { data:dataNeraca, refresh } = await useAsyncData(
     'laba_rugi-'+tanggal,
-    () => client('/api/laba_rugi/'+dayjs(tanggal).utc().local().format('YYYY-MM-DD'))
+    () => client('/api/laba_rugi/'+dayjs(tanggal.value).utc().local().format('YYYY-MM-DD'))
 )
 </script>
