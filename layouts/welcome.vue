@@ -1,18 +1,10 @@
 <template>
 
-  <div class="relative overflow-hidden h-screen">
-    
-    <div class="grid grid-cols-12 gap-3 h-screen bg-white dark:bg-dark">
+  <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3 h-screen lg:overflow-hidden bg-left-top bg-cover bg-[url(public/bg-welcome.webp)]">
 
-      <div class="xl:col-span-8 lg:col-span-7 col-span-12 lg:block hidden relative overflow-hidden bg-left-top bg-cover bg-[url(public/bg-welcome.webp)]">
-        <div class="flex justify-center h-screen items-center z-10 relative">
-          <div class="xl:w-5/12 lg:w-10/12 xl:px-0 px-6">
-          </div>  
-        </div>
-      </div>
+      <div class="xl:col-span-4 lg:col-span-5 md:col-span-6 col-span-12 lg:p-0 p-6">
+        <div class="bg-white dark:bg-dark md:h-full flex flex-col justify-between items-center p-8">
 
-      <div class="relative xl:col-span-4 lg:col-span-5 col-span-12 sm:px-12 p-5">
-        <div class="flex flex-col justify-between h-screen items-center z-10 relative">
           <div>
             <div class="flex items-start gap-2 mb-2 md:pt-10">
                 <img v-if="useConfig.config.logo" :src="useConfig.config.logo" alt="Logo App" class="max-h-10">
@@ -23,16 +15,19 @@
                 </div>
               </div>
           </div>
+
           <slot />
 
-          <div class="pb-5">
+          <div class="pt-5">
             <AppCopyright/>
           </div>
-        </div>
 
+        </div>
       </div>
 
-    </div>
+      <div class="xl:col-span-8 lg:col-span-7 md:col-span-6 col-span-12 lg:block hidden">
+      </div>
+
   </div>
 
 </template>
